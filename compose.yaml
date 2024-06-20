@@ -1,0 +1,26 @@
+services:
+  next:
+    build:
+      context: ./next
+    image: nextjs-dev
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    develop:
+      watch:
+        - action: sync
+          path: ./next
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: /app/package.json
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
