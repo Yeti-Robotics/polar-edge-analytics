@@ -14,8 +14,12 @@ permissions:
 
 # List of jobs
 jobs:
+
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./next
     # Job steps
     steps:
       # Manual Checkout
