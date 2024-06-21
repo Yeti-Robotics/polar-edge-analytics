@@ -1,0 +1,7 @@
+cd next && npx lint-staged && cd ../;
+if git diff --cached --quiet -- "next/stories/*" && git diff --cached --quiet -- "next/.storybook/*";
+then
+  echo "No changes detected in specified directories, skipping build."
+else
+  cd next && npm run build-storybook && cd ../ && git add docs/\*
+fi;
