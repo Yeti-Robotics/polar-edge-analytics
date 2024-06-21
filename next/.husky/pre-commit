@@ -1,0 +1,1 @@
+cd next && npm run build-storybook && cd ../ && git add docs/\*
