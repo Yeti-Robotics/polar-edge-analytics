@@ -1,1 +1,1 @@
-cd next && npm run build-storybook && cd ../ && git add docs/\* && git commit -m "updates storybook build"
+cd next && npm run build-storybook && cd ../ && git add docs/\* && git commit --amend --no-edit
