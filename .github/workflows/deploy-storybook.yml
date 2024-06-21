@@ -30,11 +30,18 @@ jobs:
         with:
           node-version: '16.x'
 
+      # Set the working directory and install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./next
+
+      # Build Storybook
+      - name: Build Storybook
+        run: npm run build-storybook
+        working-directory: ./next
+
       #👇 Add Storybook build and deploy to GitHub Pages as a step in the workflow
       - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
-        
         with:
-          install_command: yarn install # default: npm ci
-          build_command: yarn build-storybook # default: npm run build-storybook
           path: ./next/storybook-static # default: dist/storybook
           checkout: false # default: true
