@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build --output-dir ../docs/storybook"
+    "build-storybook": "storybook build --output-dir ../docs/storybook",
+    "prepare": "cd .. && husky install next/.husky"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
@@ -57,6 +58,7 @@
     "postcss": "^8.4.38",
     "storybook": "^8.1.10",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "husky": "^8.0.0"
   }
 }
