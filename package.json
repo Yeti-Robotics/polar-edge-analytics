@@ -8,7 +8,6 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
     "turbo": "^2.0.4",
     "typescript": "^5.4.5"
   },
@@ -17,7 +16,8 @@
   },
   "packageManager": "npm@10.8.1",
   "workspaces": [
-    "apps/*",
+    "web",
+    "storybook",
     "packages/*"
   ]
 }

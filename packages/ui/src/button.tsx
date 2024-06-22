@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 
-interface ButtonProps {
+export interface ButtonProps {
   children: ReactNode;
   className?: string;
   appName: string;
@@ -15,6 +15,7 @@ export const Button = ({ children, className, appName }: ButtonProps) => {
       onClick={() => alert(`Hello from your ${appName} app!`)}
     >
       {children}
+      some addtl text
     </button>
   );
 };
