@@ -16,4 +16,4 @@ jobs:
           checkout: false
           install_command: cd storybook && npm install
           path: storybook/storybook-static # change to your build folder
-          build_command: cd storybook && npm run build:storybook
+          build_command: npm run build:storybook
