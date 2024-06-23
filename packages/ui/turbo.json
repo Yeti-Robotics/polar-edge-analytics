@@ -1,0 +1,9 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build:ui": {
+      "dependsOn": ["^build:ui"],
+      "outputs": ["dist/**"]
+    }
+  }
+}
