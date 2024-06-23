@@ -11,7 +11,7 @@
   "devDependencies": {
     "husky": "^9.0.11",
     "turbo": "^2.0.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   },
   "engines": {
     "node": ">=18"
@@ -20,5 +20,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "drizzle-orm": "^0.31.2"
+  }
 }

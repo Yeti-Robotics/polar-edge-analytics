@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={fontLibreFranklin.variable}>{children}</body>
+      <body className={`${fontLibreFranklin.variable} font-sans`}>
+        {children}
+      </body>
     </html>
   );
 }
