@@ -1,7 +1,6 @@
 import { db } from "@/database";
 import { frcTeam } from "@/database/schema";
 import { eq } from "drizzle-orm";
-import Button from "@repo/ui/button";
 
 export default async function Home() {
   const test = await db
