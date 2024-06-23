@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build:ui": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
-    "lint": "eslint src/",
+    "lint": "eslint src/ --fix --max-warnings=0",
     "dev": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "type-check": "tsc --noEmit"
   },
