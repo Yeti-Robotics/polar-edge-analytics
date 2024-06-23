@@ -11,7 +11,7 @@ export interface ButtonProps {
 const Button = ({ children, appName }: ButtonProps): JSX.Element => {
   return (
     <button
-      className={`bg-black text-white rounded-lg outline-1 p-6`}
+      className={`bg-black text-white rounded-lg outline-1 p-6 font-semibold`}
       onClick={() => alert(`Hello from your ${appName} app!`)}
     >
       {children}

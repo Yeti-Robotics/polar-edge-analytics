@@ -17,4 +17,4 @@ jobs:
           checkout: true
           install_command: npm install
           build_command: npx turbo build:storybook
-          path: storybook/storybook-static # change to your build folder
+          path: apps/storybook/storybook-static # change to your build folder
