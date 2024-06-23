@@ -1,6 +1,6 @@
 {
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     "build:storybook": {
       "dependsOn": ["^build:storybook"],
       "outputs": ["storybook-static/**"]
