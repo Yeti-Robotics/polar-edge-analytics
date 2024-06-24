@@ -13,7 +13,7 @@
 		"prepare": "cd .. && husky install next/.husky"
 	},
 	"lint-staged": {
-		"{app,components,lib,drizzle,stories}.{ts,tsx,js,jsx}": "eslint --fix",
+		"{app,components,lib,stories}/**/*.{ts,tsx,js,jsx}": "eslint --fix",
 		"*.{js,jsx,ts,tsx,json,html}": "prettier --cache --write"
 	},
 	"dependencies": {
