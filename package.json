@@ -9,7 +9,7 @@
 		"lint": "next lint",
 		"format": "prettier . --write",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build --output-dir ../docs/storybook",
+		"build:storybook": "storybook build --output-dir storybook-static",
 		"prepare": "cd .. && husky install next/.husky"
 	},
 	"lint-staged": {
