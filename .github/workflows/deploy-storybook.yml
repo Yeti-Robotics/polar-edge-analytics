@@ -1,20 +1,20 @@
 name: Build and Publish Storybook to GitHub Pages
 on:
-  push:
-    branches:
-      - "development" # change to the branch you wish to deploy from
+    push:
+        branches:
+            - "development" # change to the branch you wish to deploy from
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+    contents: read
+    pages: write
+    id-token: write
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - id: build-publish
-        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
-        with:
-          checkout: true
-          install_command: npm install
-          build_command: npm run build:storybook
-          path: apps/storybook/storybook-static # change to your build folder
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - id: build-publish
+              uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
+              with:
+                  checkout: true
+                  install_command: npm install
+                  build_command: npm run build:storybook
+                  path: storybook-static # change to your build folder
