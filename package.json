@@ -10,7 +10,7 @@
 		"format": "prettier . --write",
 		"storybook": "storybook dev -p 6006",
 		"build:storybook": "storybook build --output-dir storybook-static",
-		"prepare": "cd .. && husky install next/.husky"
+		"prepare": "husky install .husky"
 	},
 	"lint-staged": {
 		"{app,components,lib,stories}/**/*.{ts,tsx,js,jsx}": "eslint --fix",
