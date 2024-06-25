@@ -9,10 +9,10 @@ function generateRandomInt(upperBound: number, lowerBound: number = 0) {
 }
 
 export function Snowflake({ blurFrequency }: SnowflakeProps) {
-	const size = `${generateRandomInt(20, 5)}px`;
+	const size = `${generateRandomInt(15, 5)}px`;
 	return (
 		<div
-			className={`${styles.snowflake} absolute top-[-25px] overflow-hidden rounded-[50%] bg-white/70`}
+			className={`${styles.snowflake} absolute top-[-25px] z-0 overflow-hidden rounded-[50%] bg-white/50`}
 			style={
 				{
 					width: size,
