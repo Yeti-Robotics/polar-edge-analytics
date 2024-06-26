@@ -4,15 +4,16 @@ import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
+import errors from "@/lib/errors";
 
 export interface CounterInputProps {
-	/** Field name for inner input */
+	/** Field name for inner input. */
 	name: string;
-	/** Value to start counter at, defaults to 0 */
+	/** Value to start counter at, defaults to 0. */
 	defaultValue?: number;
-	/** Minimum value for the counter, defaults to 0 */
+	/** Minimum value for the counter, defaults to 0. */
 	min?: number;
-	/** Maximum value for the counter, defaults to 0 */
+	/** Maximum value for the counter, defaults to 0. */
 	max?: number;
 	/** Amount to increase by, defaults to 1. Should rarely need to be adjusted. */
 	increaseBy?: number;
@@ -20,6 +21,9 @@ export interface CounterInputProps {
 	decreaseBy?: number;
 }
 
+/**
+ * Customizable +/- counter for forms. Value can be extracted by getting the name in FormData.
+ */
 export function CounterInput({
 	name,
 	defaultValue = 0,
@@ -28,6 +32,10 @@ export function CounterInput({
 	max,
 	min = 0,
 }: CounterInputProps) {
+	if (max && max < min) {
+		throw Error(`${errors.ILLEGAL_ARGUMENT} max cannot be less than min.`);
+	}
+
 	const [value, setValue] = useState(defaultValue);
 
 	const handleIncrement = () => {
@@ -43,12 +51,30 @@ export function CounterInput({
 
 	return (
 		<div className="flex space-x-2">
-			<Button type="button" name="decrement" onClick={handleDecrement}>
+			<Button
+				type="button"
+				name="decrement"
+				aria-label={`decrement input by ${decreaseBy}`}
+				onClick={handleDecrement}
+			>
 				<MinusIcon className="size-4" />
+				{decreaseBy !== 1 && <span>{decreaseBy}</span>}
 			</Button>
-			<Input name={name} className="text-center" readOnly value={value} />
-			<Button type="button" name="increment" onClick={handleIncrement}>
+			<Input
+				name={name}
+				aria-label="counter-current-value"
+				className="text-center"
+				readOnly
+				value={value}
+			/>
+			<Button
+				type="button"
+				name="increment"
+				aria-label={`increment input by ${increaseBy}`}
+				onClick={handleIncrement}
+			>
 				<PlusIcon className="size-4" />
+				{increaseBy !== 1 && <span>{increaseBy}</span>}
 			</Button>
 		</div>
 	);

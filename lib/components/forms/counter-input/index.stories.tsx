@@ -1,8 +1,9 @@
 import { type Meta, StoryObj } from "@storybook/react";
 import { CounterInput, type CounterInputProps } from ".";
+import { Label } from "../../ui/label";
 
 const meta: Meta<typeof CounterInput> = {
-	title: "Components/Forms/Increment Input",
+	title: "Components/Forms/Counter Input",
 	component: CounterInput,
 	render: ({ ...args }) => <ExampleCounterInput {...args} />,
 };
@@ -11,10 +12,9 @@ export default meta;
 type Story = StoryObj<typeof CounterInput>;
 
 const ExampleCounterInput = (props: CounterInputProps) => {
-	console.log(props);
 	return (
 		<form
-			className="w-full max-w-sm space-y-2"
+			className="mx-auto w-full max-w-sm space-y-2"
 			onSubmit={(e) => {
 				e.preventDefault();
 				const formData = new FormData(e.currentTarget);
@@ -25,13 +25,15 @@ const ExampleCounterInput = (props: CounterInputProps) => {
 	);
 };
 
+/** Counter Input with default arguments provided. */
 export const Default: Story = {
 	args: {
 		name: "counter",
 	},
 };
 
-export const NonOneIncrements: Story = {
+/** Increments are set to 3 to increase, and 2 to decrease. */
+export const DifferentIncrements: Story = {
 	args: {
 		name: "counter",
 		increaseBy: 3,
@@ -39,6 +41,7 @@ export const NonOneIncrements: Story = {
 	},
 };
 
+/** Max/min are set to 5/-5, and won't allow the user to exceed these bounds. */
 export const MaxMinSet: Story = {
 	args: {
 		name: "counter",

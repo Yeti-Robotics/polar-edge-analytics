@@ -24,7 +24,12 @@ export default function RootLayout({
 			<body
 				className={`${libreFranklin.variable} bg-background font-sans`}
 			>
-				<ThemeProvider attribute="class" defaultTheme="system">
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
 					<Navbar />
 					{children}
 				</ThemeProvider>
