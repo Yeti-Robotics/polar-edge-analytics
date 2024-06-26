@@ -1,4 +1,5 @@
 import styles from "./snow.module.css";
+import { getRandomSnowflake } from "./snowflakes";
 
 interface SnowflakeProps {
 	blurFrequency: number;
@@ -12,7 +13,7 @@ export function Snowflake({ blurFrequency }: SnowflakeProps) {
 	const size = `${generateRandomInt(15, 5)}px`;
 	return (
 		<div
-			className={`${styles.snowflake} absolute top-[-25px] z-0 overflow-hidden rounded-[50%] bg-white/50`}
+			className={`${styles.snowflake} absolute top-[-25px] z-0 overflow-hidden rounded-[50%] fill-white/50`}
 			style={
 				{
 					width: size,
@@ -25,8 +26,12 @@ export function Snowflake({ blurFrequency }: SnowflakeProps) {
 							: "none",
 					"--init": `${Math.random() * 20 - 10}vw`,
 					"--end": `${Math.random() * 20 - 10}vw`,
+					"--rotation-init": `${generateRandomInt(720, -720)}deg`,
+					"--rotation-end": `${generateRandomInt(720, -720)}deg`,
 				} as React.CSSProperties
 			}
-		></div>
+		>
+			{getRandomSnowflake()}
+		</div>
 	);
 }

@@ -4,9 +4,9 @@
 
 @keyframes snowAnimation {
 	0% {
-		transform: translate3d(var(--init), 0, 0);
+		transform: translate3d(var(--init), 0, 0) rotate(-1000deg);
 	}
 	100% {
-		transform: translate3d(var(--end), 110vh, 0);
+		transform: translate3d(var(--end), 110vh, 0) rotate(var(--rotation-end));
 	}
 }

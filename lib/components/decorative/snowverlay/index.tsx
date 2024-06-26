@@ -13,6 +13,8 @@ export interface SnowverlayProps {
 /** A decorative component for the homepage that uses JavaScript to generate a specified number of
  * snowflake components, with CSS taking care of the rest. No client-side components needed!
  *
+ * Background not included.
+ *
  * Based on the following CodePen:
  * <br>https://codepen.io/alvaromontoro/pen/GRNmdzB
  */

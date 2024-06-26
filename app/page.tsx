@@ -22,8 +22,8 @@ function MountainUnderlay() {
 					y2="620"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop stop-color="#FCFCFC" />
-					<stop offset="1" stop-color="#9CCFEB" />
+					<stop stopColor="#FCFCFC" />
+					<stop offset="1" stopColor="#9CCFEB" />
 				</linearGradient>
 			</defs>
 		</svg>
