@@ -5,7 +5,12 @@ import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "@/lib/utils";
 
+/** shadcn drawer component, often works better than dialog on mobile devices
+ *
+ * Link to original docs: https://ui.shadcn.com/docs/components/drawer
+ */
 const Drawer = ({
+	/** */
 	shouldScaleBackground = true,
 	...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
