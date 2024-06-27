@@ -1,0 +1,14 @@
+{
+	"extends": [
+		"prettier",
+		"next/core-web-vitals",
+		"plugin:storybook/recommended",
+		"plugin:tailwindcss/recommended"
+	],
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx", "*.js"],
+			"parser": "@typescript-eslint/parser"
+		}
+	]
+}
