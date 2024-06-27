@@ -6,8 +6,12 @@ import { Command as CommandPrimitive } from "cmdk";
 import { Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@components/ui/dialog";
 
+/** Command menu that supports search and groups.
+ *
+ * Link to original documentation: https://ui.shadcn.com/docs/components/command
+ */
 const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive>
