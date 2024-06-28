@@ -1,53 +1,86 @@
 import { Button } from "@components/ui/button";
 import { Snowverlay } from "@/lib/components/decorative/snowverlay";
+import Link from "next/link";
+import { ArrowRight, Code, Snowflake } from "lucide-react";
+import { MountainUnderlay } from "./mountain-underlay";
 
-function MountainUnderlay() {
+function Header() {
 	return (
-		<svg
-			viewBox="0 0 1280 620"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			className="inset-y-0 left-0 z-[-1] w-full overflow-hidden object-contain"
-		>
-			<path
-				d="M116.7 279.131L0 396.352V620H1279L1280 467.057L1129.96 243.779L1061.42 349.836L913.227 215.869L794.674 279.131L757.627 158.188L663.155 0.0327454L485.326 279.131L338.987 158.188L196.353 349.836L116.7 279.131Z"
-				fill="url(#paint0_linear_2_3)"
-			/>
-			<defs>
-				<linearGradient
-					id="paint0_linear_2_3"
-					x1="640"
-					y1="0.0327454"
-					x2="640"
-					y2="620"
-					gradientUnits="userSpaceOnUse"
-				>
-					<stop stopColor="#FCFCFC" />
-					<stop offset="1" stopColor="#9CCFEB" />
-				</linearGradient>
-			</defs>
-		</svg>
+		<header className="absolute left-0 top-0 w-full bg-white/10  text-white backdrop-blur-md">
+			<nav>
+				<div className="flex items-center  justify-between px-6 py-4 text-sm">
+					<div>
+						<Snowflake size={32} />
+					</div>
+					<div className="flex space-x-8">
+						<Link href="/tutorial">
+							<span>Tutorial</span>
+						</Link>
+						<Link href="/scout">
+							<span>Scout</span>
+						</Link>
+						<Link href="/dashboard">
+							<span>Dashboard</span>
+						</Link>
+					</div>
+					<div>
+						<Link className="flex items-center" href="/login">
+							<span>Login</span>
+							<ArrowRight className="ml-1" size={16} />
+						</Link>
+					</div>
+				</div>
+			</nav>
+		</header>
+	);
+}
+
+function HeroSection() {
+	return (
+		<section className="relative left-0 top-0 flex min-h-screen w-full items-center justify-center p-16 text-center">
+			<div>
+				<div className="z-10 max-w-screen-sm space-y-3 rounded-lg p-8 text-white">
+					<Link
+						className="inline-flex items-center rounded-lg bg-muted/70 px-3 py-1 text-sm font-medium"
+						href="/"
+					>
+						<Code className="mr-2" size={14} />
+						<span className="text-nowrap">In Development</span>
+					</Link>
+					<h1 className="m-0 text-5xl font-extrabold leading-none">
+						Polar Edge Analytics
+					</h1>
+					<p className="m-0 text-lg">
+						Publicly accessible, advanced scouting data for teams in
+						North Carolina. Brought to you by YETI Robotics.
+					</p>
+					<div className="inline-flex">
+						<Button className=" shadow-sm" variant="secondary">
+							Learn More
+						</Button>
+						<Button className="ml-4 bg-[#7289da] text-white shadow-sm">
+							Login with Discord
+						</Button>
+					</div>
+				</div>
+			</div>
+		</section>
 	);
 }
 
 export default async function Home() {
 	return (
-		<main className="relative min-h-[360px] items-center overflow-hidden bg-white to-90% sm:min-h-[500px]">
-			<div className="absolute bottom-0 left-0 z-0 max-h-full w-full overflow-hidden">
-				<MountainUnderlay />
-			</div>
-			<div className="absolute left-0 top-0 flex size-full items-center bg-gradient-to-br from-primary from-20% via-fuchsia-500/60 to-orange-400 p-8">
-				<Snowverlay numSnowflakes={100} blurFrequency={0.6} />
-				<div className="z-10 text-white">
-					<h1 className="text-5xl font-extrabold sm:text-7xl">
-						POLAR EDGE
-					</h1>
-					<p>YETI Robotics Scouting Platform</p>
-					<Button className="mt-4" variant="secondary">
-						Learn More
-					</Button>
+		<main className="relative">
+			<div className="fixed z-[-1] h-screen w-screen overflow-hidden bg-zinc-50">
+				<div className="absolute inset-x-0 bottom-0 z-0 w-full">
+					<MountainUnderlay />
+				</div>
+				<div className="absolute h-screen w-full bg-gradient-to-br from-primary/85 from-30% via-fuchsia-500/65 to-orange-400/90 backdrop-blur-sm">
+					<Snowverlay numSnowflakes={75} blurFrequency={0.3} />
 				</div>
 			</div>
+			<Header />
+			<HeroSection />
 		</main>
 	);
 }
