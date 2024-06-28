@@ -14,7 +14,6 @@ import { Avatar, AvatarFallback } from "../../ui/avatar";
 import { usePathname } from "next/navigation";
 import { pageData } from "./page-data";
 import { cn } from "@/lib/utils";
-import { index } from "drizzle-orm/mysql-core";
 
 function NavLinks({ path }: { path: string }) {
 	return pageData.map((page) => (
