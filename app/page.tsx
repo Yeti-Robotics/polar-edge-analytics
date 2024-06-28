@@ -6,9 +6,9 @@ import { MountainUnderlay } from "./mountain-underlay";
 
 function Header() {
 	return (
-		<header className="absolute left-0 top-0 w-full bg-white/10  text-white backdrop-blur-md">
+		<header className="absolute left-0 top-0 z-50 w-full bg-white/10  text-white backdrop-blur-md">
 			<nav>
-				<div className="flex items-center  justify-between px-6 py-4 text-sm">
+				<div className="z-50 flex items-center justify-between px-6 py-4 text-sm">
 					<div>
 						<Snowflake size={32} />
 					</div>
@@ -19,8 +19,8 @@ function Header() {
 						<Link href="/scout">
 							<span>Scout</span>
 						</Link>
-						<Link href="/dashboard">
-							<span>Dashboard</span>
+						<Link href="/analysis">
+							<span>Analyze</span>
 						</Link>
 					</div>
 					<div>
@@ -37,7 +37,7 @@ function Header() {
 
 function HeroSection() {
 	return (
-		<section className="relative left-0 top-0 flex min-h-screen w-full items-center justify-center p-16 text-center">
+		<section className="relative left-0 top-0 z-10 flex min-h-screen w-full items-center justify-center p-16 text-center">
 			<div>
 				<div className="z-10 max-w-screen-sm space-y-3 rounded-lg p-8 text-white">
 					<Link
