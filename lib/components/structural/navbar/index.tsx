@@ -1,13 +1,28 @@
-import Link from "next/link";
-import { ModeToggle } from "./toggle";
+"use client";
 
-export function Navbar() {
+import { usePathname } from "next/navigation";
+import { DesktopNav } from "./desktop";
+import { TopNavBar } from "./top-nav";
+
+export function NavSidebar({ children }: { children: React.ReactNode }) {
+	const path = usePathname();
+
+	// homepage has special layout
+	if (path === "/") {
+		return <>{children}</>;
+	}
+
 	return (
-		<header className="sticky top-0 z-50 flex h-16 w-full items-center bg-background/30 p-4 backdrop-blur-md">
-			<Link className="grow" href="/">
-				<span className="text-lg font-black">Polar Edge</span>
-				<ModeToggle />
-			</Link>
-		</header>
+		<div className="relative w-full">
+			<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+				<DesktopNav />
+				<div className="flex flex-col">
+					<TopNavBar />
+					<div className="relative  flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+						{children}
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 }
