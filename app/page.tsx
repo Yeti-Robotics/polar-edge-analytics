@@ -52,7 +52,7 @@ function HeroSection() {
 					</h1>
 					<p className="m-0 text-lg">
 						Publicly accessible, advanced scouting data for teams in
-						North Carolina. Brought to you by <a href="https://www.yetirobotics.org/"><u>YETI Robotics</u></a>.
+						North Carolina. Brought to you by <a href="https://www.yetirobotics.org/" target="blank"><u>YETI Robotics</u></a>.
 					</p>
 					<div className="inline-flex">
 						<Button className=" shadow-sm" variant="secondary">
