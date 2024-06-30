@@ -12,7 +12,9 @@ export function DesktopNav() {
 						className="flex items-center gap-2 text-lg font-extrabold"
 					>
 						<Snowflake className="size-6 fill-white" />
-						<span>Polar Edge</span>
+						<span className="bg-gradient-to-br from-primary from-20% via-fuchsia-400 to-orange-500 bg-clip-text text-transparent">
+							Polar Edge
+						</span>
 					</Link>
 				</div>
 				<div className="flex-1">
