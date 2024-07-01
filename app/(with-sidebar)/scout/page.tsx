@@ -9,6 +9,7 @@ import {
 	CardTitle,
 } from "@/lib/components/ui/card";
 import { createClient } from "@/lib/database/server";
+import { create } from "@/lib/actions/stand-form";
 
 export default async function ScoutingPage() {
 	const supabase = createClient();
@@ -25,8 +26,11 @@ export default async function ScoutingPage() {
 		<form
 			action={async (d) => {
 				"use server";
-				d.append("user_id", user.id);
-				console.log(Object.fromEntries(d.entries()));
+				d.append("scouter", user.id);
+				d.append("team_number", "1");
+				d.append("match_number", "1");
+				d.append("event_code", "2024test");
+				const res = await create(d);
 			}}
 		>
 			<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl">

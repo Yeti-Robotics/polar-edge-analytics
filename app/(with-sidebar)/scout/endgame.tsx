@@ -44,13 +44,13 @@ export function EndgameContent() {
 				<Label htmlFor="parked">Parked?</Label>
 			</div>
 			<div hidden={!climbed}>
-				<Label htmlFor="bots_same_chain">Bots Same Chain</Label>
+				<Label htmlFor="bots_on_chain">Bots Same Chain</Label>
 				<CounterInput
 					defaultValue={1}
 					required
 					min={1}
 					max={3}
-					name="bots_same_chain"
+					name="bots_on_chain"
 				/>
 			</div>
 		</div>

@@ -13,11 +13,12 @@ CREATE TABLE IF NOT EXISTS "match" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "stand_form" (
+	"form_id" serial NOT NULL,
 	"user_id" uuid NOT NULL,
 	"team_number" integer NOT NULL,
 	"match_number" integer,
 	"event_code" text,
-	"auto_line" integer NOT NULL,
+	"auto_line" boolean NOT NULL,
 	"speaker_auto" integer NOT NULL,
 	"amp_auto" integer NOT NULL,
 	"shuttle_auto" integer NOT NULL,
@@ -27,7 +28,7 @@ CREATE TABLE IF NOT EXISTS "stand_form" (
 	"climbed" boolean NOT NULL,
 	"parked" boolean NOT NULL,
 	"bots_on_chain" integer NOT NULL,
-	CONSTRAINT "stand_form_user_id_team_number_match_number_event_code_pk" PRIMARY KEY("user_id","team_number","match_number","event_code")
+	CONSTRAINT "stand_form_form_id_user_id_team_number_match_number_event_code_pk" PRIMARY KEY("form_id","user_id","team_number","match_number","event_code")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "team" (

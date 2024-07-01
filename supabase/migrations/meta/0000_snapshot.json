@@ -1,5 +1,5 @@
 {
-	"id": "f4b601c0-279e-4c35-96e6-192dcf185366",
+	"id": "79b10fea-d729-4ad9-8fa7-3af39bf2e4b8",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"version": "7",
 	"dialect": "postgresql",
@@ -85,6 +85,12 @@
 			"name": "stand_form",
 			"schema": "",
 			"columns": {
+				"form_id": {
+					"name": "form_id",
+					"type": "serial",
+					"primaryKey": false,
+					"notNull": true
+				},
 				"user_id": {
 					"name": "user_id",
 					"type": "uuid",
@@ -111,7 +117,7 @@
 				},
 				"auto_line": {
 					"name": "auto_line",
-					"type": "integer",
+					"type": "boolean",
 					"primaryKey": false,
 					"notNull": true
 				},
@@ -202,9 +208,10 @@
 				}
 			},
 			"compositePrimaryKeys": {
-				"stand_form_user_id_team_number_match_number_event_code_pk": {
-					"name": "stand_form_user_id_team_number_match_number_event_code_pk",
+				"stand_form_form_id_user_id_team_number_match_number_event_code_pk": {
+					"name": "stand_form_form_id_user_id_team_number_match_number_event_code_pk",
 					"columns": [
+						"form_id",
 						"user_id",
 						"team_number",
 						"match_number",
