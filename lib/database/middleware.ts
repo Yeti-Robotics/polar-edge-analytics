@@ -41,11 +41,8 @@ export async function updateSession(request: NextRequest) {
 		request.nextUrl.pathname.startsWith("/admin") &&
 		user?.app_metadata?.userrole !== "ADMIN"
 	) {
-		console.log("User is not an admin, redirecting to /");
 		const url = request.nextUrl.clone();
-		// TODO: redirect to a 403 page
-		url.pathname = "/tutorial";
-		console.log(url);
+		url.pathname = "/403";
 		return NextResponse.redirect(url);
 	}
 
