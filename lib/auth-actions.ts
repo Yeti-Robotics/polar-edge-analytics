@@ -10,6 +10,7 @@ export async function signIn() {
 		provider: "discord",
 		options: {
 			redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL,
+			scopes: "guilds",
 		},
 	});
 
