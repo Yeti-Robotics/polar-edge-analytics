@@ -37,6 +37,18 @@ export async function updateSession(request: NextRequest) {
 		data: { user },
 	} = await supabase.auth.getUser();
 
+	if (
+		request.nextUrl.pathname.startsWith("/admin") &&
+		user?.app_metadata?.userrole !== "ADMIN"
+	) {
+		console.log("User is not an admin, redirecting to /");
+		const url = request.nextUrl.clone();
+		// TODO: redirect to a 403 page
+		url.pathname = "/tutorial";
+		console.log(url);
+		return NextResponse.redirect(url);
+	}
+
 	// IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
 	// creating a new response object with NextResponse.next() make sure to:
 	// 1. Pass the request in it, like so:

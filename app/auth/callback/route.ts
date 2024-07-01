@@ -18,7 +18,7 @@ export async function GET(request: Request) {
 
 	if (code) {
 		const supabase = createClient();
-		await supabase.auth.exchangeCodeForSession(code);
+		console.log(await supabase.auth.exchangeCodeForSession(code));
 
 		const { data } = await supabase.auth.getSession();
 
