@@ -1,5 +1,5 @@
 {
-	"id": "9c245c2e-8d94-42a4-b2b7-a63bd2f39381",
+	"id": "f4b601c0-279e-4c35-96e6-192dcf185366",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"version": "7",
 	"dialect": "postgresql",
@@ -172,12 +172,13 @@
 			},
 			"indexes": {},
 			"foreignKeys": {
-				"stand_form_user_id_users_user_id_fk": {
-					"name": "stand_form_user_id_users_user_id_fk",
+				"stand_form_user_id_users_id_fk": {
+					"name": "stand_form_user_id_users_id_fk",
 					"tableFrom": "stand_form",
 					"tableTo": "users",
+					"schemaTo": "auth",
 					"columnsFrom": ["user_id"],
-					"columnsTo": ["user_id"],
+					"columnsTo": ["id"],
 					"onDelete": "no action",
 					"onUpdate": "no action"
 				},
@@ -238,40 +239,6 @@
 			},
 			"indexes": {},
 			"foreignKeys": {},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {}
-		},
-		"public.users": {
-			"name": "users",
-			"schema": "",
-			"columns": {
-				"user_id": {
-					"name": "user_id",
-					"type": "uuid",
-					"primaryKey": true,
-					"notNull": true
-				},
-				"is_admin": {
-					"name": "is_admin",
-					"type": "boolean",
-					"primaryKey": false,
-					"notNull": true,
-					"default": false
-				}
-			},
-			"indexes": {},
-			"foreignKeys": {
-				"users_user_id_users_id_fk": {
-					"name": "users_user_id_users_id_fk",
-					"tableFrom": "users",
-					"tableTo": "users",
-					"schemaTo": "auth",
-					"columnsFrom": ["user_id"],
-					"columnsTo": ["id"],
-					"onDelete": "no action",
-					"onUpdate": "no action"
-				}
-			},
 			"compositePrimaryKeys": {},
 			"uniqueConstraints": {}
 		}

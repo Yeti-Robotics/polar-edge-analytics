@@ -36,11 +36,6 @@ CREATE TABLE IF NOT EXISTS "team" (
 	"location" text NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "users" (
-	"user_id" uuid PRIMARY KEY NOT NULL,
-	"is_admin" boolean DEFAULT false NOT NULL
-);
---> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "match" ADD CONSTRAINT "match_event_code_event_event_code_fk" FOREIGN KEY ("event_code") REFERENCES "public"."event"("event_code") ON DELETE no action ON UPDATE no action;
 EXCEPTION
@@ -48,7 +43,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "stand_form" ADD CONSTRAINT "stand_form_user_id_users_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("user_id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "stand_form" ADD CONSTRAINT "stand_form_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -61,12 +56,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "stand_form" ADD CONSTRAINT "stand_form_event_code_match_number_match_event_code_match_number_fk" FOREIGN KEY ("event_code","match_number") REFERENCES "public"."match"("event_code","match_number") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "users" ADD CONSTRAINT "users_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -16,14 +16,6 @@ const auth_users = authSchema.table("users", {
 	id: uuid("id").primaryKey(),
 });
 
-export const users = pgTable("users", {
-	user_id: uuid("user_id")
-		.references(() => auth_users.id)
-		.notNull()
-		.primaryKey(),
-	is_admin: boolean("is_admin").notNull().default(false),
-});
-
 export const team = pgTable("team", {
 	team_number: integer("team_number").primaryKey(),
 	team_name: text("team_name"),
@@ -55,7 +47,7 @@ export const stand_form = pgTable(
 	"stand_form",
 	{
 		scouter: uuid("user_id")
-			.references(() => users.user_id)
+			.references(() => auth_users.id)
 			.notNull(),
 		team_number: integer("team_number")
 			.references(() => team.team_number)
