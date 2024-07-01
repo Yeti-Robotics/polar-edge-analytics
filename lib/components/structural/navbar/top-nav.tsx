@@ -1,4 +1,4 @@
-import { Menu, Link, Snowflake } from "lucide-react";
+import { Menu, Snowflake, Unlock } from "lucide-react";
 import { Button } from "@components/ui/button";
 import {
 	Sheet,
@@ -8,15 +8,66 @@ import {
 	SheetContent,
 } from "@components/ui/sheet";
 import { Avatar, AvatarFallback } from "@components/ui/avatar";
-import { NavLinks } from "./nav-links";
+import { NavLinks, pageData } from "./nav-links";
 import { ModeToggle } from "./toggle";
+import { signIn } from "@/lib/auth-actions";
+import { createClient } from "@/lib/database/server";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "../../ui/dropdown-menu";
+import Link from "next/link";
+import { SignOut } from "./sign-out";
+import { NavLink } from "./nav-link";
 
-function withClose(children: JSX.Element[]) {
-	return children.map((child, i) => (
-		<SheetClose asChild key={i}>
-			{child}
-		</SheetClose>
-	));
+async function AuthManager() {
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (user) {
+		return (
+			<div className="flex items-center space-x-2">
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Avatar className="hover:cursor-pointer">
+							<AvatarImage
+								src={user.user_metadata.picture}
+								alt="Avatar"
+							/>
+							<AvatarFallback>
+								{user.user_metadata.full_name}
+							</AvatarFallback>
+						</Avatar>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuGroup>
+							<DropdownMenuItem>
+								<Link href="/profile">Profile</Link>
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+						<DropdownMenuGroup>
+							<SignOut />
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
+		);
+	} else {
+		return (
+			<form action={signIn}>
+				<Button variant="secondary">
+					<Unlock size={16} className="mr-1" />
+					YETI Login
+				</Button>
+			</form>
+		);
+	}
 }
 
 function MobileNav() {
@@ -40,9 +91,15 @@ function MobileNav() {
 						className="flex items-center gap-2 text-lg font-semibold"
 					>
 						<Snowflake className="size-6" />
-						<span className="sr-only">Polar Edge</span>
+						<span className="">Polar Edge</span>
 					</Link>
-					<div className="mt-2">{withClose(NavLinks())}</div>
+					<div className="mt-2">
+						{pageData.map((page, i) => (
+							<SheetClose key={i} asChild>
+								<NavLink key={i} {...page} />
+							</SheetClose>
+						))}
+					</div>
 				</nav>
 			</SheetContent>
 		</Sheet>
@@ -55,9 +112,7 @@ export function TopNavBar() {
 			<MobileNav />
 			<div className="inline-flex items-center space-x-2">
 				<ModeToggle />
-				<Avatar>
-					<AvatarFallback>YR</AvatarFallback>
-				</Avatar>
+				<AuthManager />
 			</div>
 		</header>
 	);

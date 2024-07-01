@@ -24,7 +24,7 @@ function Header() {
 						</Link>
 					</div>
 					<div>
-						<Link className="flex items-center" href="/login">
+						<Link className="flex items-center" href="/tutorial">
 							<span>Login</span>
 							<ArrowRight className="ml-1" size={16} />
 						</Link>
