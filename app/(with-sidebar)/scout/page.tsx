@@ -8,12 +8,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/lib/components/ui/card";
+import { createClient } from "@/lib/database/server";
 
-export default function ScoutingPage() {
+export default async function ScoutingPage() {
+	const supabase = createClient();
+
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user) {
+		return <div>Not wogged in</div>;
+	}
+
 	return (
 		<form
 			action={async (d) => {
 				"use server";
+				d.append("user_id", user.id);
 				console.log(Object.fromEntries(d.entries()));
 			}}
 		>
