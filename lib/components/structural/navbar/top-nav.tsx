@@ -1,4 +1,4 @@
-import { Menu, Snowflake } from "lucide-react";
+import { Menu, Snowflake, Unlock } from "lucide-react";
 import { Button } from "@components/ui/button";
 import {
 	Sheet,
@@ -8,7 +8,7 @@ import {
 	SheetContent,
 } from "@components/ui/sheet";
 import { Avatar, AvatarFallback } from "@components/ui/avatar";
-import { NavLinks } from "./nav-links";
+import { NavLinks, pageData } from "./nav-links";
 import { ModeToggle } from "./toggle";
 import { signIn } from "@/lib/auth-actions";
 import { createClient } from "@/lib/database/server";
@@ -22,22 +22,13 @@ import {
 } from "../../ui/dropdown-menu";
 import Link from "next/link";
 import { SignOut } from "./sign-out";
-
-function withClose(children: JSX.Element[]) {
-	return children.map((child, i) => (
-		<SheetClose asChild key={i}>
-			{child}
-		</SheetClose>
-	));
-}
+import { NavLink } from "./nav-link";
 
 async function AuthManager() {
 	const supabase = createClient();
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-
-	console.log(user?.user_metadata);
 
 	if (user) {
 		return (
@@ -70,7 +61,10 @@ async function AuthManager() {
 	} else {
 		return (
 			<form action={signIn}>
-				<Button variant="outline">Sign In</Button>
+				<Button variant="secondary">
+					<Unlock size={16} className="mr-1" />
+					YETI Login
+				</Button>
 			</form>
 		);
 	}
@@ -97,9 +91,15 @@ function MobileNav() {
 						className="flex items-center gap-2 text-lg font-semibold"
 					>
 						<Snowflake className="size-6" />
-						<span className="sr-only">Polar Edge</span>
+						<span className="">Polar Edge</span>
 					</Link>
-					<div className="mt-2">{withClose(NavLinks())}</div>
+					<div className="mt-2">
+						{pageData.map((page, i) => (
+							<SheetClose key={i} asChild>
+								<NavLink key={i} {...page} />
+							</SheetClose>
+						))}
+					</div>
 				</nav>
 			</SheetContent>
 		</Sheet>

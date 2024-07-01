@@ -8,7 +8,7 @@ export interface PageData {
 	icon: ReactNode;
 }
 
-const pageData: PageData[] = [
+export const pageData: PageData[] = [
 	{
 		title: "Tutorial",
 		href: "/tutorial",

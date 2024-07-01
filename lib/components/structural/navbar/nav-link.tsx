@@ -13,7 +13,7 @@ export function NavLink(page: PageData): JSX.Element {
 		isActive && "text-primary bg-muted"
 	);
 	return (
-		<Link key={page.href} href={page.href} className={classes}>
+		<Link key={page.href} className={classes} {...page}>
 			{page.icon}
 			{page.title}
 		</Link>
