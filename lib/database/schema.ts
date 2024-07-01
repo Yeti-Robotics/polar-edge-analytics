@@ -8,6 +8,7 @@ import {
 	pgSchema,
 	uuid,
 	foreignKey,
+	serial,
 } from "drizzle-orm/pg-core";
 
 const authSchema = pgSchema("auth");
@@ -46,6 +47,7 @@ export const match = pgTable(
 export const stand_form = pgTable(
 	"stand_form",
 	{
+		form_id: serial("form_id"),
 		scouter: uuid("user_id")
 			.references(() => auth_users.id)
 			.notNull(),
@@ -54,7 +56,7 @@ export const stand_form = pgTable(
 			.notNull(),
 		match_number: integer("match_number"),
 		event_code: text("event_code"),
-		auto_line: integer("auto_line").notNull(),
+		auto_line: boolean("auto_line").notNull(),
 		speaker_auto: integer("speaker_auto").notNull(),
 		amp_auto: integer("amp_auto").notNull(),
 		shuttle_auto: integer("shuttle_auto").notNull(),
@@ -72,6 +74,7 @@ export const stand_form = pgTable(
 		}),
 		pk: primaryKey({
 			columns: [
+				table.form_id,
 				table.scouter,
 				table.team_number,
 				table.match_number,
