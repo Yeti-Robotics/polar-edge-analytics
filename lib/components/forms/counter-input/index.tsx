@@ -3,10 +3,11 @@
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { InputHTMLAttributes, useState } from "react";
 import errors from "@/lib/errors";
 
-export interface CounterInputProps {
+export interface CounterInputProps
+	extends InputHTMLAttributes<HTMLInputElement> {
 	/** Field name for inner input. */
 	name: string;
 	/** Value to start counter at, defaults to 0. */
@@ -31,6 +32,7 @@ export function CounterInput({
 	decreaseBy = 1,
 	max,
 	min = 0,
+	...props
 }: CounterInputProps) {
 	if (max && max < min) {
 		throw Error(`${errors.ILLEGAL_ARGUMENT} max cannot be less than min.`);
@@ -61,11 +63,13 @@ export function CounterInput({
 				{decreaseBy !== 1 && <span>{decreaseBy}</span>}
 			</Button>
 			<Input
+				id={name}
 				name={name}
 				aria-label="counter-current-value"
 				className="text-center"
 				readOnly
 				value={value}
+				{...props}
 			/>
 			<Button
 				type="button"

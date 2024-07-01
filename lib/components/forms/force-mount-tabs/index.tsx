@@ -35,6 +35,8 @@ function forceMountAllTabsContentChildren(children: ReactElement[]) {
  * Extension of shadcn tabs built for multi-tabbed forms, forces TabsContent
  * to be mounted so you don't have to worry about it!
  *
+ * Only downside is it can't be wrapped in a component.
+ *
  * Oh...and it all works with RSC.
  * */
 export function ForceMountTabs({
