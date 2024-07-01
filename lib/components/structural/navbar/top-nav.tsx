@@ -1,4 +1,4 @@
-import { Menu, Link, Snowflake } from "lucide-react";
+import { Menu, Snowflake } from "lucide-react";
 import { Button } from "@components/ui/button";
 import {
 	Sheet,
@@ -10,6 +10,18 @@ import {
 import { Avatar, AvatarFallback } from "@components/ui/avatar";
 import { NavLinks } from "./nav-links";
 import { ModeToggle } from "./toggle";
+import { signIn } from "@/lib/auth-actions";
+import { createClient } from "@/lib/database/server";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "../../ui/dropdown-menu";
+import Link from "next/link";
+import { SignOut } from "./sign-out";
 
 function withClose(children: JSX.Element[]) {
 	return children.map((child, i) => (
@@ -17,6 +29,51 @@ function withClose(children: JSX.Element[]) {
 			{child}
 		</SheetClose>
 	));
+}
+
+async function AuthManager() {
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	console.log(user?.user_metadata);
+
+	if (user) {
+		return (
+			<div className="flex items-center space-x-2">
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Avatar className="hover:cursor-pointer">
+							<AvatarImage
+								src={user.user_metadata.picture}
+								alt="Avatar"
+							/>
+							<AvatarFallback>
+								{user.user_metadata.full_name}
+							</AvatarFallback>
+						</Avatar>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuGroup>
+							<DropdownMenuItem>
+								<Link href="/profile">Profile</Link>
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+						<DropdownMenuGroup>
+							<SignOut />
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
+		);
+	} else {
+		return (
+			<form action={signIn}>
+				<Button variant="outline">Sign In</Button>
+			</form>
+		);
+	}
 }
 
 function MobileNav() {
@@ -55,9 +112,7 @@ export function TopNavBar() {
 			<MobileNav />
 			<div className="inline-flex items-center space-x-2">
 				<ModeToggle />
-				<Avatar>
-					<AvatarFallback>YR</AvatarFallback>
-				</Avatar>
+				<AuthManager />
 			</div>
 		</header>
 	);

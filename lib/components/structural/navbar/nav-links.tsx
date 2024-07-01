@@ -1,28 +1,28 @@
 import { NavLink } from "./nav-link";
 import { Beaker, Bot, GraduationCap, LucideProps } from "lucide-react";
-import { ComponentType, JSX, ReactNode } from "react";
+import { ComponentType, ReactNode } from "react";
 
 export interface PageData {
 	title: string;
 	href: string;
-	icon: ComponentType<LucideProps>;
+	icon: ReactNode;
 }
 
 const pageData: PageData[] = [
 	{
 		title: "Tutorial",
 		href: "/tutorial",
-		icon: GraduationCap,
+		icon: <GraduationCap size={24} />,
 	},
 	{
 		title: "Scout",
 		href: "/scout",
-		icon: Bot,
+		icon: <Bot size={24} />,
 	},
 	{
 		title: "Analyze",
 		href: "/analysis",
-		icon: Beaker,
+		icon: <Beaker size={24} />,
 	},
 ];
 

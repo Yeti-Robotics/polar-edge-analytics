@@ -4,16 +4,6 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { type PageData } from "./nav-links";
 import { usePathname } from "next/navigation";
-import { ComponentType, ReactNode } from "react";
-import { LucideProps } from "lucide-react";
-
-function withIconStyles(Icon: ComponentType<LucideProps>): ReactNode {
-	const Component = (props: JSX.IntrinsicAttributes) => {
-		return <Icon className="size-6" {...props} />;
-	};
-	Component.displayName = "StyledIcon";
-	return <Component />;
-}
 
 export function NavLink(page: PageData): JSX.Element {
 	const path = usePathname();
@@ -24,7 +14,7 @@ export function NavLink(page: PageData): JSX.Element {
 	);
 	return (
 		<Link key={page.href} href={page.href} className={classes}>
-			{withIconStyles(page.icon)}
+			{page.icon}
 			{page.title}
 		</Link>
 	);
