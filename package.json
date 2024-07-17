@@ -11,8 +11,7 @@
 		"storybook": "storybook dev -p 6006",
 		"test:storybook": "test-storybook",
 		"build:storybook": "storybook build --output-dir storybook-static",
-		"prepare": "husky install .husky",
-		"precommit": "lint-staged"
+		"prepare": "husky install .husky"
 	},
 	"lint-staged": {
 		"{app,components,lib,stories}/**/*.{ts,tsx,js,jsx}": "eslint --fix",
