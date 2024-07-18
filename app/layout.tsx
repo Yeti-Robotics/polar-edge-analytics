@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/components/structural/ThemeProvider";
-import { Navbar } from "@/lib/components/structural/navbar";
 
 const libreFranklin = Libre_Franklin({
 	subsets: ["latin"],
@@ -30,7 +29,6 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<Navbar />
 					{children}
 				</ThemeProvider>
 			</body>
