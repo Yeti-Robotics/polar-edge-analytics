@@ -10,6 +10,7 @@
 		"format": "prettier . --write",
 		"storybook": "storybook dev -p 6006",
 		"test:storybook": "test-storybook",
+		"coverage:storybook": "test-storybook --coverage",
 		"build:storybook": "storybook build --output-dir storybook-static",
 		"prepare": "husky install .husky"
 	},
