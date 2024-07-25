@@ -1,8 +1,7 @@
 import { createClient } from "@/lib/database/server";
 import { NavLink } from "./nav-link";
-import { Beaker, Bot, GraduationCap, Hammer, LucideProps } from "lucide-react";
-import { ComponentType, ReactNode } from "react";
-
+import { Beaker, Bot, GraduationCap, Hammer } from "lucide-react";
+import { ReactNode } from "react";
 export interface PageData {
 	title: string;
 	href: string;
