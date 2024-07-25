@@ -80,9 +80,7 @@ To stop running supabase, type `supabase stop` into your terminal.
 
 ### Run the scouting site
 
-Once the prerequisites have been installed, create a file in the root directory named `.env.local`. This file will store private keys and other items required for the application to function. Copy the content from `.env.example` and past it into `.env.local`. To get the keys required for Discord OAuth to work, you will need to join the YETI Scouting Discord team. The anon key can be found in your terminal after running `supabase start`. If supabase is already running, you will need to restart after updating the Discord OAuth keys.
-
-Once keys are set up, you will need to run:
+Once supabase is setup and running, in the project's root directory, run:
 
 ```bash
 npm install # this installs the project's dependencies
