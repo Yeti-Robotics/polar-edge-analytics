@@ -1,6 +1,5 @@
 "use server";
 import { z } from "zod";
-import { db } from "@/lib/database";
 import { stand_form } from "@/lib/database/schema";
 
 const schema = z.object({
@@ -79,20 +78,14 @@ const schema = z.object({
 export async function create(data: FormData) {
 	const parsedData = Object.fromEntries(data.entries());
 	const validatedData = schema.safeParse(parsedData);
-	console.log(validatedData.error?.flatten());
 	if (!validatedData.success) {
 		return {
 			errors: validatedData.error.flatten().fieldErrors,
 		};
 	}
 
-	console.log(validatedData.data);
-
 	if (validatedData.data.parked || !validatedData.data.climbed) {
 		validatedData.data.bots_on_chain = 0;
 	}
-
-	const test = await db.insert(stand_form).values(validatedData.data);
-	console.log(test);
 	// continue with the rest of the function
 }

@@ -34,7 +34,6 @@ const preview: Preview = {
 			const { backgrounds } = context.globals;
 			const theme =
 				backgrounds?.value === "hsl(222.2 84% 4.9%)" ? "dark" : "light";
-			console.log(backgrounds?.value, theme);
 			return (
 				<main
 					className={`${fontLibreFranklin.variable} storybook-main font-sans`}

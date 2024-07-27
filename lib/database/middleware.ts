@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { jwtVerify } from "jose";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
@@ -37,13 +38,41 @@ export async function updateSession(request: NextRequest) {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	if (
-		request.nextUrl.pathname.startsWith("/admin") &&
-		user?.app_metadata?.userrole !== "ADMIN"
-	) {
-		const url = request.nextUrl.clone();
-		url.pathname = "/403";
-		return NextResponse.redirect(url);
+	await supabase.auth.refreshSession();
+	const { data } = await supabase.auth.getSession();
+	const jwt = data.session?.access_token;
+	let userInfo;
+	if (jwt) {
+		try {
+			userInfo = await jwtVerify(
+				jwt,
+				new TextEncoder().encode(process.env.JWT_SECRET)
+			);
+		} catch (err) {
+			const url = request.nextUrl.clone();
+		}
+	}
+
+	if (request.nextUrl.pathname.startsWith("/admin")) {
+		const { data } = await supabase.auth.getSession();
+		const userJWT = data.session?.access_token;
+		if (userJWT) {
+			const userRole = await jwtVerify(
+				userJWT,
+				new TextEncoder().encode(process.env.JWT_SECRET)
+			)
+				.then((data) => data.payload.user_role)
+				.catch(() => undefined);
+			if (userRole !== "admin") {
+				const url = request.nextUrl.clone();
+				url.pathname = "/403";
+				return NextResponse.redirect(url);
+			}
+		} else {
+			const url = request.nextUrl.clone();
+			url.pathname = "/403";
+			return NextResponse.redirect(url);
+		}
 	}
 
 	// IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

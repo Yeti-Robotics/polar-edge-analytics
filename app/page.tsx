@@ -3,6 +3,8 @@ import { Snowverlay } from "@/lib/components/decorative/snowverlay";
 import Link from "next/link";
 import { ArrowRight, Code, Snowflake } from "lucide-react";
 import { MountainUnderlay } from "./mountain-underlay";
+import { jwtVerify } from "jose";
+import { createClient } from "@/lib/database/server";
 
 function Header() {
 	return (
@@ -35,7 +37,7 @@ function Header() {
 	);
 }
 
-function HeroSection() {
+async function HeroSection() {
 	return (
 		<section className="relative left-0 top-0 z-10 flex min-h-screen w-full items-center justify-center p-16 text-center">
 			<div>
