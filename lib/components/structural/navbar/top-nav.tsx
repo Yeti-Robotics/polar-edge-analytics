@@ -8,7 +8,7 @@ import {
 	SheetContent,
 } from "@components/ui/sheet";
 import { Avatar, AvatarFallback } from "@components/ui/avatar";
-import { NavLinks, pageData } from "./nav-links";
+import { pageData } from "./nav-links";
 import { ModeToggle } from "./toggle";
 import { signIn } from "@/lib/auth-actions";
 import { createClient } from "@/lib/database/server";
@@ -58,16 +58,26 @@ async function AuthManager() {
 				</DropdownMenu>
 			</div>
 		);
-	} else {
+	}
+
+	if (process.env.NODE_ENV === "development") {
 		return (
-			<form action={signIn}>
-				<Button variant="secondary">
+			<Button variant="secondary" asChild>
+				<Link href="/login-dev">
 					<Unlock size={16} className="mr-1" />
-					YETI Login
-				</Button>
-			</form>
+					<span>YETI Login</span>
+				</Link>
+			</Button>
 		);
 	}
+
+	return (
+		<form action={signIn}>
+			<Button variant="secondary">
+				<span>YETI Login</span>
+			</Button>
+		</form>
+	);
 }
 
 function MobileNav() {

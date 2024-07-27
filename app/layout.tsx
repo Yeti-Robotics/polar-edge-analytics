@@ -21,7 +21,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${libreFranklin.variable} bg-background font-sans`}
+				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert`}
 			>
 				<ThemeProvider
 					attribute="class"
