@@ -77,6 +77,7 @@ Copy the following output values to your environment file:
 `anon key` to `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 `API URL` to `NEXT_PUBLIC_SUPABASE_URL`
 `JWT secret` to `JWT_SECRET`
+`service_role key` to `SUPABASE_SERVICE_KEY`
 
 To stop running supabase, type `supabase stop` into your terminal.
 

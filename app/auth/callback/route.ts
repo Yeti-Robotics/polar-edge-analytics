@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/database/server";
-import { createServerClient } from "@supabase/ssr";
+import { createServiceClient } from "@/lib/database/service";
 import { NextResponse } from "next/server";
 
 interface DiscordGuildMemberResponse {
@@ -58,6 +58,9 @@ export async function GET(request: Request) {
 		).then((res) => res.json());
 
 		if (!servers || servers?.code) {
+			const serviceClient = createServiceClient();
+
+			await serviceClient.auth.admin.deleteUser(user.id);
 			await supabase.auth.signOut();
 			return NextResponse.redirect(`${origin}/403`);
 		}
