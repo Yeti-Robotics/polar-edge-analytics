@@ -7,25 +7,25 @@ import {
 	SheetTrigger,
 	SheetContent,
 } from "@components/ui/sheet";
-import { Avatar, AvatarFallback } from "@components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@components/ui/avatar";
 import { pageData } from "./nav-links";
 import { ModeToggle } from "./toggle";
-import { signIn } from "@/lib/auth-actions";
+import { signInWithDiscord } from "@/lib/auth-actions";
 import { createClient } from "@/lib/database/server";
-import { AvatarImage } from "@radix-ui/react-avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
+} from "@components/ui/dropdown-menu";
 import Link from "next/link";
 import { SignOut } from "./sign-out";
 import { NavLink } from "./nav-link";
 
 async function AuthManager() {
 	const supabase = createClient();
+
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
@@ -72,7 +72,7 @@ async function AuthManager() {
 	}
 
 	return (
-		<form action={signIn}>
+		<form action={signInWithDiscord}>
 			<Button variant="secondary">
 				<span>YETI Login</span>
 			</Button>
