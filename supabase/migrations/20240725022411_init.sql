@@ -2,7 +2,7 @@ create type public.app_permission as enum ('admin.access', 'standform.submit');
 
 create type public.app_role as enum ('admin', 'yeti-member');
 
--- profile
+-- USER PROFILE
 create table public.profile (
     id uuid not null references auth.users on delete cascade,
     nick varchar(32),
@@ -18,7 +18,6 @@ create table public.user_roles (
 );
 
 create index on public.user_roles using btree (user_id);
-
 
 create function public.handle_new_user()
 returns trigger
