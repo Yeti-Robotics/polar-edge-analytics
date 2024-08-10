@@ -54,7 +54,7 @@ create table public.stand_form (
     park                    boolean not null default false,
     number_on_chain         smallint not null default 0,
     defense                 smallint not null default 3,
-    penalties               smallint not null default 0,
+--    penalties               smallint not null default 0,
     notes                   varchar(1024) not null,
     approved                boolean not null default false,
     created_at              timestamp with time zone not null default now(),
