@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/database/server";
 import { redirect } from "next/navigation";
 
-export async function signIn() {
+export async function signInWithDiscord() {
 	const supabase = createClient();
 
 	const { error, data } = await supabase.auth.signInWithOAuth({
