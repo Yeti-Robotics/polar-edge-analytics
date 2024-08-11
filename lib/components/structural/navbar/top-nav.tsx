@@ -10,7 +10,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@components/ui/avatar";
 import { pageData } from "./nav-links";
 import { ModeToggle } from "./toggle";
-import { signInWithDiscord } from "@/lib/auth-actions";
+import { signInWithDiscord } from "@/lib/actions/auth";
 import { createClient } from "@/lib/database/server";
 import {
 	DropdownMenu,

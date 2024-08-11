@@ -68,3 +68,31 @@ export const signInDevelopment = createServerAction(
 	},
 	"development"
 );
+
+export const signInWithDiscord = createServerAction(async () => {
+	const supabase = createClient();
+
+	const { error, data } = await supabase.auth.signInWithOAuth({
+		provider: "discord",
+		options: {
+			redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL,
+			scopes: "guilds.members.read",
+		},
+	});
+
+	if (data.url) {
+		return redirect(data.url);
+	}
+
+	if (error) {
+		console.error("Error logging in:", error.message);
+		return;
+	}
+
+	return redirect("/analysis");
+});
+
+export const signOutWithDiscord = createServerAction(async () => {
+	const supabase = createClient();
+	await supabase.auth.signOut();
+});

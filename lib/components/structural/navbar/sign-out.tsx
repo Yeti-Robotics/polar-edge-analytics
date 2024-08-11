@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "@/lib/auth-actions";
+import { signOutWithDiscord } from "@/lib/actions/auth";
 import { DropdownMenuItem } from "../../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 
@@ -11,7 +11,7 @@ export function SignOut() {
 		<DropdownMenuItem
 			className="hover:cursor-pointer"
 			onClick={async () => {
-				await signOut();
+				await signOutWithDiscord();
 				router.push("/");
 			}}
 		>
