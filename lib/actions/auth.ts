@@ -3,6 +3,11 @@
 import { z } from "zod";
 import { createClient } from "../database/server";
 import { redirect } from "next/navigation";
+import {
+	createServerAction,
+	ServerActionError,
+	ServerActionErrorWithDetails,
+} from "./actions-utils";
 
 const developmentAccountSchema = z.object({
 	email: z.string({
@@ -19,63 +24,75 @@ function validateDevelopmentAccountSchema(formData: FormData) {
 	return validatedFields;
 }
 
-export async function signUpDevelopment(formData: FormData) {
-	if (process.env.NODE_ENV !== "development") {
-		return {
-			errors: ["Unauthorized"],
-		};
-	}
+export const signUpDevelopment = createServerAction(
+	async (formData: FormData) => {
+		const validatedFields = validateDevelopmentAccountSchema(formData);
+		if (!validatedFields.success) {
+			const fieldErrors = validatedFields.error.flatten().fieldErrors;
+			throw new ServerActionErrorWithDetails(
+				"Invalid input.",
+				fieldErrors
+			);
+		}
+		const { email, password } = validatedFields.data;
+		const supabase = createClient();
+		const { error } = await supabase.auth.signUp({
+			email,
+			password,
+		});
+		if (error)
+			throw new ServerActionError("Something went wrong signing up.");
+		redirect("/profile");
+	},
+	"development"
+);
 
-	const validatedFields = validateDevelopmentAccountSchema(formData);
+export const signInDevelopment = createServerAction(
+	async (formData: FormData) => {
+		const validatedFields = validateDevelopmentAccountSchema(formData);
+		if (!validatedFields.success) {
+			const fieldErrors = validatedFields.error.flatten().fieldErrors;
+			throw new ServerActionErrorWithDetails(
+				"Invalid input.",
+				fieldErrors
+			);
+		}
+		const { email, password } = validatedFields.data;
+		const supabase = createClient();
+		const { error } = await supabase.auth.signInWithPassword({
+			email,
+			password,
+		});
+		if (error) throw new ServerActionError("Something went wrong.");
+		redirect("/profile");
+	},
+	"development"
+);
 
-	if (!validatedFields.success) {
-		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-		};
-	}
-	const { email, password } = validatedFields.data;
-
+export const signInWithDiscord = createServerAction(async () => {
 	const supabase = createClient();
-	const { error } = await supabase.auth.signUp({
-		email,
-		password,
+
+	const { error, data } = await supabase.auth.signInWithOAuth({
+		provider: "discord",
+		options: {
+			redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL,
+			scopes: "guilds.members.read",
+		},
 	});
 
+	if (data.url) {
+		return redirect(data.url);
+	}
+
 	if (error) {
-		return {
-			errors: ["Something went wrong trying to sign up"],
-		};
+		console.error("Error logging in:", error.message);
+		return;
 	}
 
-	redirect("/profile");
-}
+	return redirect("/analysis");
+});
 
-export async function signInDevelopment(formData: FormData) {
-	if (process.env.NODE_ENV !== "development") {
-		return {
-			errors: ["Unauthorized"],
-		};
-	}
-
-	const validatedFields = validateDevelopmentAccountSchema(formData);
-	if (!validatedFields.success) {
-		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-		};
-	}
-	const { email, password } = validatedFields.data;
-
+export const signOutWithDiscord = createServerAction(async () => {
 	const supabase = createClient();
-	const { error } = await supabase.auth.signInWithPassword({
-		email,
-		password,
-	});
-
-	if (error) {
-		return {
-			errors: ["Something went wrong trying to sign up"],
-		};
-	}
-
-	redirect("/profile");
-}
+	await supabase.auth.signOut();
+});
