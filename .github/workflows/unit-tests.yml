@@ -1,0 +1,11 @@
+name: Run Jest Tests
+on: push
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install modules
+              run: npm install
+            - name: Run tests
+              run: npm test
