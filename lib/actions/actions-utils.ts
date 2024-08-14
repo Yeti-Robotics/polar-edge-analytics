@@ -10,11 +10,10 @@ type Details = string | string[] | undefined;
  */
 export type ServerActionResult<T> =
 	| { success: true; value: T }
-	| { success: false; error: string }
 	| {
 			success: false;
 			error: string;
-			details: Record<string, Details>;
+			details?: Record<string, Details>;
 	  };
 
 /**
@@ -71,7 +70,11 @@ export function createServerAction<Return, Args extends unknown[] = []>(
 	callback: (...args: Args) => Promise<Return>,
 	environment: "all" | "production" | "development" = "all"
 ): (...args: Args) => Promise<ServerActionResult<Return>> {
-	if (environment !== "all" && process.env.NODE_ENV !== environment) {
+	if (
+		environment !== "all" &&
+		process.env.NODE_ENV !== "test" &&
+		process.env.NODE_ENV !== environment
+	) {
 		return async () => ({
 			success: false,
 			error: "Unauthorized.",
@@ -80,7 +83,6 @@ export function createServerAction<Return, Args extends unknown[] = []>(
 	return async (...args: Args) => {
 		try {
 			const value = await callback(...args);
-			console.log(value);
 			return { success: true, value };
 		} catch (error) {
 			switch (error.constructor) {

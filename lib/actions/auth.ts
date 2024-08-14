@@ -10,9 +10,10 @@ import {
 } from "./actions-utils";
 
 const developmentAccountSchema = z.object({
-	email: z.string({
-		invalid_type_error: "Invalid Email",
-	}),
+	email: z
+		.string()
+		.min(1, { message: "This field has to be filled" })
+		.email("This is not a valid email"),
 	password: z.string().min(6),
 });
 
@@ -34,6 +35,7 @@ export const signUpDevelopment = createServerAction(
 				fieldErrors
 			);
 		}
+
 		const { email, password } = validatedFields.data;
 		const supabase = createClient();
 		const { error } = await supabase.auth.signUp({
@@ -63,7 +65,7 @@ export const signInDevelopment = createServerAction(
 			email,
 			password,
 		});
-		if (error) throw new ServerActionError("Something went wrong.");
+		if (error) throw new ServerActionError("Invalid credentials.");
 		redirect("/profile");
 	},
 	"development"
@@ -71,7 +73,6 @@ export const signInDevelopment = createServerAction(
 
 export const signInWithDiscord = createServerAction(async () => {
 	const supabase = createClient();
-
 	const { error, data } = await supabase.auth.signInWithOAuth({
 		provider: "discord",
 		options: {
@@ -79,17 +80,8 @@ export const signInWithDiscord = createServerAction(async () => {
 			scopes: "guilds.members.read",
 		},
 	});
-
-	if (data.url) {
-		return redirect(data.url);
-	}
-
-	if (error) {
-		console.error("Error logging in:", error.message);
-		return;
-	}
-
-	return redirect("/analysis");
+	if (error) throw new ServerActionError("Error logging in.");
+	redirect(data.url);
 });
 
 export const signOutWithDiscord = createServerAction(async () => {
