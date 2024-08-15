@@ -1,3 +1,4 @@
+import { getNodeEnv } from "@/lib/utils";
 /**
  * Creating a standard response for server actions, and adding the ability to (securely) throw errors.
  * @see https://joulev.dev/blogs/throwing-expected-errors-in-react-server-actions
@@ -70,10 +71,11 @@ export function createServerAction<Return, Args extends unknown[] = []>(
 	callback: (...args: Args) => Promise<Return>,
 	environment: "all" | "production" | "development" = "all"
 ): (...args: Args) => Promise<ServerActionResult<Return>> {
+	const nodeEnv = getNodeEnv();
 	if (
 		environment !== "all" &&
-		process.env.NODE_ENV !== "test" &&
-		process.env.NODE_ENV !== environment
+		nodeEnv !== "test" &&
+		nodeEnv !== environment
 	) {
 		return async () => ({
 			success: false,
