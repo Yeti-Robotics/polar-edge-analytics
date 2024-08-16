@@ -39,18 +39,21 @@ export type Database = {
 					end_date: string;
 					event_key: string;
 					event_name: string;
+					is_current: boolean | null;
 					start_date: string;
 				};
 				Insert: {
 					end_date: string;
 					event_key: string;
 					event_name: string;
+					is_current?: boolean | null;
 					start_date: string;
 				};
 				Update: {
 					end_date?: string;
 					event_key?: string;
 					event_name?: string;
+					is_current?: boolean | null;
 					start_date?: string;
 				};
 				Relationships: [];
@@ -177,7 +180,6 @@ export type Database = {
 					notes: string;
 					number_on_chain: number;
 					park: boolean;
-					penalties: number;
 					scouter: string;
 					shuttle_notes: number;
 					spotlight: boolean;
@@ -201,7 +203,6 @@ export type Database = {
 					notes: string;
 					number_on_chain?: number;
 					park?: boolean;
-					penalties?: number;
 					scouter: string;
 					shuttle_notes?: number;
 					spotlight?: boolean;
@@ -225,7 +226,6 @@ export type Database = {
 					notes?: string;
 					number_on_chain?: number;
 					park?: boolean;
-					penalties?: number;
 					scouter?: string;
 					shuttle_notes?: number;
 					spotlight?: boolean;
