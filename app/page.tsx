@@ -77,9 +77,7 @@ export default async function Home() {
 				<div className="absolute inset-x-0 bottom-0 z-0 w-full">
 					<MountainUnderlay />
 				</div>
-				<div className="absolute h-screen w-full bg-gradient-to-br from-primary/85 from-30% via-fuchsia-500/65 to-orange-400/90 backdrop-blur-sm">
-					<Snowverlay numSnowflakes={75} blurFrequency={0.3} />
-				</div>
+				<div className="absolute h-screen w-full bg-gradient-to-br from-primary/85 from-30% via-fuchsia-500/65 to-orange-400/90 backdrop-blur-sm"></div>
 			</div>
 			<Header />
 			<HeroSection />
