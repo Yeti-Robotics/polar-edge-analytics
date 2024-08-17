@@ -1,21 +1,21 @@
 "use client";
 
-import { ForceMountTabs } from "@/lib/components/forms/force-mount-tabs";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 } from "@/lib/components/ui/card";
-import { TabsTrigger } from "@/lib/components/ui/tabs";
+import { Tabs, TabsTrigger } from "@/lib/components/ui/tabs";
 import { CounterInput } from "@components/forms/counter-input";
 import { Checkbox } from "@components/ui/checkbox";
 import { Label } from "@components/ui/label";
-import { TabsList } from "@radix-ui/react-tabs";
+import { TabsList } from "@/lib/components/ui/tabs";
 import { useEffect, useState } from "react";
-import { getAutoTab, getEndgameTab, getMiscTab, getTeleopTab } from "./tabs";
+import { AutoTab, EndgameTab, MiscTab, TeleopTab } from "./tabs";
 import { Button } from "@/lib/components/ui/button";
 import { StandFormData, validate } from "@/lib/actions/stand-form";
+import { TabsContentForceMount } from "./force-mount-tab";
 
 export function EndgameContent() {
 	const [climbed, setClimbed] = useState(false);
@@ -75,6 +75,30 @@ export function StandForm({
 	handleSubmit: (data: StandFormData) => Promise<unknown>;
 }) {
 	const [errors, setErrors] = useState([] as string[]);
+	const [activeTab, setActiveTab] = useState("auto");
+
+	const tabs = [
+		{
+			value: "auto",
+			content: <AutoTab />,
+			displayText: "Auto",
+		},
+		{
+			value: "teleop",
+			content: <TeleopTab />,
+			displayText: "Teleop",
+		},
+		{
+			value: "endgame",
+			content: <EndgameTab />,
+			displayText: "Endgame",
+		},
+		{
+			value: "misc",
+			content: <MiscTab />,
+			displayText: "Misc",
+		},
+	];
 
 	return (
 		<form
@@ -102,23 +126,31 @@ export function StandForm({
 					<CardTitle>Stand Form</CardTitle>
 				</CardHeader>
 				<CardContent className="px-6 pb-6">
-					<ForceMountTabs
-						defaultValue="auto"
+					<Tabs
+						value={activeTab}
+						onValueChange={setActiveTab}
 						className="max-w-[400px]"
 					>
-						<TabsList className="grid w-full grid-cols-4">
-							<TabsTrigger value="auto">Auto</TabsTrigger>
-							<TabsTrigger value="teleop">Teleop</TabsTrigger>
-							<TabsTrigger value="endgame">Endgame</TabsTrigger>
-							<TabsTrigger value="misc">Misc</TabsTrigger>
+						<TabsList>
+							{tabs.map(({ value, displayText }) => (
+								<TabsTrigger key={value} value={value}>
+									{displayText}
+								</TabsTrigger>
+							))}
 						</TabsList>
-						{getAutoTab()}
-						{getTeleopTab()}
-						{getEndgameTab()}
-						{getMiscTab()}
+						{tabs.map(({ value, content }) => (
+							<TabsContentForceMount
+								key={value}
+								value={value}
+								activeTab={activeTab}
+							>
+								{content}
+							</TabsContentForceMount>
+						))}
 						<Button type="submit" className="mt-4 w-full">
 							Submit
 						</Button>
+
 						<div>
 							{errors.map((error) => (
 								<p key={error} className="text-red-500">
@@ -126,7 +158,7 @@ export function StandForm({
 								</p>
 							))}
 						</div>
-					</ForceMountTabs>
+					</Tabs>
 				</CardContent>
 			</Card>
 		</form>

@@ -9,18 +9,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/lib/components/ui/select";
-import { TabsContent, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
+import { TabsContent } from "@/lib/components/ui/tabs";
 import { Checkbox } from "@/lib/components/ui/checkbox";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/lib/components/ui/card";
-import { ForceMountTabs } from "@/lib/components/forms/force-mount-tabs";
-import { Button } from "@/lib/components/ui/button";
-import { validate } from "@/lib/actions/stand-form";
-import { useState } from "react";
 
 export function NotesMissed({ name }: { name: string }) {
 	return (
@@ -31,9 +21,9 @@ export function NotesMissed({ name }: { name: string }) {
 	);
 }
 
-export function getAutoTab() {
+export function AutoTab() {
 	return (
-		<TabsContent value="auto">
+		<>
 			<h4>Auto</h4>
 			<div className="space-y-2">
 				<div className="flex items-center">
@@ -58,13 +48,13 @@ export function getAutoTab() {
 				</div>
 				<NotesMissed name="notes_missed_auto" />
 			</div>
-		</TabsContent>
+		</>
 	);
 }
 
-export function getTeleopTab() {
+export function TeleopTab() {
 	return (
-		<TabsContent value="teleop">
+		<>
 			<h4>Teleop</h4>
 			<div className="space-y-2">
 				<div>
@@ -85,22 +75,22 @@ export function getTeleopTab() {
 				</div>
 				<NotesMissed name="notes_missed_teleop" />
 			</div>
-		</TabsContent>
+		</>
 	);
 }
 
-export function getEndgameTab() {
+export function EndgameTab() {
 	return (
-		<TabsContent value="endgame">
+		<>
 			<h4>Endgame</h4>
 			<EndgameContent />
-		</TabsContent>
+		</>
 	);
 }
 
-export function getMiscTab() {
+export function MiscTab() {
 	return (
-		<TabsContent value="misc">
+		<TabsContent forceMount value="misc">
 			<h4>Miscellaneous</h4>
 			<div className="space-y-2">
 				<div>
