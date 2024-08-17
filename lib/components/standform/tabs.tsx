@@ -1,17 +1,35 @@
 import { CounterInput } from "@/lib/components/forms/counter-input";
-import { TabsContent } from "@/lib/components/ui/tabs";
-import { Label } from "@/lib/components/ui/label";
-import { Checkbox } from "@/lib/components/ui/checkbox";
 import { Textarea } from "@/lib/components/ui/textarea";
+import { EndgameContent } from "./form";
+import { Label } from "@/lib/components/ui/label";
 import {
 	Select,
-	SelectValue,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
+	SelectValue,
 } from "@/lib/components/ui/select";
-import { EndgameContent } from "./endgame";
-// import { EndgameContent } from "./endgame";
+import { TabsContent, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
+import { Checkbox } from "@/lib/components/ui/checkbox";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@/lib/components/ui/card";
+import { ForceMountTabs } from "@/lib/components/forms/force-mount-tabs";
+import { Button } from "@/lib/components/ui/button";
+import { validate } from "@/lib/actions/stand-form";
+import { useState } from "react";
+
+export function NotesMissed({ name }: { name: string }) {
+	return (
+		<div>
+			<Label htmlFor={name}>Notes Missed</Label>
+			<CounterInput required name={name} />
+		</div>
+	);
+}
 
 export function getAutoTab() {
 	return (
@@ -27,17 +45,18 @@ export function getAutoTab() {
 					<Label htmlFor="auto_line">Auto Line Crossed?</Label>
 				</div>
 				<div>
-					<Label htmlFor="speaker_auto">Speaker Auto</Label>
+					<Label htmlFor="speaker_auto">Speaker Notes</Label>
 					<CounterInput required name="speaker_auto" />
 				</div>
 				<div>
-					<Label htmlFor="amp_auto">Amp Auto</Label>
+					<Label htmlFor="amp_auto">Amp Notes</Label>
 					<CounterInput required name="amp_auto" />
 				</div>
 				<div>
-					<Label htmlFor="shuttle_auto">Shuttle Teleop</Label>
+					<Label htmlFor="shuttle_teleop">Shuttle Notes</Label>
 					<CounterInput required name="shuttle_auto" />
 				</div>
+				<NotesMissed name="notes_missed_auto" />
 			</div>
 		</TabsContent>
 	);
@@ -49,17 +68,22 @@ export function getTeleopTab() {
 			<h4>Teleop</h4>
 			<div className="space-y-2">
 				<div>
-					<Label htmlFor="speaker_teleop">Speaker Teleop</Label>
+					<Label htmlFor="speaker_teleop">Speaker Notes</Label>
 					<CounterInput required name="speaker_teleop" />
 				</div>
 				<div>
-					<Label htmlFor="amp_teleop">Amp Teleop</Label>
+					<Label htmlFor="amp_teleop">Amped Speaker Notes</Label>
+					<CounterInput required name="amped_speaker_teleop" />
+				</div>
+				<div>
+					<Label htmlFor="amp_teleop">Amp Notes</Label>
 					<CounterInput required name="amp_teleop" />
 				</div>
 				<div>
-					<Label htmlFor="shuttle_teleop">Shuttle Teleop</Label>
+					<Label htmlFor="shuttle_teleop">Shuttle Notes</Label>
 					<CounterInput required name="shuttle_teleop" />
 				</div>
+				<NotesMissed name="notes_missed_teleop" />
 			</div>
 		</TabsContent>
 	);
@@ -81,7 +105,7 @@ export function getMiscTab() {
 			<div className="space-y-2">
 				<div>
 					<Label htmlFor="defense_rating">Defense Rating</Label>
-					<Select required name="defense_rating">
+					<Select name="defense_rating">
 						<SelectTrigger>
 							<SelectValue placeholder="Select a defense rating" />
 						</SelectTrigger>
@@ -95,11 +119,10 @@ export function getMiscTab() {
 					</Select>
 				</div>
 				<div>
-					<Label htmlFor="comments">Comments</Label>
+					<Label htmlFor="notes">Comments</Label>
 					<Textarea
-						name="comments"
+						name="notes"
 						placeholder="Enter you comments here..."
-						required
 						minLength={32}
 						maxLength={256}
 					></Textarea>
