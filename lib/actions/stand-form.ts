@@ -1,8 +1,4 @@
 import { z } from "zod";
-import {
-	createServerAction,
-	ServerActionErrorWithDetails,
-} from "./actions-utils";
 
 const schema = z.object({
 	scouter: z.string().uuid(),
@@ -43,19 +39,7 @@ const schema = z.object({
 		.refine((value) => value >= 0, {
 			message: "shuttle_auto must be a non-negative integer",
 		}),
-	notes_missed_auto: z.coerce
-		.number()
-		.int()
-		.refine((value) => value >= 0, {
-			message: "notes_missed_auto must be a non-negative integer",
-		}),
 	speaker_teleop: z.coerce
-		.number()
-		.int()
-		.refine((value) => value >= 0, {
-			message: "speaker_teleop must be a non-negative integer",
-		}),
-	amped_speaker_teleop: z.coerce
 		.number()
 		.int()
 		.refine((value) => value >= 0, {
@@ -72,12 +56,6 @@ const schema = z.object({
 		.int()
 		.refine((value) => value >= 0, {
 			message: "shuttle_teleop must be a non-negative integer",
-		}),
-	notes_missed_teleop: z.coerce
-		.number()
-		.int()
-		.refine((value) => value >= 0, {
-			message: "notes_missed_teleop must be a non-negative integer",
 		}),
 	climbed: z.coerce
 		.boolean()
@@ -107,12 +85,18 @@ const flattenFieldErrors = (errors: Record<string, string[]>) => {
 	return Object.values(errors).flat();
 };
 
-export function validate(data: FormData) {
+export type StandFormData = z.infer<typeof schema>;
+export type StandFormValidationResult = {
+	errors: string[];
+	data: StandFormData | null;
+};
+
+export function validate(data: FormData): StandFormValidationResult {
 	const parsedData = Object.fromEntries(data.entries());
 	const validatedData = schema.safeParse(parsedData);
+
 	if (!validatedData.success) {
 		return {
-			success: false,
 			errors: flattenFieldErrors(
 				validatedData.error.flatten().fieldErrors
 			),
@@ -125,10 +109,7 @@ export function validate(data: FormData) {
 	}
 
 	return {
-		success: true,
-		errors: [],
 		data: validatedData.data,
+		errors: [],
 	};
 }
-
-export type StandFormData = z.infer<typeof schema>;

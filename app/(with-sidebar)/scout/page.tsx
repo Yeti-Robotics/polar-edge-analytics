@@ -1,12 +1,3 @@
-import { TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
-import { Button } from "@/lib/components/ui/button";
-import { ForceMountTabs } from "@/lib/components/forms/force-mount-tabs";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/lib/components/ui/card";
 import { createClient } from "@/lib/database/server";
 import { StandForm } from "../../../lib/components/standform/form";
 
@@ -26,6 +17,7 @@ export default async function ScoutingPage() {
 			handleSubmit={async (data) => {
 				"use server";
 				console.log(data);
+				return { success: true, value: data };
 			}}
 		/>
 	);

@@ -1,6 +1,7 @@
+"use client";
+
 import { CounterInput } from "@/lib/components/forms/counter-input";
 import { Textarea } from "@/lib/components/ui/textarea";
-import { EndgameContent } from "./form";
 import { Label } from "@/lib/components/ui/label";
 import {
 	Select,
@@ -11,15 +12,7 @@ import {
 } from "@/lib/components/ui/select";
 import { TabsContent } from "@/lib/components/ui/tabs";
 import { Checkbox } from "@/lib/components/ui/checkbox";
-
-export function NotesMissed({ name }: { name: string }) {
-	return (
-		<div>
-			<Label htmlFor={name}>Notes Missed</Label>
-			<CounterInput required name={name} />
-		</div>
-	);
-}
+import { useEffect, useState } from "react";
 
 export function AutoTab() {
 	return (
@@ -46,7 +39,6 @@ export function AutoTab() {
 					<Label htmlFor="shuttle_teleop">Shuttle Notes</Label>
 					<CounterInput required name="shuttle_auto" />
 				</div>
-				<NotesMissed name="notes_missed_auto" />
 			</div>
 		</>
 	);
@@ -62,10 +54,6 @@ export function TeleopTab() {
 					<CounterInput required name="speaker_teleop" />
 				</div>
 				<div>
-					<Label htmlFor="amp_teleop">Amped Speaker Notes</Label>
-					<CounterInput required name="amped_speaker_teleop" />
-				</div>
-				<div>
 					<Label htmlFor="amp_teleop">Amp Notes</Label>
 					<CounterInput required name="amp_teleop" />
 				</div>
@@ -73,9 +61,60 @@ export function TeleopTab() {
 					<Label htmlFor="shuttle_teleop">Shuttle Notes</Label>
 					<CounterInput required name="shuttle_teleop" />
 				</div>
-				<NotesMissed name="notes_missed_teleop" />
 			</div>
 		</>
+	);
+}
+
+function EndgameContent() {
+	const [climbed, setClimbed] = useState(false);
+	const [parked, setParked] = useState(false);
+
+	useEffect(() => {
+		if (climbed) {
+			setParked(false);
+		}
+	}, [climbed]);
+
+	useEffect(() => {
+		if (parked) {
+			setClimbed(false);
+		}
+	}, [parked]);
+
+	return (
+		<div className="space-y-2">
+			<div className="flex items-center space-x-2">
+				<Checkbox
+					id="climbed"
+					className="size-6"
+					name="climbed"
+					checked={climbed}
+					onCheckedChange={() => setClimbed((curr) => !curr)}
+				/>
+				<Label htmlFor="climbed">Climbed?</Label>
+			</div>
+			<div className="flex items-center space-x-2">
+				<Checkbox
+					id="parked"
+					className="size-6"
+					name="parked"
+					checked={parked}
+					onCheckedChange={() => setParked((curr) => !curr)}
+				/>
+				<Label htmlFor="parked">Parked?</Label>
+			</div>
+			<div hidden={!climbed}>
+				<Label htmlFor="bots_on_chain">Bots Same Chain</Label>
+				<CounterInput
+					defaultValue={1}
+					required
+					min={1}
+					max={3}
+					name="bots_on_chain"
+				/>
+			</div>
+		</div>
 	);
 }
 
@@ -112,7 +151,7 @@ export function MiscTab() {
 					<Label htmlFor="notes">Comments</Label>
 					<Textarea
 						name="notes"
-						placeholder="Enter you comments here..."
+						placeholder="Enter your comments here..."
 						minLength={32}
 						maxLength={256}
 					></Textarea>

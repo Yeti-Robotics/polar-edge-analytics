@@ -7,74 +7,22 @@ import {
 	CardTitle,
 } from "@/lib/components/ui/card";
 import { Tabs, TabsTrigger } from "@/lib/components/ui/tabs";
-import { CounterInput } from "@components/forms/counter-input";
-import { Checkbox } from "@components/ui/checkbox";
-import { Label } from "@components/ui/label";
 import { TabsList } from "@/lib/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AutoTab, EndgameTab, MiscTab, TeleopTab } from "./tabs";
 import { Button } from "@/lib/components/ui/button";
 import { StandFormData, validate } from "@/lib/actions/stand-form";
 import { TabsContentForceMount } from "./force-mount-tab";
+import { useFormState } from "react-dom";
+import { ServerActionResult } from "@/lib/actions/actions-utils";
 
-export function EndgameContent() {
-	const [climbed, setClimbed] = useState(false);
-	const [parked, setParked] = useState(false);
-
-	useEffect(() => {
-		if (climbed) {
-			setParked(false);
-		}
-	}, [climbed]);
-
-	useEffect(() => {
-		if (parked) {
-			setClimbed(false);
-		}
-	}, [parked]);
-
-	return (
-		<div className="space-y-2">
-			<div className="flex items-center space-x-2">
-				<Checkbox
-					id="climbed"
-					className="size-6"
-					name="climbed"
-					checked={climbed}
-					onCheckedChange={() => setClimbed((curr) => !curr)}
-				/>
-				<Label htmlFor="climbed">Climbed?</Label>
-			</div>
-			<div className="flex items-center space-x-2">
-				<Checkbox
-					id="parked"
-					className="size-6"
-					name="parked"
-					checked={parked}
-					onCheckedChange={() => setParked((curr) => !curr)}
-				/>
-				<Label htmlFor="parked">Parked?</Label>
-			</div>
-			<div hidden={!climbed}>
-				<Label htmlFor="bots_on_chain">Bots Same Chain</Label>
-				<CounterInput
-					defaultValue={1}
-					required
-					min={1}
-					max={3}
-					name="bots_on_chain"
-				/>
-			</div>
-		</div>
-	);
-}
+// TODO: Add form submission logic
 
 export function StandForm({
 	handleSubmit,
 }: {
-	handleSubmit: (data: StandFormData) => Promise<unknown>;
+	handleSubmit: (data: StandFormData) => Promise<ServerActionResult<unknown>>;
 }) {
-	const [errors, setErrors] = useState([] as string[]);
 	const [activeTab, setActiveTab] = useState("auto");
 
 	const tabs = [
@@ -100,27 +48,28 @@ export function StandForm({
 		},
 	];
 
+	const [formState, formAction] = useFormState(
+		async (_: unknown, formData: FormData) => {
+			formData.append("scouter", "e22e61b8-bd4d-425d-8d6b-ba1b7e93c2e0");
+			formData.append("team_number", "1");
+			formData.append("match_number", "1");
+			formData.append("event_code", "2024test");
+
+			const result = validate(formData);
+
+			if (result.errors.length) {
+				return { errors: result.errors };
+			}
+
+			await handleSubmit(result.data!);
+
+			return { errors: [] };
+		},
+		null
+	);
+
 	return (
-		<form
-			action={async (d) => {
-				// TODO: use useContext to get user info? or pass in w/ props
-				d.append("scouter", "0dc19558-ed9c-49c9-b1ba-9dca484c1954");
-				d.append("team_number", "1");
-				d.append("match_number", "1");
-				d.append("event_code", "2024test");
-
-				const res = validate(d);
-
-				if (!res.success) {
-					setErrors(res.errors);
-					return;
-				} else {
-					// TODO: error handling in submit function
-					handleSubmit(res.data!);
-					setErrors([]);
-				}
-			}}
-		>
+		<form action={formAction}>
 			<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl">
 				<CardHeader>
 					<CardTitle>Stand Form</CardTitle>
@@ -150,9 +99,8 @@ export function StandForm({
 						<Button type="submit" className="mt-4 w-full">
 							Submit
 						</Button>
-
 						<div>
-							{errors.map((error) => (
+							{formState?.errors.map((error) => (
 								<p key={error} className="text-red-500">
 									{error}
 								</p>
