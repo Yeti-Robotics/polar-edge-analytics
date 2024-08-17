@@ -5,8 +5,11 @@ create table public.event (
     event_name              varchar(128) not null,
     start_date              date not null,
     end_date                date not null,
+    is_current              boolean default false,
     primary key (event_key)                      
 );
+
+create unique index on public.event (is_current) where is_current = true;
 
 create table public.match (
     event_key               varchar(16) not null,
