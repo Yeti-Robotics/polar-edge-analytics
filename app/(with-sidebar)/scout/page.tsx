@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/database/server";
-import { StandForm } from "../../../lib/components/standform/form";
+import { StandForm } from "../../../lib/components/stand-form/form";
 
 export default async function ScoutingPage() {
 	const supabase = createClient();

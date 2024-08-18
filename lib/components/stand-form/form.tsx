@@ -11,7 +11,7 @@ import { TabsList } from "@/lib/components/ui/tabs";
 import { useState } from "react";
 import { AutoTab, EndgameTab, MiscTab, TeleopTab } from "./tabs";
 import { Button } from "@/lib/components/ui/button";
-import { StandFormData, validate } from "@/lib/actions/stand-form";
+import { StandFormData, validate } from "@/lib/components/stand-form/validate";
 import { TabsContentForceMount } from "./force-mount-tab";
 import { useFormState } from "react-dom";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
