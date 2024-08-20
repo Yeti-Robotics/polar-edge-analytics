@@ -1,3 +1,4 @@
+import { createContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 
 const schema = z.object({
@@ -81,13 +82,9 @@ const schema = z.object({
 		.min(32, { message: "Notes must be at least 32 characters long" }),
 });
 
-const flattenFieldErrors = (errors: Record<string, string[]>) => {
-	return Object.values(errors).flat();
-};
-
 export type StandFormData = z.infer<typeof schema>;
 export type StandFormValidationResult = {
-	errors: string[];
+	errors: Record<string, string[]>;
 	data: StandFormData | null;
 };
 
@@ -97,9 +94,7 @@ export function validate(data: FormData): StandFormValidationResult {
 
 	if (!validatedData.success) {
 		return {
-			errors: flattenFieldErrors(
-				validatedData.error.flatten().fieldErrors
-			),
+			errors: validatedData.error.flatten().fieldErrors,
 			data: null,
 		};
 	}
@@ -110,6 +105,8 @@ export function validate(data: FormData): StandFormValidationResult {
 
 	return {
 		data: validatedData.data,
-		errors: [],
+		errors: {},
 	};
 }
+
+export const ValidationContext = createContext({} as StandFormValidationResult);
