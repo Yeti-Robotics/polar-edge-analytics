@@ -47,8 +47,6 @@ export function StandForm({
 	const [formState, formAction] = useFormState(
 		async (_: unknown, formData: FormData) => {
 			formData.append("scouter", "e22e61b8-bd4d-425d-8d6b-ba1b7e93c2e0");
-			formData.append("team_number", "1");
-			formData.append("match_number", "1");
 			formData.append("event_code", "2024test");
 
 			const result = validate(formData);
@@ -79,18 +77,30 @@ export function StandForm({
 
 	return (
 		<ValidationContext.Provider value={formState}>
-			<form action={formAction}>
-				<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl">
+			<form className="flex justify-center" action={formAction}>
+				<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl md:p-4">
 					<CardHeader>
 						<CardTitle>Stand Form</CardTitle>
-						<div className="flex justify-between px-4">
-							<div>
-								<ValidatedLabel>Match Number</ValidatedLabel>
-								<Input className="w-28" type="number" />
+						<div className="flex justify-between">
+							<div className="max-w-min space-y-2 text-wrap">
+								<ValidatedLabel htmlFor="match_number">
+									Match Number
+								</ValidatedLabel>
+								<Input
+									name="match_number"
+									className="w-28"
+									type="number"
+								/>
 							</div>
-							<div>
-								<ValidatedLabel>Team Number</ValidatedLabel>
-								<Input className="w-28" type="number" />
+							<div className="max-w-min space-y-2 text-wrap">
+								<ValidatedLabel htmlFor="team_number">
+									Team Number
+								</ValidatedLabel>
+								<Input
+									name="team_number"
+									className="w-28"
+									type="number"
+								/>
 							</div>
 						</div>
 					</CardHeader>
@@ -98,17 +108,15 @@ export function StandForm({
 						<Tabs
 							value={activeTab}
 							onValueChange={setActiveTab}
-							className="max-w-[400px]"
+							className="max-w-min"
 						>
-							<div className="flex justify-center">
-								<TabsList>
-									{tabs.map(({ value, displayText }) => (
-										<TabsTrigger key={value} value={value}>
-											{displayText}
-										</TabsTrigger>
-									))}
-								</TabsList>
-							</div>
+							<TabsList>
+								{tabs.map(({ value, displayText }) => (
+									<TabsTrigger key={value} value={value}>
+										{displayText}
+									</TabsTrigger>
+								))}
+							</TabsList>
 							{tabs.map(({ value, content }) => (
 								<TabsContentForceMount
 									key={value}
@@ -118,7 +126,7 @@ export function StandForm({
 									{content}
 								</TabsContentForceMount>
 							))}
-							<Button type="submit" className="mt-4 w-full">
+							<Button type="submit" className="mt-8 w-full">
 								Submit
 							</Button>
 						</Tabs>

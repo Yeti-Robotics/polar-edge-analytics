@@ -103,16 +103,6 @@ function EndgameContent() {
 		<div className="space-y-2">
 			<div className="flex items-center space-x-2">
 				<Checkbox
-					id="climbed"
-					className="size-6"
-					name="climbed"
-					checked={climbed}
-					onCheckedChange={() => setClimbed((curr) => !curr)}
-				/>
-				<ValidatedLabel htmlFor="climbed">Climbed?</ValidatedLabel>
-			</div>
-			<div className="flex items-center space-x-2">
-				<Checkbox
 					id="parked"
 					className="size-6"
 					name="parked"
@@ -120,6 +110,16 @@ function EndgameContent() {
 					onCheckedChange={() => setParked((curr) => !curr)}
 				/>
 				<ValidatedLabel htmlFor="parked">Parked?</ValidatedLabel>
+			</div>
+			<div className="flex items-center space-x-2">
+				<Checkbox
+					id="climbed"
+					className="size-6"
+					name="climbed"
+					checked={climbed}
+					onCheckedChange={() => setClimbed((curr) => !curr)}
+				/>
+				<ValidatedLabel htmlFor="climbed">Climbed?</ValidatedLabel>
 			</div>
 			<div hidden={!climbed}>
 				<ValidatedLabel htmlFor="bots_on_chain">

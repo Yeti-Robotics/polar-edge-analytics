@@ -38,7 +38,10 @@ const ValidatedLabel = ({ ...props }) => {
 			<div>
 				{isInvalid &&
 					validation.errors[props.htmlFor].map((error, i) => (
-						<p key={i} className="mb-2 mt-1 text-xs text-red-500">
+						<p
+							key={i}
+							className="mb-2 mt-1 text-clip text-xs text-red-500"
+						>
 							{error}
 						</p>
 					))}
