@@ -77,7 +77,7 @@ async function HeroSection() {
 						Publicly accessible, advanced scouting data for teams in
 						North Carolina. Brought to you by YETI Robotics.
 					</p>
-					<div className="inline-flex">
+					<div className="inline-flex space-x-3">
 						<Button className=" shadow-sm" variant="secondary">
 							Learn More
 						</Button>
