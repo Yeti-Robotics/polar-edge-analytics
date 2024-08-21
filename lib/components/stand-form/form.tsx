@@ -33,6 +33,8 @@ import {
 import { TabsContentForceMount } from "./force-mount-tab";
 import { useFormState } from "react-dom";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
+import { ValidatedLabel } from "../ui/label";
+import { Input } from "../ui/input";
 
 // TODO: Add form submission logic
 
@@ -81,6 +83,16 @@ export function StandForm({
 				<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl">
 					<CardHeader>
 						<CardTitle>Stand Form</CardTitle>
+						<div className="flex justify-between px-4">
+							<div>
+								<ValidatedLabel>Match Number</ValidatedLabel>
+								<Input className="w-28" type="number" />
+							</div>
+							<div>
+								<ValidatedLabel>Team Number</ValidatedLabel>
+								<Input className="w-28" type="number" />
+							</div>
+						</div>
 					</CardHeader>
 					<CardContent className="px-6 pb-6">
 						<Tabs
@@ -88,13 +100,15 @@ export function StandForm({
 							onValueChange={setActiveTab}
 							className="max-w-[400px]"
 						>
-							<TabsList>
-								{tabs.map(({ value, displayText }) => (
-									<TabsTrigger key={value} value={value}>
-										{displayText}
-									</TabsTrigger>
-								))}
-							</TabsList>
+							<div className="flex justify-center">
+								<TabsList>
+									{tabs.map(({ value, displayText }) => (
+										<TabsTrigger key={value} value={value}>
+											{displayText}
+										</TabsTrigger>
+									))}
+								</TabsList>
+							</div>
 							{tabs.map(({ value, content }) => (
 								<TabsContentForceMount
 									key={value}
