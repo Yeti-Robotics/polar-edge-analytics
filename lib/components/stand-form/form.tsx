@@ -33,6 +33,8 @@ import {
 import { TabsContentForceMount } from "./force-mount-tab";
 import { useFormState } from "react-dom";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
+import { ValidatedLabel } from "../ui/label";
+import { Input } from "../ui/input";
 
 // TODO: Add form submission logic
 
@@ -45,8 +47,6 @@ export function StandForm({
 	const [formState, formAction] = useFormState(
 		async (_: unknown, formData: FormData) => {
 			formData.append("scouter", "e22e61b8-bd4d-425d-8d6b-ba1b7e93c2e0");
-			formData.append("team_number", "1");
-			formData.append("match_number", "1");
 			formData.append("event_code", "2024test");
 
 			const result = validate(formData);
@@ -77,16 +77,38 @@ export function StandForm({
 
 	return (
 		<ValidationContext.Provider value={formState}>
-			<form action={formAction}>
-				<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl">
+			<form className="flex justify-center" action={formAction}>
+				<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl md:p-4">
 					<CardHeader>
 						<CardTitle>Stand Form</CardTitle>
+						<div className="flex justify-between">
+							<div className="max-w-min space-y-2 text-wrap">
+								<ValidatedLabel htmlFor="match_number">
+									Match Number
+								</ValidatedLabel>
+								<Input
+									name="match_number"
+									className="w-28"
+									type="number"
+								/>
+							</div>
+							<div className="max-w-min space-y-2 text-wrap">
+								<ValidatedLabel htmlFor="team_number">
+									Team Number
+								</ValidatedLabel>
+								<Input
+									name="team_number"
+									className="w-28"
+									type="number"
+								/>
+							</div>
+						</div>
 					</CardHeader>
 					<CardContent className="px-6 pb-6">
 						<Tabs
 							value={activeTab}
 							onValueChange={setActiveTab}
-							className="max-w-[400px]"
+							className="max-w-min"
 						>
 							<TabsList>
 								{tabs.map(({ value, displayText }) => (
@@ -104,7 +126,7 @@ export function StandForm({
 									{content}
 								</TabsContentForceMount>
 							))}
-							<Button type="submit" className="mt-4 w-full">
+							<Button type="submit" className="mt-8 w-full">
 								Submit
 							</Button>
 						</Tabs>

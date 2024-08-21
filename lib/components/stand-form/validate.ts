@@ -4,16 +4,16 @@ import { z } from "zod";
 const schema = z.object({
 	scouter: z.string().uuid(),
 	team_number: z.coerce
-		.number()
-		.int()
+		.number({ message: "Team number must be a number" })
+		.int({ message: "Team number cannot be blank" })
 		.refine((value) => value > 0, {
-			message: "team_number must be a positive integer",
+			message: "Team number must be a positive number",
 		}),
 	match_number: z.coerce
-		.number()
-		.int()
+		.number({ message: "Match number must be a number" })
+		.int({ message: "Match number cannot be blank" })
 		.refine((value) => value > 0, {
-			message: "match_number must be a positive integer",
+			message: "Match number must be a positive number",
 		}),
 	event_code: z.string().refine((value) => value !== "", {
 		message: "event_code is required",
