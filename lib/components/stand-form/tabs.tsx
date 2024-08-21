@@ -2,7 +2,7 @@
 
 import { CounterInput } from "@/lib/components/forms/counter-input";
 import { Textarea } from "@/lib/components/ui/textarea";
-import { Label } from "@/lib/components/ui/label";
+import { ValidatedLabel } from "@/lib/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -12,9 +12,12 @@ import {
 } from "@/lib/components/ui/select";
 import { TabsContent } from "@/lib/components/ui/tabs";
 import { Checkbox } from "@/lib/components/ui/checkbox";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ValidationContext } from "./validate";
 
 export function AutoTab() {
+	const validation = useContext(ValidationContext);
+
 	return (
 		<>
 			<h4>Auto</h4>
@@ -25,18 +28,26 @@ export function AutoTab() {
 						name="auto_line"
 						className="mr-2 size-6"
 					/>
-					<Label htmlFor="auto_line">Auto Line Crossed?</Label>
+					<ValidatedLabel htmlFor="auto_line">
+						Auto Line Crossed?
+					</ValidatedLabel>
 				</div>
 				<div>
-					<Label htmlFor="speaker_auto">Speaker Notes</Label>
+					<ValidatedLabel htmlFor="speaker_auto">
+						Speaker Notes
+					</ValidatedLabel>
 					<CounterInput required name="speaker_auto" />
 				</div>
 				<div>
-					<Label htmlFor="amp_auto">Amp Notes</Label>
+					<ValidatedLabel htmlFor="amp_auto">
+						Amp Notes
+					</ValidatedLabel>
 					<CounterInput required name="amp_auto" />
 				</div>
 				<div>
-					<Label htmlFor="shuttle_teleop">Shuttle Notes</Label>
+					<ValidatedLabel htmlFor="shuttle_teleop">
+						Shuttle Notes
+					</ValidatedLabel>
 					<CounterInput required name="shuttle_auto" />
 				</div>
 			</div>
@@ -50,15 +61,21 @@ export function TeleopTab() {
 			<h4>Teleop</h4>
 			<div className="space-y-2">
 				<div>
-					<Label htmlFor="speaker_teleop">Speaker Notes</Label>
+					<ValidatedLabel htmlFor="speaker_teleop">
+						Speaker Notes
+					</ValidatedLabel>
 					<CounterInput required name="speaker_teleop" />
 				</div>
 				<div>
-					<Label htmlFor="amp_teleop">Amp Notes</Label>
+					<ValidatedLabel htmlFor="amp_teleop">
+						Amp Notes
+					</ValidatedLabel>
 					<CounterInput required name="amp_teleop" />
 				</div>
 				<div>
-					<Label htmlFor="shuttle_teleop">Shuttle Notes</Label>
+					<ValidatedLabel htmlFor="shuttle_teleop">
+						Shuttle Notes
+					</ValidatedLabel>
 					<CounterInput required name="shuttle_teleop" />
 				</div>
 			</div>
@@ -92,7 +109,7 @@ function EndgameContent() {
 					checked={climbed}
 					onCheckedChange={() => setClimbed((curr) => !curr)}
 				/>
-				<Label htmlFor="climbed">Climbed?</Label>
+				<ValidatedLabel htmlFor="climbed">Climbed?</ValidatedLabel>
 			</div>
 			<div className="flex items-center space-x-2">
 				<Checkbox
@@ -102,10 +119,12 @@ function EndgameContent() {
 					checked={parked}
 					onCheckedChange={() => setParked((curr) => !curr)}
 				/>
-				<Label htmlFor="parked">Parked?</Label>
+				<ValidatedLabel htmlFor="parked">Parked?</ValidatedLabel>
 			</div>
 			<div hidden={!climbed}>
-				<Label htmlFor="bots_on_chain">Bots Same Chain</Label>
+				<ValidatedLabel htmlFor="bots_on_chain">
+					Bots Same Chain
+				</ValidatedLabel>
 				<CounterInput
 					defaultValue={1}
 					required
@@ -133,7 +152,9 @@ export function MiscTab() {
 			<h4>Miscellaneous</h4>
 			<div className="space-y-2">
 				<div>
-					<Label htmlFor="defense_rating">Defense Rating</Label>
+					<ValidatedLabel htmlFor="defense_rating">
+						Defense Rating
+					</ValidatedLabel>
 					<Select name="defense_rating">
 						<SelectTrigger>
 							<SelectValue placeholder="Select a defense rating" />
@@ -148,7 +169,7 @@ export function MiscTab() {
 					</Select>
 				</div>
 				<div>
-					<Label htmlFor="notes">Comments</Label>
+					<ValidatedLabel htmlFor="notes">Comments</ValidatedLabel>
 					<Textarea
 						name="notes"
 						placeholder="Enter your comments here..."
@@ -160,3 +181,34 @@ export function MiscTab() {
 		</TabsContent>
 	);
 }
+
+export const tabMappings: Record<string, string> = {
+	auto: "auto",
+	teleop: "teleop",
+	bots_on_chain: "endgame",
+	defense_rating: "misc",
+	notes: "misc",
+};
+
+export const tabs = [
+	{
+		value: "auto",
+		content: <AutoTab />,
+		displayText: "Auto",
+	},
+	{
+		value: "teleop",
+		content: <TeleopTab />,
+		displayText: "Teleop",
+	},
+	{
+		value: "endgame",
+		content: <EndgameTab />,
+		displayText: "Endgame",
+	},
+	{
+		value: "misc",
+		content: <MiscTab />,
+		displayText: "Misc",
+	},
+];
