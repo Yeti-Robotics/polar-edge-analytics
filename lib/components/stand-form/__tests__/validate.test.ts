@@ -2,7 +2,7 @@
  * Tests to verify stand form validation functions as expected.
  */
 
-import { validate } from "../validate";
+import { validateForm } from "../client-validate";
 
 function getBaseTestForm() {
 	const baseForm = new FormData();
@@ -35,16 +35,16 @@ describe("Validate correctly validates Stand Forms", () => {
 	});
 
 	it("passes for valid form", () => {
-		const validationResult = validate(testForm);
-		expect(Object.keys(validationResult.errors).length).toBe(0);
+		const validationResult = validateForm(testForm);
+		expect(Object.keys(validationResult.formErrors).length).toBe(0);
 		expect(validationResult.data?.climbed).toBe(false);
 	});
 
 	it("rejects if note is not 32 characters long", () => {
 		testForm.set("notes", "invalid note :<");
-		const validationResult = validate(testForm);
-		expect(Object.keys(validationResult.errors).length).toBe(1);
-		expect(validationResult.errors["notes"].at(0)).toBe(
+		const validationResult = validateForm(testForm);
+		expect(Object.keys(validationResult.formErrors).length).toBe(1);
+		expect(validationResult.formErrors["notes"].at(0)).toBe(
 			"Notes must be at least 32 characters long"
 		);
 	});
@@ -56,10 +56,10 @@ describe("Validate correctly validates Stand Forms", () => {
 		testForm.set("speaker_teleop", "-5");
 		testForm.set("amp_teleop", "-1");
 		testForm.set("shuttle_teleop", "-11");
-		const validationResult = validate(testForm);
-		expect(Object.keys(validationResult.errors).length).toBe(6);
+		const validationResult = validateForm(testForm);
+		expect(Object.keys(validationResult.formErrors).length).toBe(6);
 		expect(
-			Object.values(validationResult.errors)
+			Object.values(validationResult.formErrors)
 				.reduce((a, b) => [...a, ...b], [])
 				.every((err) => err.endsWith("must be a non-negative integer"))
 		).toBe(true);
@@ -67,14 +67,14 @@ describe("Validate correctly validates Stand Forms", () => {
 
 	it("allows climbed to be set to true", () => {
 		testForm.append("climbed", "true");
-		const validationResult = validate(testForm);
-		expect(Object.keys(validationResult.errors).length).toBe(0);
+		const validationResult = validateForm(testForm);
+		expect(Object.keys(validationResult.formErrors).length).toBe(0);
 	});
 
 	it("sets climbed and parked to false if neither is specified", () => {
 		testForm.delete("parked");
-		const validationResult = validate(testForm);
-		expect(Object.keys(validationResult.errors).length).toBe(0);
+		const validationResult = validateForm(testForm);
+		expect(Object.keys(validationResult.formErrors).length).toBe(0);
 		expect(validationResult.data?.climbed).toBe(false);
 		expect(validationResult.data?.parked).toBe(false);
 	});
@@ -83,7 +83,7 @@ describe("Validate correctly validates Stand Forms", () => {
 		testForm.delete("scouter");
 		testForm.delete("team_number");
 		testForm.delete("match_number");
-		const validationResult = validate(testForm);
-		expect(Object.keys(validationResult.errors).length).toBe(3);
+		const validationResult = validateForm(testForm);
+		expect(Object.keys(validationResult.formErrors).length).toBe(3);
 	});
 });

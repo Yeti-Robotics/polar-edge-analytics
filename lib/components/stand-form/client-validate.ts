@@ -1,8 +1,8 @@
-import { createContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 
-const schema = z.object({
-	scouter: z.string().uuid(),
+export const standFormSchema = z.object({
+	event_code: z.string().optional(),
+	scouter: z.string().uuid().optional(),
 	team_number: z.coerce
 		.number({ message: "Team number must be a number" })
 		.int({ message: "Team number cannot be blank" })
@@ -15,9 +15,6 @@ const schema = z.object({
 		.refine((value) => value > 0, {
 			message: "Match number must be a positive number",
 		}),
-	event_code: z.string().refine((value) => value !== "", {
-		message: "event_code is required",
-	}),
 	auto_line: z.coerce
 		.boolean()
 		.nullish()
@@ -82,19 +79,24 @@ const schema = z.object({
 		.min(32, { message: "Notes must be at least 32 characters long" }),
 });
 
-export type StandFormData = z.infer<typeof schema>;
+export type StandFormData = z.infer<typeof standFormSchema>;
 export type StandFormValidationResult = {
-	errors: Record<string, string[]>;
+	formErrors: {
+		[K in keyof StandFormData]?: string[] | undefined;
+	};
+	serverErrors?: Record<string, string[]>;
 	data: StandFormData | null;
 };
 
-export function validate(data: FormData): StandFormValidationResult {
-	const parsedData = Object.fromEntries(data.entries());
-	const validatedData = schema.safeParse(parsedData);
+export function validateData(
+	data: object,
+	schema: z.Schema
+): StandFormValidationResult {
+	const validatedData = schema.safeParse(data);
 
 	if (!validatedData.success) {
 		return {
-			errors: validatedData.error.flatten().fieldErrors,
+			formErrors: validatedData.error.flatten().fieldErrors,
 			data: null,
 		};
 	}
@@ -105,8 +107,11 @@ export function validate(data: FormData): StandFormValidationResult {
 
 	return {
 		data: validatedData.data,
-		errors: {},
+		formErrors: {},
 	};
 }
 
-export const ValidationContext = createContext({} as StandFormValidationResult);
+export function validateForm(data: FormData): StandFormValidationResult {
+	const parsedData = Object.fromEntries(data.entries());
+	return validateData(parsedData, standFormSchema);
+}

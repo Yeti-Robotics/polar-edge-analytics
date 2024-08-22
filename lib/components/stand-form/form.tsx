@@ -8,35 +8,24 @@ import {
 } from "@/lib/components/ui/card";
 import { Tabs, TabsTrigger } from "@/lib/components/ui/tabs";
 import { TabsList } from "@/lib/components/ui/tabs";
-import {
-	createContext,
-	Dispatch,
-	SetStateAction,
-	useEffect,
-	useState,
-} from "react";
-import {
-	AutoTab,
-	EndgameTab,
-	MiscTab,
-	tabMappings,
-	tabs,
-	TeleopTab,
-} from "./tabs";
+import { createContext, useContext, useEffect, useState } from "react";
+import { tabMappings, tabs } from "./tabs";
 import { Button } from "@/lib/components/ui/button";
 import {
 	StandFormData,
 	StandFormValidationResult,
-	validate,
-	ValidationContext,
-} from "@/lib/components/stand-form/validate";
+	validateForm,
+} from "@/lib/components/stand-form/client-validate";
 import { TabsContentForceMount } from "./force-mount-tab";
 import { useFormState } from "react-dom";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
 import { ValidatedLabel } from "../ui/label";
 import { Input } from "../ui/input";
+import { useUser } from "../structural/AuthProvider";
+import { runServerAction } from "./server-validate";
 
 // TODO: Add form submission logic
+export const ValidationContext = createContext({} as StandFormValidationResult);
 
 export function StandForm({
 	handleSubmit,
@@ -46,26 +35,26 @@ export function StandForm({
 	const [activeTab, setActiveTab] = useState("auto");
 	const [formState, formAction] = useFormState(
 		async (_: unknown, formData: FormData) => {
-			formData.append("scouter", "e22e61b8-bd4d-425d-8d6b-ba1b7e93c2e0");
-			formData.append("event_code", "2024test");
+			const result = validateForm(formData);
 
-			const result = validate(formData);
-
-			if (result.errors.length) {
+			if (!result.data) {
 				return result;
 			}
 
-			await handleSubmit(result.data!);
+			const serverResult = await runServerAction(
+				result.data,
+				handleSubmit
+			);
 
-			return result;
+			return serverResult;
 		},
-		{ errors: {}, data: null },
+		{ formErrors: {}, data: null },
 		"/"
 	);
 
 	useEffect(() => {
 		const activeErrorTab = Object.keys(tabMappings).find((tabKey) =>
-			Object.keys(formState.errors).some((errorKey) =>
+			Object.keys(formState.formErrors).some((errorKey) =>
 				errorKey.includes(tabKey)
 			)
 		);
@@ -73,7 +62,7 @@ export function StandForm({
 		if (activeErrorTab) {
 			setActiveTab(tabMappings[activeErrorTab]);
 		}
-	}, [formState.errors]);
+	}, [formState.formErrors]);
 
 	return (
 		<ValidationContext.Provider value={formState}>

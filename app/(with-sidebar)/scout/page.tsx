@@ -1,3 +1,5 @@
+"use server";
+
 import { createClient } from "@/lib/database/server";
 import { StandForm } from "../../../lib/components/stand-form/form";
 

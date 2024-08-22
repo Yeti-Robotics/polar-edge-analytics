@@ -1,6 +1,6 @@
 import { Button } from "@/lib/components/ui/button";
 import { seedData } from "@/lib/data/seedData";
-import { revalidateEvent } from "./revalidate-event";
+import { revalidateEvent } from "./event";
 
 export default function AdminPage() {
 	return (

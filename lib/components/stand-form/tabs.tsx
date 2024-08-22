@@ -12,12 +12,9 @@ import {
 } from "@/lib/components/ui/select";
 import { TabsContent } from "@/lib/components/ui/tabs";
 import { Checkbox } from "@/lib/components/ui/checkbox";
-import { useContext, useEffect, useState } from "react";
-import { ValidationContext } from "./validate";
+import { useEffect, useState } from "react";
 
 export function AutoTab() {
-	const validation = useContext(ValidationContext);
-
 	return (
 		<>
 			<h4>Auto</h4>
