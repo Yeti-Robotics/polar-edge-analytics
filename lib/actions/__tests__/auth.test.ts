@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import {
 	signInDevelopment,
 	signInWithDiscord,
-	signOutWithDiscord,
+	signOut,
 	signUpDevelopment,
 } from "../auth";
 import { createClient } from "@/lib/database/server";
@@ -199,7 +199,7 @@ describe("Sign out correctly functions", () => {
 	});
 
 	it("Creates a client and signs out", async () => {
-		await signOutWithDiscord();
+		await signOut();
 		expect(createClient).toHaveBeenCalledTimes(1);
 		expect(mockSignOut).toHaveBeenCalledTimes(1);
 		expect(mockSignOut).toHaveReturned();

@@ -71,6 +71,11 @@ export const signInDevelopment = createServerAction(
 	"development"
 );
 
+export const signOut = createServerAction(async () => {
+	const supabase = createClient();
+	await supabase.auth.signOut();
+});
+
 export const signInWithDiscord = createServerAction(async () => {
 	const supabase = createClient();
 	const { error, data } = await supabase.auth.signInWithOAuth({
@@ -82,9 +87,4 @@ export const signInWithDiscord = createServerAction(async () => {
 	});
 	if (error) throw new ServerActionError("Error logging in.");
 	redirect(data.url);
-});
-
-export const signOutWithDiscord = createServerAction(async () => {
-	const supabase = createClient();
-	await supabase.auth.signOut();
 });
