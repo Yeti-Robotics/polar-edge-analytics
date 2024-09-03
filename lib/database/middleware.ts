@@ -34,47 +34,36 @@ export async function updateSession(request: NextRequest) {
 	// supabase.auth.getUser(). A simple mistake could make it very hard to debug
 	// issues with users being randomly logged out.
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
 	await supabase.auth.refreshSession();
-	const { data } = await supabase.auth.getSession();
-	const jwt = data.session?.access_token;
-	let userInfo;
-	if (jwt) {
-		try {
-			userInfo = await jwtVerify(
-				jwt,
-				new TextEncoder().encode(process.env.JWT_SECRET)
-			);
-		} catch (err) {
-			const url = request.nextUrl.clone();
+	const { data: sessionData } = await supabase.auth.getSession();
+	await supabase.auth.refreshSession();
+
+	const matchedPath = ["/admin", "/scout"].find((path) =>
+		request.nextUrl.pathname.startsWith(path)
+	);
+
+	if (matchedPath) {
+		const userJWT = sessionData.session?.access_token;
+
+		if (!userJWT)
+			return NextResponse.redirect(new URL("/403", request.url));
+
+		const userRole = await jwtVerify(
+			userJWT,
+			new TextEncoder().encode(process.env.JWT_SECRET)
+		)
+			.then((data) => data.payload.user_role)
+			.catch(() => undefined);
+
+		switch (matchedPath) {
+			case "/admin":
+				if (userRole === "admin") break;
+			case "/scout":
+				if (userRole === "yeti-member" || userRole === "admin") break;
+			default:
+				return NextResponse.redirect(new URL("/403", request.url));
 		}
 	}
-
-	if (request.nextUrl.pathname.startsWith("/admin")) {
-		const { data } = await supabase.auth.getSession();
-		const userJWT = data.session?.access_token;
-		if (userJWT) {
-			const userRole = await jwtVerify(
-				userJWT,
-				new TextEncoder().encode(process.env.JWT_SECRET)
-			)
-				.then((data) => data.payload.user_role)
-				.catch(() => undefined);
-			if (userRole !== "admin") {
-				const url = request.nextUrl.clone();
-				url.pathname = "/403";
-				return NextResponse.redirect(url);
-			}
-		} else {
-			const url = request.nextUrl.clone();
-			url.pathname = "/403";
-			return NextResponse.redirect(url);
-		}
-	}
-
 	// IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
 	// creating a new response object with NextResponse.next() make sure to:
 	// 1. Pass the request in it, like so:

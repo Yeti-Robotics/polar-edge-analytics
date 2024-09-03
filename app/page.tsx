@@ -1,10 +1,7 @@
 import { Button } from "@components/ui/button";
-import { Snowverlay } from "@/lib/components/decorative/snowverlay";
 import Link from "next/link";
 import { ArrowRight, Code, Snowflake } from "lucide-react";
 import { MountainUnderlay } from "./mountain-underlay";
-import { jwtVerify } from "jose";
-import { createClient } from "@/lib/database/server";
 import { Unlock } from "lucide-react";
 import { signInWithDiscord } from "@/lib/actions/auth";
 

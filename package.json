@@ -19,6 +19,7 @@
 		"*.{js,jsx,ts,tsx,json,html}": "prettier --cache --write"
 	},
 	"dependencies": {
+		"@hookform/resolvers": "^3.9.0",
 		"@mdx-js/loader": "^3.0.1",
 		"@mdx-js/react": "^3.0.1",
 		"@next/mdx": "^14.2.4",
@@ -47,6 +48,7 @@
 		"next-themes": "^0.3.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"react-hook-form": "^7.53.0",
 		"recharts": "^2.12.7",
 		"tailwind-merge": "^2.3.0",
 		"tailwindcss-animate": "^1.0.7",

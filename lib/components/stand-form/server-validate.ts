@@ -5,71 +5,58 @@ import {
 	standFormSchema,
 	StandFormValidationResult,
 	validateData,
-	validateForm,
 } from "./client-validate";
 import {
+	createServerAction,
+	ServerActionError,
 	ServerActionErrorWithDetails,
 	ServerActionResult,
 } from "@/lib/actions/actions-utils";
+import z from "zod";
 import { createClient } from "@/lib/database/server";
 import { getCurrentEventCached } from "@/app/(with-sidebar)/admin/event";
 
-export async function runServerAction(
-	standFormData: StandFormData,
-	submitFunction: (
-		data: StandFormData
-	) => Promise<ServerActionResult<unknown>>
-): Promise<StandFormValidationResult> {
-	const supabase = createClient();
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+const submittedStandFormSchema = standFormSchema.extend({
+	scouter: z.string().uuid(),
+	event_code: z.string(),
+});
 
-	const eventData = await getCurrentEventCached();
-	const validationResult = validateData(standFormData, standFormSchema);
+type SubmittedStandForm = z.infer<typeof submittedStandFormSchema>;
 
-	if (!validationResult.data) {
-		return validationResult;
-	}
+export const standFormAction = createServerAction(
+	async (
+		rawFormData: StandFormData,
+		submitFunction: (
+			data: StandFormData
+		) => Promise<ServerActionResult<StandFormData>>
+	) => {
+		const originalData = rawFormData as SubmittedStandForm;
 
-	if (!user || !eventData) {
-		const serverErrors = {} as Record<string, string[]>;
+		const supabase = createClient();
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
 
-		if (!user) {
-			serverErrors.scouter = [
-				"You must be logged in to submit a stand form.",
-			];
+		const eventData = await getCurrentEventCached();
+
+		if (!user) throw new ServerActionError("Not logged in");
+		if (!eventData) throw new ServerActionError("No current event");
+
+		originalData.scouter = user.id;
+		originalData.event_code = eventData.event_key;
+
+		const validationResult = validateData(
+			originalData,
+			submittedStandFormSchema
+		);
+
+		if (!validationResult.data) {
+			throw new ServerActionErrorWithDetails(
+				"Invalid data.",
+				validationResult.formErrors
+			);
 		}
 
-		if (!eventData) {
-			serverErrors.event = ["Event not found."];
-		}
-
-		return {
-			serverErrors,
-			formErrors: {},
-			data: null,
-		};
+		return await submitFunction(originalData);
 	}
-
-	standFormData.scouter = user.id;
-	standFormData.event_code = eventData.event_key;
-
-	try {
-		await submitFunction(standFormData);
-	} catch (error) {
-		return {
-			serverErrors: {
-				server: ["Server error, please try again later."],
-			},
-			formErrors: {},
-			data: null,
-		};
-	}
-
-	return {
-		data: standFormData,
-		serverErrors: {},
-		formErrors: {},
-	};
-}
+);

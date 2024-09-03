@@ -8,11 +8,19 @@ import {
 } from "@/lib/components/ui/card";
 import { Tabs, TabsTrigger } from "@/lib/components/ui/tabs";
 import { TabsList } from "@/lib/components/ui/tabs";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+	createContext,
+	KeyboardEvent,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { tabMappings, tabs } from "./tabs";
 import { Button } from "@/lib/components/ui/button";
 import {
 	StandFormData,
+	standFormSchema,
 	StandFormValidationResult,
 	validateForm,
 } from "@/lib/components/stand-form/client-validate";
@@ -22,16 +30,31 @@ import { ServerActionResult } from "@/lib/actions/actions-utils";
 import { ValidatedLabel } from "../ui/label";
 import { Input } from "../ui/input";
 import { useUser } from "../structural/AuthProvider";
-import { runServerAction } from "./server-validate";
-
+import { standFormAction } from "./server-validate";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 // TODO: Add form submission logic
 export const ValidationContext = createContext({} as StandFormValidationResult);
+
+const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
+	if (e.code === "Minus") {
+		e.preventDefault();
+	}
+
+	if (e.currentTarget.value.length >= maxLength) {
+		e.currentTarget.value = e.currentTarget.value.slice(0, maxLength - 1);
+	}
+};
 
 export function StandForm({
 	handleSubmit,
 }: {
-	handleSubmit: (data: StandFormData) => Promise<ServerActionResult<unknown>>;
+	handleSubmit: (
+		data: StandFormData
+	) => Promise<ServerActionResult<StandFormData>>;
 }) {
+	const form = useForm<z.infer<typeof standFormSchema>>();
+
 	const [activeTab, setActiveTab] = useState("auto");
 	const [formState, formAction] = useFormState(
 		async (_: unknown, formData: FormData) => {
@@ -41,15 +64,16 @@ export function StandForm({
 				return result;
 			}
 
-			const serverResult = await runServerAction(
+			const serverResult = await standFormAction(
 				result.data,
 				handleSubmit
 			);
 
-			return serverResult;
+			if (serverResult.success) {
+				return { formErrors: {}, data: serverResult.value };
+			}
 		},
-		{ formErrors: {}, data: null },
-		"/"
+		{ formErrors: {}, data: null }
 	);
 
 	useEffect(() => {
@@ -79,6 +103,9 @@ export function StandForm({
 									name="match_number"
 									className="w-28"
 									type="number"
+									min={0}
+									max={100}
+									onKeyDown={(e) => trimInput(e, 3)}
 								/>
 							</div>
 							<div className="max-w-min space-y-2 text-wrap">
@@ -89,6 +116,9 @@ export function StandForm({
 									name="team_number"
 									className="w-28"
 									type="number"
+									min={0}
+									max={99999}
+									onKeyDown={(e) => trimInput(e, 5)}
 								/>
 							</div>
 						</div>
