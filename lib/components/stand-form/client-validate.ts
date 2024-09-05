@@ -22,37 +22,37 @@ export const standFormSchema = z.object({
 		.int()
 		.positive({ message: "Auto speaker must be positive number" })
 		.default(0)
-		.describe("Speaker Notes"),
+		.describe("Speaker"),
 	amp_auto: z.coerce
 		.number()
 		.int()
 		.positive({ message: "Auto amp number must be positive number" })
 		.default(0)
-		.describe("Amp Notes"),
+		.describe("Amp"),
 	shuttle_auto: z.coerce
 		.number()
 		.int()
 		.positive({ message: "Auto shuttle must be positive number" })
 		.default(0)
-		.describe("Shuttle Notes"),
+		.describe("Shuttle"),
 	speaker_teleop: z.coerce
 		.number()
 		.int()
 		.positive({ message: "Teleop speaker must be positive number" })
 		.default(0)
-		.describe("Speaker Notes"),
+		.describe("Speaker"),
 	amp_teleop: z.coerce
 		.number()
 		.int()
 		.positive({ message: "Teleop amp must be positive number" })
 		.default(0)
-		.describe("Amp Notes"),
+		.describe("Amp"),
 	shuttle_teleop: z.coerce
 		.number()
 		.int()
 		.positive({ message: "Teleop shuttle must be positive number" })
 		.default(0)
-		.describe("Shuttle Notes"),
+		.describe("Shuttle"),
 	climbed: z.coerce
 		.boolean()
 		.nullish()

@@ -33,6 +33,7 @@ import { useUser } from "../structural/AuthProvider";
 import { standFormAction } from "./server-validate";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { AutoForm } from "./formgen";
 // TODO: Add form submission logic
 export const ValidationContext = createContext({} as StandFormValidationResult);
 
@@ -153,5 +154,21 @@ export function StandForm({
 				</Card>
 			</form>
 		</ValidationContext.Provider>
+	);
+}
+
+function StandFormNew() {
+	return (
+		<AutoForm
+			dataSchema={standFormSchema}
+			uiSchema={{
+				amp_auto: {
+					label: "sup",
+				},
+				match_number: {},
+			}}
+			onSubmit={() => {}}
+			title="Stand Form"
+		/>
 	);
 }

@@ -1,5 +1,14 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { AnyZodObject, z, ZodType } from "zod";
+import {
+	AnyZodObject,
+	z,
+	ZodBoolean,
+	ZodBooleanDef,
+	ZodNumber,
+	ZodString,
+	ZodType,
+	ZodTypeDef,
+} from "zod";
 import {
 	Card,
 	CardContent,
@@ -13,33 +22,33 @@ import { TabsContentForceMount } from "./force-mount-tab";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { CounterInput } from "../forms/counter-input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
 
 type ZodSchema = AnyZodObject;
 type UiSchemaConfig = {
 	label?: string;
 	description?: string;
-	render: () => JSX.Element;
+	render?: () => JSX.Element;
 };
 
-type UiSchema<Schema extends ZodSchema, RootSchema extends object> = {
+type UiSchema<Schema extends ZodSchema> = {
 	[K in keyof Schema["shape"]]: UiSchemaConfig;
 };
 
-type FormUiSchema<Schema extends ZodSchema> = Partial<
-	UiSchema<Schema, z.infer<Schema>>
->;
+type FormUiSchema<Schema extends ZodSchema> = Partial<UiSchema<Schema>>;
 
-type AutoFormProps = {
+type AutoFormProps<T extends ZodSchema> = {
 	title: string;
-	dataSchema: ZodSchema;
-	uiSchema: FormUiSchema<ZodSchema>;
-	onSubmit: (data: z.infer<ZodSchema>) => void;
-	groupings: Record<string, (keyof ZodSchema)[]> & {
-		header?: (keyof ZodSchema)[];
-	};
+	dataSchema: T;
+	uiSchema: FormUiSchema<T>;
+	onSubmit: (data: z.infer<T>) => void;
+	groupings: Record<string, Extract<keyof T, string>[]>;
 };
 
-type FormContentProps = Pick<AutoFormProps, "dataSchema" | "uiSchema"> & {
+type FormContentProps<T extends ZodSchema> = Pick<
+	AutoFormProps<T>,
+	"dataSchema" | "uiSchema"
+> & {
 	fields: string[];
 } & ComponentProps<"div">;
 
@@ -49,23 +58,11 @@ type FormFieldProps = {
 	render?: () => JSX.Element;
 };
 
-const formFieldComponents: Record<
-	string,
-	<T extends ZodType>(name: string, type: ZodType<T>) => JSX.Element
-> = {
-	boolean: (name, type) => {
-		return <Checkbox name={name} className="mr-2 size-6" />;
-	},
-	number: (name) => {
-		return <CounterInput name={name} />;
-	},
-};
-
 function FormField(props: FormFieldProps) {
 	return <div>{formFieldComponents[props.type](props.name)}</div>;
 }
 
-function FormContent(props: FormContentProps) {
+function FormContent<T extends ZodSchema>(props: FormContentProps<T>) {
 	return (
 		<div {...props}>
 			{props.fields.map((field) => (
@@ -77,8 +74,8 @@ function FormContent(props: FormContentProps) {
 	);
 }
 
-function TabbedForm(
-	props: Pick<AutoFormProps, "dataSchema" | "uiSchema" | "groupings">
+function TabbedForm<T extends ZodSchema>(
+	props: Pick<AutoFormProps<T>, "dataSchema" | "uiSchema" | "groupings">
 ) {
 	const labels = Object.keys(props.groupings);
 	const [activeTab, setActiveTab] = useState(labels[0]);
@@ -109,7 +106,10 @@ function TabbedForm(
 	);
 }
 
-function AutoForm({ groupings = {}, ...props }: AutoFormProps) {
+export function AutoForm<T extends ZodSchema>({
+	groupings = {},
+	...props
+}: AutoFormProps<T>) {
 	const groups = Object.keys(groupings);
 	const form = useForm({
 		resolver: zodResolver(props.dataSchema),
