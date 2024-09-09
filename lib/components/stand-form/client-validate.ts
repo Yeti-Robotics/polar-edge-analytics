@@ -1,86 +1,92 @@
-import { z } from "zod";
+import { z, ZodNumber } from "zod";
 
 export const standFormSchema = z.object({
 	team_number: z.coerce
 		.number({ message: "Team number must be a number" })
 		.int({ message: "Team number cannot be blank" })
-		.positive({ message: "Team number cannot be positive number" })
-		.describe("Team number"),
+		.positive({ message: "Team number must be greater than zero" })
+		.max(99999, { message: "Team number is too large" })
+		.describe("Team you are scouting"),
 	match_number: z.coerce
 		.number({ message: "Match number must be a number" })
 		.int({ message: "Match number cannot be blank" })
-		.positive({ message: "Match number must be positive number" })
-		.describe("Match number"),
+		.positive({ message: "Match number must be greater than zero" })
+		.max(200, { message: "Match number is too large" })
+		.describe("Match you are scouting"),
 	auto_line: z.coerce
 		.boolean()
 		.nullish()
 		.default(false)
 		.transform((value) => value ?? false)
-		.describe("Auto line Crossed"),
+		.describe("Did they cross the white line?"),
 	speaker_auto: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Auto speaker must be positive number" })
+		.nonnegative({ message: "Auto speaker must be a positive number" })
 		.default(0)
-		.describe("Speaker"),
+		.describe("Notes scored in speaker during autonomous"),
 	amp_auto: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Auto amp number must be positive number" })
+		.nonnegative({ message: "Auto amp number must be a positive number" })
 		.default(0)
-		.describe("Amp"),
+		.describe("Notes scored in amplifier during autonomous"),
 	shuttle_auto: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Auto shuttle must be positive number" })
+		.nonnegative({ message: "Auto shuttle must be a positive number" })
 		.default(0)
-		.describe("Shuttle"),
+		.describe("Notes thrown across field during autonomous"),
 	speaker_teleop: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Teleop speaker must be positive number" })
+		.nonnegative({ message: "Teleop speaker must be a positive number" })
 		.default(0)
-		.describe("Speaker"),
+		.describe("Notes scored in speaker during teleop"),
 	amp_teleop: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Teleop amp must be positive number" })
+		.nonnegative({ message: "Teleop amp must be a positive number" })
 		.default(0)
-		.describe("Amp"),
+		.describe("Notes scored in amplifier during teleop"),
 	shuttle_teleop: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Teleop shuttle must be positive number" })
+		.nonnegative({ message: "Teleop shuttle must be a positive number" })
 		.default(0)
-		.describe("Shuttle"),
+		.describe("Notes thrown across field during teleop"),
 	climbed: z.coerce
 		.boolean()
 		.nullish()
 		.transform((value) => value ?? false)
 		.default(false)
-		.describe("Climbed"),
+		.describe("Did they climb on the chain?"),
 	parked: z.coerce
 		.boolean()
 		.nullish()
 		.transform((value) => value ?? false)
 		.default(false)
-		.describe("Parked"),
+		.describe("Did they park underneath the podium?"),
 	bots_on_chain: z.coerce
 		.number()
 		.int()
-		.positive({ message: "Bots on chain must be a positive number" })
+		.nonnegative({ message: "Bots on chain must be a positive number" })
 		.default(0)
-		.describe("Bots on chain"),
+		.describe("Number of bots hanging on the same chain"),
 	defense_rating: z.coerce
 		.number({ message: "Defense rating must be a valid number" })
 		.int()
 		.min(1, { message: "Defense rating must be a valid number" })
 		.max(5)
-		.describe("Defense rating"),
+		.describe("Defense rating of the robot"),
 	notes: z
 		.string({ message: "Notes must be at least 32 characters long" })
 		.min(32, { message: "Notes must be at least 32 characters long" })
-		.describe("Notes"),
+		.describe("Comments about robot performance"),
+});
+
+standFormSchema.refine((data) => !data.climbed && data.bots_on_chain > 0, {
+	message: "Climbed must be true if bots on chain is greater than 0",
 });
 
 export type StandFormData = z.infer<typeof standFormSchema>;
@@ -90,31 +96,3 @@ export type StandFormValidationResult = {
 	};
 	data: StandFormData | null;
 };
-
-export function validateData(
-	data: object,
-	schema: z.Schema
-): StandFormValidationResult {
-	const validatedData = schema.safeParse(data);
-
-	if (!validatedData.success) {
-		return {
-			formErrors: validatedData.error.flatten().fieldErrors,
-			data: null,
-		};
-	}
-
-	if (validatedData.data.parked || !validatedData.data.climbed) {
-		validatedData.data.bots_on_chain = 0;
-	}
-
-	return {
-		data: validatedData.data,
-		formErrors: {},
-	};
-}
-
-export function validateForm(data: FormData): StandFormValidationResult {
-	const parsedData = Object.fromEntries(data.entries());
-	return validateData(parsedData, standFormSchema);
-}

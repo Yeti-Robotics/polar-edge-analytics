@@ -17,7 +17,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				setUser(data.user);
 			}
 		});
-	}, []);
+	}, [supabase.auth]);
 
 	return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 }

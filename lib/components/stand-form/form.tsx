@@ -1,41 +1,23 @@
 "use client";
 
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/lib/components/ui/card";
-import { Tabs, TabsTrigger } from "@/lib/components/ui/tabs";
-import { TabsList } from "@/lib/components/ui/tabs";
-import {
-	createContext,
-	KeyboardEvent,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
-import { tabMappings, tabs } from "./tabs";
-import { Button } from "@/lib/components/ui/button";
+import { KeyboardEvent, useEffect } from "react";
 import {
 	StandFormData,
 	standFormSchema,
-	StandFormValidationResult,
-	validateForm,
 } from "@/lib/components/stand-form/client-validate";
-import { TabsContentForceMount } from "./force-mount-tab";
-import { useFormState } from "react-dom";
-import { ServerActionResult } from "@/lib/actions/actions-utils";
-import { ValidatedLabel } from "../ui/label";
 import { Input } from "../ui/input";
-import { useUser } from "../structural/AuthProvider";
-import { standFormAction } from "./server-validate";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { AutoForm } from "./formgen";
+import { useFormContext } from "react-hook-form";
+import { AutoForm } from "../forms/autogenerate";
+import { Textarea } from "../ui/textarea";
+import { CounterInput } from "../forms/counter-input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../ui/select";
 // TODO: Add form submission logic
-export const ValidationContext = createContext({} as StandFormValidationResult);
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	if (e.code === "Minus") {
@@ -47,128 +29,118 @@ const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	}
 };
 
-export function StandForm({
-	handleSubmit,
-}: {
-	handleSubmit: (
-		data: StandFormData
-	) => Promise<ServerActionResult<StandFormData>>;
-}) {
-	const form = useForm<z.infer<typeof standFormSchema>>();
-
-	const [activeTab, setActiveTab] = useState("auto");
-	const [formState, formAction] = useFormState(
-		async (_: unknown, formData: FormData) => {
-			const result = validateForm(formData);
-
-			if (!result.data) {
-				return result;
-			}
-
-			const serverResult = await standFormAction(
-				result.data,
-				handleSubmit
-			);
-
-			if (serverResult.success) {
-				return { formErrors: {}, data: serverResult.value };
-			}
-		},
-		{ formErrors: {}, data: null }
-	);
-
-	useEffect(() => {
-		const activeErrorTab = Object.keys(tabMappings).find((tabKey) =>
-			Object.keys(formState.formErrors).some((errorKey) =>
-				errorKey.includes(tabKey)
-			)
-		);
-
-		if (activeErrorTab) {
-			setActiveTab(tabMappings[activeErrorTab]);
-		}
-	}, [formState.formErrors]);
-
+export function StandForm() {
 	return (
-		<ValidationContext.Provider value={formState}>
-			<form className="flex justify-center" action={formAction}>
-				<Card className="prose w-fit dark:prose-invert prose-headings:font-extrabold prose-h3:my-2 prose-h4:text-xl md:p-4">
-					<CardHeader>
-						<CardTitle>Stand Form</CardTitle>
-						<div className="flex justify-between">
-							<div className="max-w-min space-y-2 text-wrap">
-								<ValidatedLabel htmlFor="match_number">
-									Match Number
-								</ValidatedLabel>
-								<Input
-									name="match_number"
-									className="w-28"
-									type="number"
-									min={0}
-									max={100}
-									onKeyDown={(e) => trimInput(e, 3)}
-								/>
-							</div>
-							<div className="max-w-min space-y-2 text-wrap">
-								<ValidatedLabel htmlFor="team_number">
-									Team Number
-								</ValidatedLabel>
-								<Input
-									name="team_number"
-									className="w-28"
-									type="number"
-									min={0}
-									max={99999}
-									onKeyDown={(e) => trimInput(e, 5)}
-								/>
-							</div>
-						</div>
-					</CardHeader>
-					<CardContent className="px-6 pb-6">
-						<Tabs
-							value={activeTab}
-							onValueChange={setActiveTab}
-							className="max-w-min"
-						>
-							<TabsList>
-								{tabs.map(({ value, displayText }) => (
-									<TabsTrigger key={value} value={value}>
-										{displayText}
-									</TabsTrigger>
-								))}
-							</TabsList>
-							{tabs.map(({ value, content }) => (
-								<TabsContentForceMount
-									key={value}
-									value={value}
-									activeTab={activeTab}
+		<div className="flex justify-center">
+			<AutoForm
+				title="Stand Form"
+				className="max-w-prose"
+				data={standFormSchema}
+				ui={{
+					team_number: {
+						position: "header",
+						Component: (props) => (
+							<Input
+								{...props}
+								type="number"
+								min={0}
+								max={99999}
+								onKeyDown={(e) => trimInput(e, 5)}
+							/>
+						),
+					},
+					match_number: {
+						position: "header",
+						Component: (props) => (
+							<Input
+								{...props}
+								type="number"
+								min={0}
+								max={200}
+								onKeyDown={(e) => trimInput(e, 3)}
+							/>
+						),
+					},
+					notes: {
+						Component: (props) => (
+							<Textarea {...props} placeholder="Notes" />
+						),
+					},
+					bots_on_chain: {
+						Component: (props) => {
+							const { watch, setError, clearErrors, setValue } =
+								useFormContext();
+							const climbed = watch("climbed");
+
+							useEffect(() => {
+								if (climbed) {
+									clearErrors("bots_on_chain");
+								} else {
+									setValue("bots_on_chain", 0);
+								}
+							}, [setValue, clearErrors, climbed]);
+
+							return (
+								<div
+									onClick={() => {
+										if (!climbed) {
+											setError("bots_on_chain", {
+												type: "disabled",
+												message:
+													"Bot must climb to be on chain",
+											});
+										}
+									}}
 								>
-									{content}
-								</TabsContentForceMount>
-							))}
-							<Button type="submit" className="mt-8 w-full">
-								Submit
-							</Button>
-						</Tabs>
-					</CardContent>
-				</Card>
-			</form>
-		</ValidationContext.Provider>
-	);
-}
-
-function StandFormNew() {
-	return (
-		<AutoForm
-			dataSchema={standFormSchema}
-			uiSchema={{
-				amp_auto: {
-					label: "sup",
-				},
-				match_number: {},
-			}}
-			onSubmit={() => {}}
-			title="Stand Form"
-		/>
+									<CounterInput
+										{...props}
+										disabled={!climbed}
+									/>
+								</div>
+							);
+						},
+					},
+					defense_rating: {
+						Component: (props) => {
+							return (
+								<Select
+									value={props.value}
+									onValueChange={props.onChange}
+									name="defense_rating"
+								>
+									<SelectTrigger>
+										<SelectValue placeholder="Select a defense rating" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="1">
+											1 - Little/No Defense
+										</SelectItem>
+										<SelectItem value="2">2</SelectItem>
+										<SelectItem value="3">3</SelectItem>
+										<SelectItem value="4">4</SelectItem>
+										<SelectItem value="5">
+											5 - Lockdown
+										</SelectItem>
+									</SelectContent>
+								</Select>
+							);
+						},
+					},
+				}}
+				onSubmit={(data) => {
+					console.log(data);
+				}}
+				groupings={{
+					auto: Object.keys(standFormSchema.shape).filter((key) => {
+						return key.includes("auto");
+					}) as Extract<keyof StandFormData, string>[],
+					teleop: Object.keys(standFormSchema.shape).filter((key) => {
+						return key.includes("teleop");
+					}) as Extract<keyof StandFormData, string>[],
+					endgame: ["climbed", "parked", "bots_on_chain"],
+					misc: ["defense_rating", "notes"],
+				}}
+			/>
+		</div>
 	);
 }
