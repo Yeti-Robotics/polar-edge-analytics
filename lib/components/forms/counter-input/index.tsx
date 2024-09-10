@@ -71,6 +71,8 @@ const CounterInput = React.forwardRef<HTMLInputElement, CounterInputProps>(
 					name="decrement"
 					aria-label={`decrement input by ${decreaseBy}`}
 					onClick={() => handleCount(false)}
+					disabled={props.disabled}
+					aria-disabled={props.disabled}
 				>
 					<MinusIcon className="size-4" />
 					{decreaseBy !== 1 && <span>{decreaseBy}</span>}
@@ -90,6 +92,8 @@ const CounterInput = React.forwardRef<HTMLInputElement, CounterInputProps>(
 					name="increment"
 					aria-label={`increment input by ${increaseBy}`}
 					onClick={() => handleCount(true)}
+					disabled={props.disabled}
+					aria-disabled={props.disabled}
 				>
 					<PlusIcon className="size-4" />
 					{increaseBy !== 1 && <span>{increaseBy}</span>}

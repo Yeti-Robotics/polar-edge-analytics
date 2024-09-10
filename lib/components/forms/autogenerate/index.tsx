@@ -40,6 +40,7 @@ import {
 import { Button } from "../../ui/button";
 import { Info } from "lucide-react";
 import { ClickablePopover } from "../../ui/popover/index";
+import { Input } from "../../ui/input";
 
 type ZodSchema = AnyZodObject;
 type UiSchemaConfig = {
@@ -65,7 +66,7 @@ type AutoFormProps<T extends ZodSchema> = {
 
 const formFieldComponents = [
 	{
-		check: (field: ZodType) => field instanceof ZodBoolean,
+		type: ZodBoolean,
 		render: (props: ControllerRenderProps) => (
 			<Checkbox
 				className="size-6"
@@ -76,7 +77,7 @@ const formFieldComponents = [
 		),
 	},
 	{
-		check: (field: ZodType) => field instanceof ZodNumber,
+		type: ZodNumber,
 		render: (props: ControllerRenderProps) => <CounterInput {...props} />,
 	},
 ];
@@ -119,17 +120,19 @@ function FormContent<T extends ZodSchema>({
 			{fields.map((name, i) => {
 				const FormComponent = ui[name]?.Component
 					? ui[name].Component
-					: formFieldComponents.find((f) =>
-							f.check(recurseSchema(data.shape[name]))
+					: formFieldComponents.find(
+							(f) =>
+								recurseSchema(data.shape[name]) instanceof
+								f.type
 						)?.render;
-
-				const description = ui[name]?.description
-					? ui[name].description
-					: data.shape[name].description;
 
 				if (!FormComponent) {
 					throw new Error(`Form component for ${name} not found!`);
 				}
+
+				const description = ui[name]?.description
+					? ui[name].description
+					: data.shape[name].description;
 
 				return (
 					<FormField
@@ -236,6 +239,12 @@ export function AutoForm<T extends ZodSchema>({
 		.map(([name]) => name) as Extract<keyof z.infer<T>, string>[];
 	const form = useForm<T>({
 		resolver: zodResolver(data),
+		defaultValues: {
+			match_number: "",
+			team_number: "",
+			defense_rating: "",
+			auto_line: false,
+		},
 	});
 
 	return (
@@ -246,18 +255,18 @@ export function AutoForm<T extends ZodSchema>({
 						<CardTitle className="md:text-3xl">
 							{props.title}
 						</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<div className="max-w-xs">
 							{headerFields.length && (
 								<FormContent
-									className="grid w-full grid-cols-2  justify-between gap-2 space-x-4 py-2 md:py-6 "
+									className="grid w-full grid-cols-2 justify-between gap-2 space-x-4 pb-2 md:pb-6"
 									fields={headerFields}
 									data={data}
 									ui={ui}
 								/>
 							)}
 						</div>
-					</CardHeader>
-					<CardContent>
 						{groups.length ? (
 							<TabbedForm
 								groupings={groupings}
@@ -289,7 +298,7 @@ export function AutoForm<T extends ZodSchema>({
 							onClick={() => {
 								form.reset();
 							}}
-							type="reset"
+							type="button"
 							className="flex w-full"
 						>
 							Reset

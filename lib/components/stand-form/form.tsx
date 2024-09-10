@@ -34,7 +34,7 @@ export function StandForm() {
 		<div className="flex justify-center">
 			<AutoForm
 				title="Stand Form"
-				className="max-w-prose"
+				className="max-w-screen"
 				data={standFormSchema}
 				ui={{
 					team_number: {
@@ -45,20 +45,13 @@ export function StandForm() {
 								type="number"
 								min={0}
 								max={99999}
-								onKeyDown={(e) => trimInput(e, 5)}
 							/>
 						),
 					},
 					match_number: {
 						position: "header",
 						Component: (props) => (
-							<Input
-								{...props}
-								type="number"
-								min={0}
-								max={200}
-								onKeyDown={(e) => trimInput(e, 3)}
-							/>
+							<Input {...props} type="number" min={0} max={200} />
 						),
 					},
 					notes: {
