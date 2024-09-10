@@ -16,7 +16,7 @@ export default async function ScoutingPage() {
 
 	return (
 		<StandForm
-			handleSubmit={async (data) => {
+			onSubmit={async (data) => {
 				"use server";
 				// TODO: add actual submission logic
 				console.log(data);

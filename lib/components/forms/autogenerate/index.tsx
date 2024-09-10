@@ -40,7 +40,7 @@ import {
 import { Button } from "../../ui/button";
 import { Info } from "lucide-react";
 import { ClickablePopover } from "../../ui/popover/index";
-import { Input } from "../../ui/input";
+import { ServerActionResult } from "@/lib/actions/actions-utils";
 
 type ZodSchema = AnyZodObject;
 type UiSchemaConfig = {
@@ -60,9 +60,9 @@ type AutoFormProps<T extends ZodSchema> = {
 	title: string;
 	data: T;
 	ui: FormUiSchema<T>;
-	onSubmit: (data: z.infer<T>) => void;
+	onSubmit: (data: z.infer<T>) => Promise<ServerActionResult<unknown>>;
 	groupings: Record<string, Extract<keyof z.infer<T>, string>[]>;
-} & ComponentProps<"form">;
+};
 
 const formFieldComponents = [
 	{
@@ -234,17 +234,13 @@ export function AutoForm<T extends ZodSchema>({
 	...props
 }: AutoFormProps<T>) {
 	const groups = Object.keys(groupings);
+
 	const headerFields = Object.entries(ui)
 		.filter(([, u]) => u?.position === "header")
 		.map(([name]) => name) as Extract<keyof z.infer<T>, string>[];
+
 	const form = useForm<T>({
 		resolver: zodResolver(data),
-		defaultValues: {
-			match_number: "",
-			team_number: "",
-			defense_rating: "",
-			auto_line: false,
-		},
 	});
 
 	return (
@@ -295,10 +291,10 @@ export function AutoForm<T extends ZodSchema>({
 							Submit
 						</Button>
 						<Button
+							type="button"
 							onClick={() => {
 								form.reset();
 							}}
-							type="button"
 							className="flex w-full"
 						>
 							Reset

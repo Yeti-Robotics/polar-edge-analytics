@@ -17,6 +17,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
+import { ServerActionResult } from "@/lib/actions/actions-utils";
 // TODO: Add form submission logic
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
@@ -29,12 +30,15 @@ const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	}
 };
 
-export function StandForm() {
+export function StandForm({
+	onSubmit,
+}: {
+	onSubmit: (data: StandFormData) => Promise<ServerActionResult<unknown>>;
+}) {
 	return (
 		<div className="flex justify-center">
 			<AutoForm
 				title="Stand Form"
-				className="max-w-screen"
 				data={standFormSchema}
 				ui={{
 					team_number: {
@@ -45,13 +49,20 @@ export function StandForm() {
 								type="number"
 								min={0}
 								max={99999}
+								onKeyDown={(e) => trimInput(e, 5)}
 							/>
 						),
 					},
 					match_number: {
 						position: "header",
 						Component: (props) => (
-							<Input {...props} type="number" min={0} max={200} />
+							<Input
+								{...props}
+								type="number"
+								min={0}
+								max={200}
+								onKeyDown={(e) => trimInput(e, 3)}
+							/>
 						),
 					},
 					notes: {
@@ -120,9 +131,7 @@ export function StandForm() {
 						},
 					},
 				}}
-				onSubmit={(data) => {
-					console.log(data);
-				}}
+				onSubmit={onSubmit}
 				groupings={{
 					auto: Object.keys(standFormSchema.shape).filter((key) => {
 						return key.includes("auto");
