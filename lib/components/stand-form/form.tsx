@@ -18,7 +18,7 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
-// TODO: Add form submission logic
+import { standFormAction } from "./server-validate";
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	if (e.code === "Minus") {
@@ -131,7 +131,7 @@ export function StandForm({
 						},
 					},
 				}}
-				onSubmit={onSubmit}
+				onSubmit={(data) => standFormAction(data, onSubmit)}
 				groupings={{
 					auto: Object.keys(standFormSchema.shape).filter((key) => {
 						return key.includes("auto");

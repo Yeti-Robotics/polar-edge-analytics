@@ -4,7 +4,6 @@ import {
 	StandFormData,
 	standFormSchema,
 	StandFormValidationResult,
-	validateData,
 } from "./client-validate";
 import {
 	createServerAction,
@@ -14,11 +13,13 @@ import {
 } from "@/lib/actions/actions-utils";
 import z from "zod";
 import { createClient } from "@/lib/database/server";
-import { getCurrentEventCached } from "@/app/(with-sidebar)/admin/event";
+import {
+	cachedEvent,
+	getCurrentEventCached,
+} from "@/app/(with-sidebar)/admin/event";
 
 const submittedStandFormSchema = standFormSchema.extend({
 	scouter: z.string().uuid(),
-	event_code: z.string(),
 });
 
 type SubmittedStandForm = z.infer<typeof submittedStandFormSchema>;
@@ -28,8 +29,9 @@ export const standFormAction = createServerAction(
 		rawFormData: StandFormData,
 		submitFunction: (
 			data: StandFormData
-		) => Promise<ServerActionResult<StandFormData>>
+		) => Promise<ServerActionResult<unknown>>
 	) => {
+		console.log("run");
 		const originalData = rawFormData as SubmittedStandForm;
 
 		const supabase = createClient();
@@ -37,26 +39,19 @@ export const standFormAction = createServerAction(
 			data: { user },
 		} = await supabase.auth.getUser();
 
-		const eventData = await getCurrentEventCached();
-
 		if (!user) throw new ServerActionError("Not logged in");
-		if (!eventData) throw new ServerActionError("No current event");
 
 		originalData.scouter = user.id;
-		originalData.event_code = eventData.event_key;
 
-		const validationResult = validateData(
-			originalData,
-			submittedStandFormSchema
-		);
+		const { data, error, success } =
+			await submittedStandFormSchema.safeParse(originalData);
 
-		if (!validationResult.data) {
-			throw new ServerActionErrorWithDetails(
-				"Invalid data.",
-				validationResult.formErrors
-			);
+		if (!success) {
+			// err handle
+			console.log(error);
+			return;
 		}
 
-		return await submitFunction(originalData);
+		return await submitFunction(data);
 	}
 );

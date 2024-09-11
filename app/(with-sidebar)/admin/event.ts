@@ -11,19 +11,18 @@ export async function revalidateEvent() {
 }
 
 export async function getCurrentEvent(supabase: SupabaseClient<Database>) {
-	// const { data, error } = await supabase
-	// 	.from("event")
-	// 	.select("event_key")
-	// 	.eq("is_current", true)
-	// 	.limit(1);
-	// if (error || data.length === 0) {
-	// 	throw new ServerActionError("Error getting current event.");
-	// }
-	// return data[0];
-	return { event_key: "23423ijosf" };
+	const { data, error } = await supabase
+		.from("event")
+		.select("event_key")
+		.eq("is_current", true)
+		.limit(1);
+	if (error || data.length === 0) {
+		throw new ServerActionError("Error getting current event.");
+	}
+	return data[0];
 }
 
-const cachedEvent = unstable_cache(
+export const cachedEvent = unstable_cache(
 	(supabaseClient) => getCurrentEvent(supabaseClient),
 	["event_key"],
 	{ tags: ["event"] }
@@ -31,5 +30,8 @@ const cachedEvent = unstable_cache(
 
 export async function getCurrentEventCached() {
 	const supabase = createClient();
-	return await cachedEvent(supabase);
+	console.log("current Event");
+	const result = await cachedEvent(supabase);
+	console.log(result);
+	return result;
 }
