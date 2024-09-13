@@ -1,0 +1,8 @@
+name: Run Jest Tests
+on: workflow_call
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/site-setup.yml
+    - name: Run tests
+      run: npm test
