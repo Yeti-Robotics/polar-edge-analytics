@@ -3,6 +3,6 @@ on: workflow_call
 runs:
   using: composite
   steps:
-    - uses: ./.github/actions/site-setup.yml
+    - uses: ./.github/actions/site-setup
     - name: Run tests
       run: npm test
