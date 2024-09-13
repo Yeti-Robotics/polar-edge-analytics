@@ -6,10 +6,12 @@ jobs:
         container:
             image: mcr.microsoft.com/playwright:v1.45.0-jammy
         steps:
+            - uses: actions/checkout@v4
             - uses: "./.github/actions/ui-tests.yml"
     run-jest-tests:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v4
             - uses: "./.github/actions/unit-tests.yml"
     verify-tests:
         runs-on: ubuntu-latest
