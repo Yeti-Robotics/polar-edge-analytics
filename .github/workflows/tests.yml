@@ -1,0 +1,21 @@
+name: Run tests on push
+on: [push]
+jobs:
+    run-storybook-tests:
+        runs-on: ubuntu-latest
+        container:
+            image: mcr.microsoft.com/playwright:v1.45.0-jammy
+        steps:
+            - uses: actions/checkout@v4
+            - uses: ./.github/actions/ui-tests
+    run-jest-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: ./.github/actions/unit-tests
+    verify-tests:
+        runs-on: ubuntu-latest
+        needs: [run-storybook-tests, run-jest-tests]
+        steps:
+            - name: Verify both jobs passed
+              run: echo "Both storybook and jest tests passed successfully!"
