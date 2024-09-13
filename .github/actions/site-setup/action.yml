@@ -9,3 +9,4 @@ runs:
           node-version: 20.17.0
     - name: "Install dependencies"
       run: "npm install"
+      shell: bash
