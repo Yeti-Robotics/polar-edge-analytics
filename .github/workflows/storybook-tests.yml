@@ -1,7 +1,7 @@
-name: Interaction and Accessibility Tests
+name: Storybook Tests
 on: workflow_call
 jobs:
-    run-storybook:
+    test:
         runs-on: ubuntu-latest
         container:
             image: mcr.microsoft.com/playwright:v1.45.0-jammy

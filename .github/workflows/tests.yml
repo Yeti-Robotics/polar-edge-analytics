@@ -1,13 +1,13 @@
-name: Run Tests on Push
+name: Status Checks
 on: [push]
 jobs:
-    storybook-tests:
+    storybook:
         uses: ./.github/workflows/storybook-tests.yml
     unit-tests:
         uses: ./.github/workflows/unit-tests.yml
     verify-tests:
         runs-on: ubuntu-latest
-        needs: [storybook-tests, unit-tests]
+        needs: [storybook, unit-tests]
         steps:
             - name: All tests pass
               if: success()
