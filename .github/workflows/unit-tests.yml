@@ -1,0 +1,15 @@
+name: Unit Tests
+on: workflow_call
+jobs:
+    run-jest:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Install Node/node_modules
+              uses: ./.github/actions/site-setup
+
+            - name: Run tests
+              run: npm test
+              shell: bash
