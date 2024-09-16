@@ -1,7 +1,10 @@
 "use server";
 
-import { ServerActionResult } from "@/lib/actions/actions-utils";
-import { StandFormData } from "@/lib/components/stand-form/client-validate";
+import {
+	ServerActionError,
+	ServerActionResult,
+} from "@/lib/actions/actions-utils";
+import { StandFormData } from "@/lib/components/stand-form/schema";
 import { createClient } from "@/lib/database/server";
 
 export const submitStandForm = async (
@@ -11,8 +14,7 @@ export const submitStandForm = async (
 	const { data: userData, error: authError } = await supabase.auth.getUser();
 
 	if (authError) {
-		console.log(authError);
-		throw new Error("nuh uh");
+		throw new ServerActionError("Not authenticated");
 	}
 
 	const { error } = await supabase.from("stand_form").insert({
@@ -35,7 +37,7 @@ export const submitStandForm = async (
 	});
 
 	if (error) {
-		console.log(error);
+		throw new ServerActionError("Error submitting form");
 	}
 
 	return { success: true, value: data };

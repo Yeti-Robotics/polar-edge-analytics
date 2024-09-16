@@ -1,4 +1,4 @@
-import { z, ZodNumber } from "zod";
+import { z } from "zod";
 
 export const standFormSchema = z.object({
 	team_number: z.coerce
@@ -90,9 +90,3 @@ standFormSchema.refine((data) => !data.climbed && data.bots_on_chain > 0, {
 });
 
 export type StandFormData = z.infer<typeof standFormSchema>;
-export type StandFormValidationResult = {
-	formErrors: {
-		[K in keyof StandFormData]?: string[] | undefined;
-	};
-	data: StandFormData | null;
-};

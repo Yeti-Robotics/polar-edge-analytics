@@ -4,10 +4,10 @@ import { KeyboardEvent, useEffect } from "react";
 import {
 	StandFormData,
 	standFormSchema,
-} from "@/lib/components/stand-form/client-validate";
+} from "@/lib/components/stand-form/schema";
 import { Input } from "../ui/input";
 import { useFormContext } from "react-hook-form";
-import { AutoForm } from "../forms/autogenerate";
+import { AutoForm, FormAction } from "../forms/autogenerate";
 import { Textarea } from "../ui/textarea";
 import { CounterInput } from "../forms/counter-input";
 import {
@@ -18,7 +18,7 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
-import { standFormAction } from "./server-validate";
+import { standFormServerAction } from "./validate";
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	if (e.code === "Minus") {
@@ -33,7 +33,7 @@ const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 export function StandForm({
 	onSubmit,
 }: {
-	onSubmit: (data: StandFormData) => Promise<ServerActionResult<unknown>>;
+	onSubmit: FormAction<typeof standFormSchema>;
 }) {
 	return (
 		<div className="flex justify-center">
@@ -131,7 +131,7 @@ export function StandForm({
 						},
 					},
 				}}
-				onSubmit={(data) => standFormAction(data, onSubmit)}
+				onSubmit={(data) => standFormServerAction(data, onSubmit)}
 				groupings={{
 					auto: Object.keys(standFormSchema.shape).filter((key) => {
 						return key.includes("auto");

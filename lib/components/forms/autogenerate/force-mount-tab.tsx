@@ -1,4 +1,4 @@
-import { TabsContent } from "../ui/tabs";
+import { TabsContent } from "../../ui/tabs";
 
 export function TabsContentForceMount({
 	value,

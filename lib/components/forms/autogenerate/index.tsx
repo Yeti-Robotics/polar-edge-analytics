@@ -1,7 +1,9 @@
 import {
 	ControllerRenderProps,
+	Path,
 	useForm,
 	useFormContext,
+	useFormState,
 } from "react-hook-form";
 import {
 	AnyZodObject,
@@ -17,16 +19,16 @@ import {
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/lib/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
-import React, { ComponentProps, useEffect, useState } from "react";
+import React, { ComponentProps, useEffect, useMemo, useState } from "react";
 import { prettyPrint } from "@/lib/utils";
-import { TabsContentForceMount } from "../../stand-form/force-mount-tab";
+import { TabsContentForceMount } from "./force-mount-tab";
 import { CounterInput } from "../counter-input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "../../ui/checkbox";
 import {
 	Form,
@@ -39,10 +41,12 @@ import {
 } from "../../ui/form";
 import { Button } from "../../ui/button";
 import { Info } from "lucide-react";
-import { ClickablePopover } from "../../ui/popover/index";
+import { ClickablePopover } from "../../ui/popover/clickable";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type ZodSchema = AnyZodObject;
+export type ZodSchema = AnyZodObject;
+
 type UiSchemaConfig = {
 	label?: string;
 	description?: string;
@@ -50,19 +54,30 @@ type UiSchemaConfig = {
 	Component?: (props: ControllerRenderProps) => JSX.Element;
 };
 
-type UiSchema<Schema extends ZodSchema> = {
+type FormUiSchema<Schema extends ZodSchema> = Partial<{
 	[K in keyof Schema["shape"]]: UiSchemaConfig;
-};
+}>;
 
-type FormUiSchema<Schema extends ZodSchema> = Partial<UiSchema<Schema>>;
+export type FormAction<T extends ZodSchema> = (
+	data: z.infer<T>
+) => Promise<ServerActionResult<unknown>>;
 
 type AutoFormProps<T extends ZodSchema> = {
 	title: string;
 	data: T;
 	ui: FormUiSchema<T>;
-	onSubmit: (data: z.infer<T>) => Promise<ServerActionResult<unknown>>;
+	onSubmit: FormAction<T>;
 	groupings: Record<string, Extract<keyof z.infer<T>, string>[]>;
 };
+
+type AutoFormData<T extends ZodSchema> = Pick<
+	AutoFormProps<T>,
+	"groupings" | "data" | "ui"
+>;
+type FormContentProps<T extends ZodSchema> = {
+	fields: Extract<keyof z.infer<T>, string>[];
+} & ComponentProps<"div"> &
+	Omit<AutoFormData<T>, "groupings">;
 
 const formFieldComponents = [
 	{
@@ -81,15 +96,6 @@ const formFieldComponents = [
 		render: (props: ControllerRenderProps) => <CounterInput {...props} />,
 	},
 ];
-
-type AutoFormData<T extends ZodSchema> = Pick<
-	AutoFormProps<T>,
-	"groupings" | "data" | "ui"
->;
-type FormContentProps<T extends ZodSchema> = {
-	fields: Extract<keyof z.infer<T>, string>[];
-} & ComponentProps<"div"> &
-	Omit<AutoFormData<T>, "groupings">;
 
 function recurseSchema<T extends ZodType>(
 	zodSchema: ZodEffects<T> | ZodDefault<T> | ZodType
@@ -177,7 +183,7 @@ function TabbedForm<T extends ZodSchema>({
 }: AutoFormData<T>) {
 	const labels = Object.keys(groupings);
 	const [activeTab, setActiveTab] = useState(labels[0]);
-	const { formState } = useFormContext();
+	const formState = useFormState();
 
 	useEffect(() => {
 		if (formState.errors) {
@@ -194,14 +200,18 @@ function TabbedForm<T extends ZodSchema>({
 				}
 			}
 		}
-	}, [groupings, labels, formState.errors]);
+	}, [formState.errors]);
 
 	return (
 		<Tabs value={activeTab} onValueChange={setActiveTab}>
 			<div className="flex justify-center">
 				<TabsList className="flex w-fit justify-center">
 					{labels.map((label) => (
-						<TabsTrigger key={label} value={label}>
+						<TabsTrigger
+							onClick={() => setActiveTab(label)}
+							key={label}
+							value={label}
+						>
 							{prettyPrint(label)}
 						</TabsTrigger>
 					))}
@@ -234,7 +244,6 @@ export function AutoForm<T extends ZodSchema>({
 	...props
 }: AutoFormProps<T>) {
 	const groups = Object.keys(groupings);
-
 	const headerFields = Object.entries(ui)
 		.filter(([, u]) => u?.position === "header")
 		.map(([name]) => name) as Extract<keyof z.infer<T>, string>[];
@@ -243,14 +252,59 @@ export function AutoForm<T extends ZodSchema>({
 		resolver: zodResolver(data),
 	});
 
+	const submitHandler = async (formData: T) => {
+		try {
+			const result = await onSubmit(formData);
+
+			if (result.success) {
+				// TODO: handle success
+			} else {
+				if (
+					result.error.toLowerCase().startsWith("invalid input") &&
+					result.details
+				) {
+					const formErrors = result.details as Record<
+						Extract<keyof z.infer<T>, string>,
+						string[]
+					>;
+
+					for (const [name, errors] of Object.entries(formErrors)) {
+						form.setError(name as Path<T>, {
+							type: "validate",
+							message: errors.join("\n"),
+						});
+					}
+				} else {
+					form.setError("root.serverError", {
+						message: result.error,
+					});
+				}
+			}
+		} catch (e) {
+			form.setError("root.serverError", {
+				message: "Server Error",
+			});
+		}
+	};
+
 	return (
 		<Form {...form}>
-			<form {...props} onSubmit={form.handleSubmit(onSubmit)}>
+			<form {...props} onSubmit={form.handleSubmit(submitHandler)}>
 				<Card>
 					<CardHeader>
 						<CardTitle className="md:text-3xl">
 							{props.title}
 						</CardTitle>
+						<CardDescription>
+							{form.formState.errors.root?.serverError && (
+								<div className="text-red-500">
+									{
+										form.formState.errors.root.serverError
+											.message
+									}
+								</div>
+							)}
+						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<div className="max-w-xs">
