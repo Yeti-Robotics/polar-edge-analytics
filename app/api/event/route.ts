@@ -19,5 +19,4 @@ export async function GET() {
 	return NextResponse.json(data[0]);
 }
 
-export const dynamic = "force-static";
 export const revalidate = 3600;
