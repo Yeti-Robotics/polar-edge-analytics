@@ -5,9 +5,11 @@ jobs:
         uses: ./.github/workflows/storybook-tests.yml
     unit-tests:
         uses: ./.github/workflows/unit-tests.yml
+    next-build:
+        uses: ./.github/workflows/build-next.yml
     verify-tests:
         runs-on: ubuntu-latest
-        needs: [storybook, unit-tests]
+        needs: [storybook, unit-tests, next-build]
         steps:
             - name: All tests pass
               if: success()
