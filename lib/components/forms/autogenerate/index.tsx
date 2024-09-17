@@ -256,12 +256,12 @@ export function AutoForm<T extends ZodSchema>({
 		.filter(([, u]) => u?.position === "header")
 		.map(([name]) => name) as Extract<keyof z.infer<T>, string>[];
 
-	const form = useForm<T>({
+	const form = useForm<z.infer<T>>({
 		resolver: zodResolver(data),
-		defaultValues: defaultValues as DefaultValues<T>, // Potentially: dynamically create default values?
+		defaultValues, // Potentially: dynamically create default values?
 	});
 
-	const submitHandler = async (formData: T) => {
+	const submitHandler = async (formData: z.infer<T>) => {
 		try {
 			const result = await onSubmit(formData);
 
@@ -278,7 +278,7 @@ export function AutoForm<T extends ZodSchema>({
 					>;
 
 					for (const [name, errors] of Object.entries(formErrors)) {
-						form.setError(name as Path<T>, {
+						form.setError(name as Path<z.infer<T>>, {
 							type: "validate",
 							message: errors.join("\n"),
 						});
