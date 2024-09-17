@@ -9,7 +9,7 @@ const libreFranklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
-	title: "PolarEdge Analytics",
+	title: "Polar Edge Analytics",
 	description: "A NC FRC Scouting Platform",
 };
 

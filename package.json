@@ -19,6 +19,7 @@
 		"*.{js,jsx,ts,tsx,json,html}": "prettier --cache --write"
 	},
 	"dependencies": {
+		"@hookform/resolvers": "^3.9.0",
 		"@mdx-js/loader": "^3.0.1",
 		"@mdx-js/react": "^3.0.1",
 		"@next/mdx": "^14.2.4",
@@ -29,7 +30,7 @@
 		"@radix-ui/react-dropdown-menu": "^2.1.1",
 		"@radix-ui/react-hover-card": "^1.1.0",
 		"@radix-ui/react-label": "^2.1.0",
-		"@radix-ui/react-popover": "^1.1.0",
+		"@radix-ui/react-popover": "^1.1.1",
 		"@radix-ui/react-progress": "^1.1.0",
 		"@radix-ui/react-radio-group": "^1.2.0",
 		"@radix-ui/react-scroll-area": "^1.1.0",
@@ -48,6 +49,7 @@
 		"next-themes": "^0.3.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"react-hook-form": "^7.53.0",
 		"recharts": "^2.12.7",
 		"tailwind-merge": "^2.3.0",
 		"tailwindcss-animate": "^1.0.7",

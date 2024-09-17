@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/lib/components/structural/AuthProvider";
 import { NavSidebar } from "@/lib/components/structural/navbar";
 
 export default function WithSidebar({
@@ -5,5 +6,9 @@ export default function WithSidebar({
 }: {
 	children: React.ReactNode;
 }) {
-	return <NavSidebar>{children}</NavSidebar>;
+	return (
+		<AuthProvider>
+			<NavSidebar>{children}</NavSidebar>
+		</AuthProvider>
+	);
 }
