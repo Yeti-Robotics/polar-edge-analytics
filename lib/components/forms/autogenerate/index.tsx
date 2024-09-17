@@ -1,5 +1,6 @@
 import {
 	ControllerRenderProps,
+	DefaultValues,
 	Path,
 	useForm,
 	useFormContext,
@@ -68,6 +69,7 @@ type AutoFormProps<T extends ZodSchema> = {
 	ui: FormUiSchema<T>;
 	onSubmit: FormAction<T>;
 	groupings: Record<string, Extract<keyof z.infer<T>, string>[]>;
+	defaultValues: DefaultValues<z.infer<T>>;
 };
 
 type AutoFormData<T extends ZodSchema> = Pick<
@@ -185,6 +187,7 @@ function TabbedForm<T extends ZodSchema>({
 	const [activeTab, setActiveTab] = useState(labels[0]);
 	const formState = useFormState();
 
+	/* eslint-disable react-hooks/exhaustive-deps */
 	useEffect(() => {
 		if (formState.errors) {
 			for (const label of labels) {
@@ -200,7 +203,11 @@ function TabbedForm<T extends ZodSchema>({
 				}
 			}
 		}
-	}, [formState.errors]);
+
+		if (formState.isSubmitted && formState.isSubmitSuccessful) {
+			setActiveTab(labels[0]);
+		}
+	}, [formState.errors, formState.isSubmitted, formState.isSubmitSuccessful]);
 
 	return (
 		<Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -241,6 +248,7 @@ export function AutoForm<T extends ZodSchema>({
 	data,
 	ui,
 	onSubmit,
+	defaultValues,
 	...props
 }: AutoFormProps<T>) {
 	const groups = Object.keys(groupings);
@@ -250,6 +258,7 @@ export function AutoForm<T extends ZodSchema>({
 
 	const form = useForm<T>({
 		resolver: zodResolver(data),
+		defaultValues: defaultValues as DefaultValues<T>, // Potentially: dynamically create default values?
 	});
 
 	const submitHandler = async (formData: T) => {
@@ -257,7 +266,7 @@ export function AutoForm<T extends ZodSchema>({
 			const result = await onSubmit(formData);
 
 			if (result.success) {
-				// TODO: handle success
+				form.reset();
 			} else {
 				if (
 					result.error.toLowerCase().startsWith("invalid input") &&
@@ -295,16 +304,6 @@ export function AutoForm<T extends ZodSchema>({
 						<CardTitle className="md:text-3xl">
 							{props.title}
 						</CardTitle>
-						<CardDescription>
-							{form.formState.errors.root?.serverError && (
-								<div className="text-red-500">
-									{
-										form.formState.errors.root.serverError
-											.message
-									}
-								</div>
-							)}
-						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<div className="max-w-xs">
@@ -336,7 +335,7 @@ export function AutoForm<T extends ZodSchema>({
 							/>
 						)}
 					</CardContent>
-					<CardFooter className="space-x-2">
+					<CardFooter className="flex flex-col space-y-4">
 						<Button
 							onClick={() => {}}
 							type="submit"
@@ -344,15 +343,24 @@ export function AutoForm<T extends ZodSchema>({
 						>
 							Submit
 						</Button>
-						<Button
-							type="button"
-							onClick={() => {
-								form.reset();
-							}}
-							className="flex w-full"
+						<div
+							className={
+								form.formState.errors.root?.serverError
+									? "text-red-500"
+									: form.formState.isSubmitSuccessful
+										? "text-green-500"
+										: "hidden"
+							}
 						>
-							Reset
-						</Button>
+							{form.formState.errors.root?.serverError
+								? form.formState.errors.root?.serverError
+										.message
+								: form.formState.isSubmitSuccessful &&
+									  !form.formState.isSubmitting &&
+									  !form.formState.isDirty
+									? `Successfully submitted!`
+									: ""}
+						</div>
 					</CardFooter>
 				</Card>
 			</form>

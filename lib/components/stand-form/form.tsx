@@ -6,7 +6,7 @@ import {
 	standFormSchema,
 } from "@/lib/components/stand-form/schema";
 import { Input } from "../ui/input";
-import { useFormContext } from "react-hook-form";
+import { DefaultValues, useFormContext } from "react-hook-form";
 import { AutoForm, FormAction } from "../forms/autogenerate";
 import { Textarea } from "../ui/textarea";
 import { CounterInput } from "../forms/counter-input";
@@ -18,7 +18,6 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { ServerActionResult } from "@/lib/actions/actions-utils";
-import { standFormServerAction } from "./validate";
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	if (e.code === "Minus") {
@@ -70,11 +69,11 @@ export function StandForm({
 							<Textarea {...props} placeholder="Notes" />
 						),
 					},
-					bots_on_chain: {
+					number_on_chain: {
 						Component: (props) => {
 							const { watch, setError, clearErrors, setValue } =
 								useFormContext();
-							const climbed = watch("climbed");
+							const climbed = watch("climb");
 
 							useEffect(() => {
 								if (climbed) {
@@ -104,7 +103,7 @@ export function StandForm({
 							);
 						},
 					},
-					defense_rating: {
+					defense: {
 						Component: (props) => {
 							return (
 								<Select
@@ -131,7 +130,7 @@ export function StandForm({
 						},
 					},
 				}}
-				onSubmit={(data) => standFormServerAction(data, onSubmit)}
+				onSubmit={onSubmit}
 				groupings={{
 					auto: Object.keys(standFormSchema.shape).filter((key) => {
 						return key.includes("auto");
@@ -139,9 +138,26 @@ export function StandForm({
 					teleop: Object.keys(standFormSchema.shape).filter((key) => {
 						return key.includes("teleop");
 					}) as Extract<keyof StandFormData, string>[],
-					endgame: ["climbed", "parked", "bots_on_chain"],
-					misc: ["defense_rating", "notes"],
+					endgame: ["climb", "park", "number_on_chain"],
+					misc: ["defense", "notes"],
 				}}
+				defaultValues={
+					{
+						team_number: "",
+						match_number: "",
+						auto_speaker_notes: 0,
+						auto_amp_notes: 0,
+						auto_shuttle_notes: 0,
+						teleop_amp_notes: 0,
+						teleop_shuttle_notes: 0,
+						teleop_speaker_notes: 0,
+						climb: false,
+						park: false,
+						number_on_chain: 0,
+						defense: "",
+						notes: "",
+					} as DefaultValues<unknown>
+				}
 			/>
 		</div>
 	);

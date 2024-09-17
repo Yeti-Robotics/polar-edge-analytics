@@ -13,67 +13,67 @@ export const standFormSchema = z.object({
 		.positive({ message: "Match number must be greater than zero" })
 		.max(200, { message: "Match number is too large" })
 		.describe("Match you are scouting"),
-	auto_line: z.coerce
+	initiation_line: z.coerce
 		.boolean()
 		.nullish()
 		.default(false)
 		.transform((value) => value ?? false)
 		.describe("Did they cross the white line?"),
-	speaker_auto: z.coerce
+	auto_speaker_notes: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Auto speaker must be a positive number" })
 		.default(0)
 		.describe("Notes scored in speaker during autonomous"),
-	amp_auto: z.coerce
+	auto_amp_notes: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Auto amp number must be a positive number" })
 		.default(0)
 		.describe("Notes scored in amplifier during autonomous"),
-	shuttle_auto: z.coerce
+	auto_shuttle_notes: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Auto shuttle must be a positive number" })
 		.default(0)
 		.describe("Notes thrown across field during autonomous"),
-	speaker_teleop: z.coerce
+	teleop_speaker_notes: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Teleop speaker must be a positive number" })
 		.default(0)
 		.describe("Notes scored in speaker during teleop"),
-	amp_teleop: z.coerce
+	teleop_amp_notes: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Teleop amp must be a positive number" })
 		.default(0)
 		.describe("Notes scored in amplifier during teleop"),
-	shuttle_teleop: z.coerce
+	teleop_shuttle_notes: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Teleop shuttle must be a positive number" })
 		.default(0)
 		.describe("Notes thrown across field during teleop"),
-	climbed: z.coerce
+	climb: z.coerce
 		.boolean()
 		.nullish()
 		.transform((value) => value ?? false)
 		.default(false)
 		.describe("Did they climb on the chain?"),
-	parked: z.coerce
+	park: z.coerce
 		.boolean()
 		.nullish()
 		.transform((value) => value ?? false)
 		.default(false)
 		.describe("Did they park underneath the podium?"),
-	bots_on_chain: z.coerce
+	number_on_chain: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Bots on chain must be a positive number" })
 		.default(0)
 		.describe("Number of bots hanging on the same chain"),
-	defense_rating: z.coerce
+	defense: z.coerce
 		.number({ message: "Defense rating must be a valid number" })
 		.int()
 		.min(1, { message: "Defense rating must be a valid number" })
@@ -85,7 +85,7 @@ export const standFormSchema = z.object({
 		.describe("Comments about robot performance"),
 });
 
-standFormSchema.refine((data) => !data.climbed && data.bots_on_chain > 0, {
+standFormSchema.refine((data) => !data.climb && data.number_on_chain > 0, {
 	message: "Climbed must be true if bots on chain is greater than 0",
 });
 
