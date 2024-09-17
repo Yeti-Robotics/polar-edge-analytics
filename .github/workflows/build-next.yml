@@ -15,9 +15,15 @@ jobs:
             - name: Install Node/node_modules
               uses: ./.github/actions/site-setup
 
-            - name: echo some things
-              run: echo ${{ vars.POSTGRES_URL }}
+            - name: Create .env.production
+              run: | # Secrets needed to create app
+                  echo "SUPABASE_AUTH_DISCORD_CLIENT_ID=${{secrets.SUPABASE_AUTH_DISCORD_CLIENT_ID}}" >> .env.production
+                  echo "SUPABASE_AUTH_DISCORD_SECRET=${{secrets.SUPABASE_AUTH_DISCORD_SECRET}}" >> .env.production
+                  echo "SUPABASE_SERVICE_KEY=${{secrets.SUPABASE_SERVICE_KEY}}" >> .env.production
+                  echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}" >> .env.production
+                  echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env.production
+              shell: bash
 
-            - name: Run tests
+            - name: Run Next.js Build
               run: npm run build
               shell: bash
