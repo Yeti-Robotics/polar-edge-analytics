@@ -2,22 +2,23 @@
  * Tests to verify stand form validation functions as expected.
  */
 
+import { standFormSchema } from "../schema";
+
 function getBaseTestForm() {
 	const baseForm = new FormData();
-	baseForm.append("scouter", "ba64daa5-37a0-47e9-b376-2930b948dbfe");
 	baseForm.append("team_number", "3506");
 	baseForm.append("match_number", "12");
-	baseForm.append("event_code", "2024test");
-	baseForm.append("auto_line", "true");
-	baseForm.append("speaker_auto", "3");
-	baseForm.append("amp_auto", "0");
-	baseForm.append("shuttle_auto", "0");
-	baseForm.append("speaker_teleop", "10");
-	baseForm.append("amp_teleop", "2");
-	baseForm.append("bots_on_chain", "0");
-	baseForm.append("shuttle_teleop", "0");
-	baseForm.append("parked", "true");
-	baseForm.append("defense_rating", "2");
+	baseForm.append("initiation_line", "true");
+	baseForm.append("auto_speaker_notes", "3");
+	baseForm.append("auto_amp_notes", "0");
+	baseForm.append("auto_shuttle_notes", "0");
+	baseForm.append("teleop_speaker_notes", "10");
+	baseForm.append("teleop_amp_notes", "2");
+	baseForm.append("teleop_shuttle_notes", "2");
+	baseForm.append("climb", "true");
+	baseForm.append("park", "true");
+	baseForm.append("number_on_chain", "0");
+	baseForm.append("defense", "2");
 	baseForm.append(
 		"notes",
 		"This is a valid note that is greater than 32 characters long"
@@ -79,4 +80,12 @@ describe("Validate correctly validates Stand Forms", () => {
 	// 	const validationResult = validateForm(testForm);
 	// 	expect(Object.keys(validationResult.formErrors).length).toBe(3);
 	// });
+
+	it("validates form", () => {
+		const testForm = getBaseTestForm();
+		const data = Object.fromEntries(testForm.entries());
+		const validationResult = standFormSchema.safeParse(data);
+		const errors = validationResult.error?.flatten().fieldErrors ?? {};
+		expect(Object.keys(errors).length).toBe(0);
+	});
 });
