@@ -1,12 +1,21 @@
-name: "Setup Site"
-description: "Actions to perform in order to test the site"
+name: Setup Site
+description: Actions to perform in order to test the site
 on: workflow_call
 runs:
-  using: "composite"
+  using: composite
   steps:
     - uses: actions/setup-node@v4
       with:
           node-version: 20.17.0
-    - name: "Install dependencies"
-      run: "npm install"
+    - name: Install dependencies
+      run: npm install
+      shell: bash
+
+    - name: Create .env.production
+      run: | # Secrets needed to create app
+        echo "SUPABASE_AUTH_DISCORD_CLIENT_ID=${{secrets.SUPABASE_AUTH_DISCORD_CLIENT_ID}}" >> .env.production
+        echo "SUPABASE_AUTH_DISCORD_SECRET=${{secrets.SUPABASE_AUTH_DISCORD_SECRET}}" >> .env.production
+        echo "SUPABASE_SERVICE_KEY=${{secrets.SUPABASE_SERVICE_KEY}}" >> .env.production
+        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}" >> .env.production
+        echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env.production
       shell: bash
