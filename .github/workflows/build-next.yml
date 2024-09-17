@@ -11,6 +11,9 @@ jobs:
             - name: Install Node/node_modules
               uses: ./.github/actions/site-setup
 
+            - name: echo some things
+              run: echo ${{ vars.POSTGRES_URL }}
+
             - name: Run tests
               run: npm run build
               shell: bash
