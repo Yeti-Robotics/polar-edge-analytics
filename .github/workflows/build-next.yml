@@ -11,9 +11,6 @@ jobs:
             - name: Install Node/node_modules
               uses: ./.github/actions/site-setup
 
-            - name: Cat .env.production
-              run: cat .env.production
-
             - name: Create .env.local
               run: | # Secrets needed to create app
                   echo "SUPABASE_AUTH_DISCORD_CLIENT_ID=${{secrets.SUPABASE_AUTH_DISCORD_CLIENT_ID}}" >> .env.local
