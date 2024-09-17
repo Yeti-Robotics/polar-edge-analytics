@@ -1,13 +1,13 @@
 "use client";
 import PolarEdgeLogo from "./logo.icon";
 import {
-	Binoculars,
 	Compass,
 	LogIn,
 	LogOut,
 	MenuIcon,
 	NotebookTabs,
 	NotepadText,
+	Telescope,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -112,7 +112,7 @@ export function Sidebar({
 							<div className="flex grow flex-col space-y-1">
 								<NavAccordion>
 									<NavAccordionTrigger>
-										<Binoculars className="mr-2 size-5" />
+										<Telescope className="mr-2 size-5" />
 										<span className="flex leading-4 sm:hidden sm:group-hover/nav:flex">
 											Scout
 										</span>
