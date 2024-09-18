@@ -1,18 +1,12 @@
-import { DesktopNav } from "./desktop";
-import { TopNavBar } from "./top-nav";
+import { createClient } from "@/lib/database/server";
+import { Sidebar } from "./sidebar";
 
-export function NavSidebar({ children }: { children: React.ReactNode }) {
+export async function NavSidebar({ children }: { children: React.ReactNode }) {
+	const supabase = createClient();
+	const { data } = await supabase.auth.getUser();
 	return (
-		<div className="relative w-full">
-			<div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-				<DesktopNav />
-				<div className="flex flex-col">
-					<TopNavBar />
-					<div className="relative  flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-						{children}
-					</div>
-				</div>
-			</div>
-		</div>
+		<>
+			<Sidebar user={data.user}>{children}</Sidebar>
+		</>
 	);
 }
