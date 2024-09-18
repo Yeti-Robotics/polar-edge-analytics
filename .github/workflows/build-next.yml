@@ -11,6 +11,10 @@ jobs:
             - name: Install Node/node_modules
               uses: ./.github/actions/site-setup
 
+            - name: echo url
+              shell: bash
+              run: echo ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+
             - name: Run Next.js Build
               run: npm run build
               shell: bash
