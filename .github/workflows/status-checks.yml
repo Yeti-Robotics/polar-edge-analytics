@@ -10,6 +10,7 @@ jobs:
     next-build:
         name: Build Next.js
         uses: ./.github/workflows/build-next.yml
+        secrets: inherit
     verify-tests:
         name: All Status Checks Pass
         runs-on: ubuntu-latest
