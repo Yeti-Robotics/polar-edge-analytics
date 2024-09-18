@@ -11,6 +11,9 @@ jobs:
             - name: Install Node/node_modules
               uses: ./.github/actions/site-setup
 
+            - name: Setup tmate session
+              uses: mxschmitt/action-tmate@v3
+
             - name: Create .env.local
               run: | # Secrets needed to create app
                   echo "SUPABASE_AUTH_DISCORD_CLIENT_ID=${{ secrets.SUPABASE_AUTH_DISCORD_CLIENT_ID }}" >> .env.local
