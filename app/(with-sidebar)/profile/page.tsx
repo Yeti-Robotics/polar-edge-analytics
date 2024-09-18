@@ -14,7 +14,9 @@ export default async function ProfilePage() {
 
 	return (
 		<div>
-			<h1>Welcome back, {user.user_metadata.full_name}</h1>
+			<h1>
+				Welcome back, {user.user_metadata.full_name ?? "Yeti scouter"}
+			</h1>
 		</div>
 	);
 }

@@ -169,6 +169,7 @@ export type Database = {
 				Row: {
 					approved: boolean;
 					auto_amp_notes: number;
+					auto_shuttle_notes: number;
 					auto_speaker_notes: number;
 					climb: boolean;
 					created_at: string;
@@ -181,10 +182,10 @@ export type Database = {
 					number_on_chain: number;
 					park: boolean;
 					scouter: string;
-					shuttle_notes: number;
 					spotlight: boolean;
 					team_number: number;
 					teleop_amp_notes: number;
+					teleop_shuttle_notes: number;
 					teleop_speaker_notes: number;
 					trap_notes: number;
 					updated_at: string;
@@ -192,6 +193,7 @@ export type Database = {
 				Insert: {
 					approved?: boolean;
 					auto_amp_notes?: number;
+					auto_shuttle_notes?: number;
 					auto_speaker_notes?: number;
 					climb?: boolean;
 					created_at?: string;
@@ -204,10 +206,10 @@ export type Database = {
 					number_on_chain?: number;
 					park?: boolean;
 					scouter: string;
-					shuttle_notes?: number;
 					spotlight?: boolean;
 					team_number: number;
 					teleop_amp_notes?: number;
+					teleop_shuttle_notes?: number;
 					teleop_speaker_notes?: number;
 					trap_notes?: number;
 					updated_at?: string;
@@ -215,6 +217,7 @@ export type Database = {
 				Update: {
 					approved?: boolean;
 					auto_amp_notes?: number;
+					auto_shuttle_notes?: number;
 					auto_speaker_notes?: number;
 					climb?: boolean;
 					created_at?: string;
@@ -227,10 +230,10 @@ export type Database = {
 					number_on_chain?: number;
 					park?: boolean;
 					scouter?: string;
-					shuttle_notes?: number;
 					spotlight?: boolean;
 					team_number?: number;
 					teleop_amp_notes?: number;
+					teleop_shuttle_notes?: number;
 					teleop_speaker_notes?: number;
 					trap_notes?: number;
 					updated_at?: string;
@@ -371,7 +374,31 @@ export type Database = {
 			};
 		};
 		Views: {
-			[_ in never]: never;
+			team_stats: {
+				Row: {
+					auto_amp_notes: number | null;
+					auto_shuttle_notes: number | null;
+					auto_speaker_notes: number | null;
+					climb: boolean | null;
+					defense: number | null;
+					initiation_line: boolean | null;
+					park: boolean | null;
+					team_name: string | null;
+					team_number: number | null;
+					teleop_amp_notes: number | null;
+					teleop_shuttle_notes: number | null;
+					teleop_speaker_notes: number | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "stand_form_team_number_fkey";
+						columns: ["team_number"];
+						isOneToOne: false;
+						referencedRelation: "team";
+						referencedColumns: ["team_number"];
+					},
+				];
+			};
 		};
 		Functions: {
 			authorize: {
@@ -379,6 +406,10 @@ export type Database = {
 					requested_permission: Database["public"]["Enums"]["app_permission"];
 				};
 				Returns: boolean;
+			};
+			current_event: {
+				Args: Record<PropertyKey, never>;
+				Returns: string;
 			};
 			custom_access_token_hook: {
 				Args: {
