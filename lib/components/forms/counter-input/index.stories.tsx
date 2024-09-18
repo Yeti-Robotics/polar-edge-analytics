@@ -1,10 +1,23 @@
 import { type Meta, StoryObj } from "@storybook/react";
 import { within, expect, userEvent } from "@storybook/test";
 import { CounterInput, type CounterInputProps } from ".";
+import { Form } from "../../ui/form";
+import { useForm } from "react-hook-form";
 
 const meta: Meta<typeof CounterInput> = {
 	title: "Components/Forms/Counter Input",
 	component: CounterInput,
+	decorators: [
+		(Story) => {
+			const ctx = useForm();
+
+			return (
+				<Form {...ctx}>
+					<Story />
+				</Form>
+			);
+		},
+	],
 };
 
 export default meta;
