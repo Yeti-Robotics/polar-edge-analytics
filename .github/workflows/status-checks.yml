@@ -2,12 +2,18 @@ name: Status Checks
 on: [push]
 jobs:
     storybook:
+        name: Storybook Tests
         uses: ./.github/workflows/storybook-tests.yml
     unit-tests:
+        name: Jest Unit Tests
         uses: ./.github/workflows/unit-tests.yml
+    next-build:
+        name: Build Next.js
+        uses: ./.github/workflows/build-next.yml
     verify-tests:
+        name: All Status Checks Pass
         runs-on: ubuntu-latest
-        needs: [storybook, unit-tests]
+        needs: [storybook, unit-tests, next-build]
         steps:
             - name: All tests pass
               if: success()

@@ -1,0 +1,25 @@
+name: Build Next.js
+on: workflow_call
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        environment: ci
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Install Node/node_modules
+              uses: ./.github/actions/site-setup
+
+            - name: Create .env.local
+              run: | # Secrets needed to create app
+                  echo "SUPABASE_AUTH_DISCORD_CLIENT_ID=${{secrets.SUPABASE_AUTH_DISCORD_CLIENT_ID}}" >> .env.local
+                  echo "SUPABASE_AUTH_DISCORD_SECRET=${{secrets.SUPABASE_AUTH_DISCORD_SECRET}}" >> .env.local
+                  echo "SUPABASE_SERVICE_KEY=${{secrets.SUPABASE_SERVICE_KEY}}" >> .env.local
+                  echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY}}" >> .env.local
+                  echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env.local
+              shell: bash
+
+            - name: Run Next.js Build
+              run: npm run build
+              shell: bash
