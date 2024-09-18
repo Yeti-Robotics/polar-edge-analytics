@@ -89,7 +89,7 @@ export function Sidebar({
 				<div className="flex items-center space-x-4 sm:ml-12">
 					<MenuIcon
 						onClick={() => setIsOpenMobile(true)}
-						className="fill-whiten size-8 hover:cursor-pointer sm:hidden"
+						className="size-8 fill-white hover:cursor-pointer sm:hidden"
 					/>
 				</div>
 				<OnlineStatus />
