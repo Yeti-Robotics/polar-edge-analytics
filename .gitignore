@@ -40,4 +40,4 @@ storybook-static/
 *storybook.log
 
 # vscode
-.vscode
+**/.vscode
