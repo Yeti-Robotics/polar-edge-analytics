@@ -16,8 +16,8 @@ export default function DevelopmentLoginPage() {
 
 	return (
 		<main className="grid grid-cols-1 sm:grid-cols-2">
-			<div className="hidden bg-gradient-to-br from-primary from-20% via-fuchsia-500 to-orange-400 sm:block "></div>
-			<div className="prose flex min-h-screen flex-col items-center justify-center p-4 dark:prose-invert">
+			<div className="from-primary hidden bg-gradient-to-br from-20% via-fuchsia-500 to-orange-400 sm:block "></div>
+			<div className="prose dark:prose-invert flex min-h-screen flex-col items-center justify-center p-4">
 				<div>
 					<h1 className="mb-2 text-center text-xl sm:text-3xl">
 						Development Login
