@@ -1,6 +1,6 @@
 "use server";
 
-import { TeamDataTable } from "@/lib/components/display/team-data-table/table";
+import { TeamDataTable } from "@/lib/components/display/team-data-table";
 import { getTeamData } from "./data";
 
 export default async function AnalysisPage() {
