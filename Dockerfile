@@ -5,14 +5,14 @@ WORKDIR /app
 FROM base AS builder
 
 # Install dependencies based on the preferred package manager
-COPY package.json package-lock.json ./
+COPY ./next/package.json ./next/package-lock.json ./
 
 # Omit --production flag for TypeScript devDependencies
 RUN npm ci
 
 # FROM base AS builder
-COPY . .
-COPY .env.production .
+COPY ./next .
+COPY ./next/.env.production .
 # COPY --from=deps /app/node_modules ./node_modules
 
 # Next.js collects completely anonymous telemetry data about general usage. Learn more here: https://nextjs.org/telemetry

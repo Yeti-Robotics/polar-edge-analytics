@@ -4,7 +4,7 @@ services:
   next-app:
     container_name: next
     build:
-      context: next
+      context: ./
       dockerfile: Dockerfile
     env_file:
       - .env.local
