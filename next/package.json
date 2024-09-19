@@ -11,7 +11,7 @@
 		"storybook": "storybook dev -p 6006",
 		"test:storybook": "test-storybook",
 		"build:storybook": "storybook build --output-dir storybook-static",
-		"prepare": "husky install .husky",
+		"husky-prepare": "husky install .husky",
 		"test": "jest"
 	},
 	"lint-staged": {
