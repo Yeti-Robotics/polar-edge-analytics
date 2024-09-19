@@ -10,3 +10,4 @@ runs:
     - name: Install dependencies
       run: npm install
       shell: bash
+      working-directory: next
