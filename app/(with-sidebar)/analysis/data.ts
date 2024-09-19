@@ -4,7 +4,7 @@ import {
 	createServerAction,
 	ServerActionError,
 } from "@/lib/actions/actions-utils";
-import { TeamData } from "@/lib/components/display/team-data-table/table";
+import { TeamData } from "@/lib/components/display/team-data-table";
 import { createClient } from "@/lib/database/server";
 
 export const getTeamData = createServerAction(async () => {
