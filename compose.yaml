@@ -13,22 +13,6 @@ services:
       - 3000:3000
     networks:
       - server
-  
-  postgres:
-    container_name: postgres
-    image: postgres:15-alpine
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=password
-    networks:
-      - server
-    ports:
-      - 5432:5432
-    volumes:
-      - db-data:/var/lib/postgresql/data
 
 networks:
   server:
-
-volumes:
-  db-data: {}
