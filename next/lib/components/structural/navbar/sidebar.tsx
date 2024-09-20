@@ -36,7 +36,6 @@ export function Sidebar({
 	const mobileNavRef = useRef<HTMLElement>(null);
 
 	const handlePageClick = (e: any) => {
-		console.log(mobileNavRef.current?.contains(e.target));
 		if (isOpenMobile && !mobileNavRef.current?.contains(e.target)) {
 			setIsOpenMobile(false);
 		}
@@ -163,7 +162,7 @@ export function Sidebar({
 						</div>
 					</div>
 				</nav>
-				<div className="relative top-12 z-0 p-4 sm:left-16">
+				<div className="relative top-12 z-0 p-4 sm:left-16 min-h-[calc(100vh-3rem)] w-[calc(100%-5rem)]">
 					{children}
 				</div>
 			</div>
