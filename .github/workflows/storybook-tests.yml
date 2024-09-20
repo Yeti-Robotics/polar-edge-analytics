@@ -4,7 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.45.0-jammy
+      image: mcr.microsoft.com/playwright:v1.47.1-jammy
     defaults:
       run:
         working-directory: next
