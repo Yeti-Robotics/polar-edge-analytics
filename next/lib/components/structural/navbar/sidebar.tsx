@@ -100,7 +100,7 @@ export function Sidebar({
 					className={`overflow-hidden duration-200`}
 				>
 					<div
-						className={`group/nav fixed z-50 h-screen sm:flex ${isOpenMobile ? "w-56" : "box-border w-0"} flex-col overflow-hidden bg-background transition-[width]  hover:w-56 dark:border-r dark:border-r-slate-700 sm:w-16`}
+						className={`group/nav fixed z-50 h-screen flex ${isOpenMobile ? "w-56" : "box-border w-0"} flex-col overflow-hidden bg-background transition-[width]  hover:w-56 dark:border-r dark:border-r-slate-700 sm:w-16`}
 					>
 						<Link
 							className="mx-2 mb-4 mt-2 flex w-12 flex-col items-center justify-center"
