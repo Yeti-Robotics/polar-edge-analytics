@@ -37,7 +37,7 @@ interface DiscordGuildMemberResponse {
 export async function GET(request: Request) {
 	const requestUrl = new URL(request.url);
 	const code = requestUrl.searchParams.get("code");
-	const origin = requestUrl.origin;
+	const origin = process.env.NEXT_PUBLIC_SITE_ORIGIN;
 
 	if (code) {
 		const supabase = createClient();
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
 		} = await supabase.auth.exchangeCodeForSession(code);
 
 		if (!session) {
-			return NextResponse.redirect(`${origin}/403`);
+			return NextResponse.redirect(new URL('/403', origin));
 		}
 
 		const headers = new Headers();
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
 
 			await serviceClient.auth.admin.deleteUser(user.id);
 			await supabase.auth.signOut();
-			return NextResponse.redirect(`${origin}/403`);
+			return NextResponse.redirect(new URL('/profile', origin));
 		}
 
 		await supabase
@@ -70,6 +70,6 @@ export async function GET(request: Request) {
 			.update({ nick: servers.nick })
 			.eq("id", user.id);
 
-		return NextResponse.redirect(`${origin}/profile`);
+		return NextResponse.redirect(new URL('/profile', origin));
 	}
 }
