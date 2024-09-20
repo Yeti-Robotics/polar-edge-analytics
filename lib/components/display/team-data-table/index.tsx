@@ -97,21 +97,21 @@ const columns: ColumnDef<TeamData>[] = [
 			columnHelper.accessor("auto_amp_notes", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Amp Notes"} column={column} />
+					<SortableHeader label={"Amp"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("auto_speaker_notes", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Speaker Notes"} column={column} />
+					<SortableHeader label={"Speaker"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("auto_shuttle_notes", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Shuttle Notes"} column={column} />
+					<SortableHeader label={"Shuttle"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
@@ -124,21 +124,21 @@ const columns: ColumnDef<TeamData>[] = [
 			columnHelper.accessor("teleop_amp_notes", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Amp Notes"} column={column} />
+					<SortableHeader label={"Amp"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("teleop_speaker_notes", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Speaker Notes"} column={column} />
+					<SortableHeader label={"Speaker"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("teleop_shuttle_notes", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Shuttle Notes"} column={column} />
+					<SortableHeader label={"Shuttle"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
@@ -171,7 +171,7 @@ const columns: ColumnDef<TeamData>[] = [
 			columnHelper.accessor("defense", {
 				cell: (info) => <NumberDisplay value={info.getValue()} />,
 				header: ({ column }) => (
-					<SortableHeader label={"Defense Rating"} column={column} />
+					<SortableHeader label={"Defense"} column={column} />
 				),
 				footer: (info) => info.column.id,
 			}),
@@ -198,10 +198,6 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 	const [columnVisibility, setVisibility] = useState<VisibilityState>({});
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-	useEffect(() => {
-		console.log(columnVisibility);
-	}, [columnVisibility]);
-
 	const table = useReactTable<TeamData>({
 		data: teamData,
 		columns,
@@ -219,7 +215,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 	});
 
 	return (
-		<div className="flex max-w-xs flex-col space-y-4 md:max-w-fit">
+		<div className="flex flex-col space-y-4">
 			<div className="flex justify-between">
 				<div>
 					<Input
@@ -253,9 +249,13 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 											key={column.id}
 											className="capitalize"
 											checked={column.getIsVisible()}
-											onCheckedChange={(value) =>
-												column.toggleVisibility(!!value)
-											}
+											onClick={() => {
+												column
+													.getLeafColumns()
+													.map((c) =>
+														c.toggleVisibility()
+													);
+											}}
 										>
 											{column.id}
 										</DropdownMenuCheckboxItem>
@@ -265,7 +265,9 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 					</DropdownMenu>
 				</div>
 			</div>
-			<DataTable table={table} />
+			<div className="w-[calc(100vw-96px)]">
+				<DataTable table={table} />
+			</div>
 		</div>
 	);
 }

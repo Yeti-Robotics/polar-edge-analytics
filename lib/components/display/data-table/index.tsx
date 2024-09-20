@@ -25,7 +25,7 @@ export function DataTable<T>({ table }: DataTableProps<T>) {
 								<TableHead
 									key={header.id}
 									colSpan={header.colSpan}
-									className="border text-center"
+									className="h-1 border p-1 text-center"
 								>
 									{header.isPlaceholder
 										? null
@@ -49,7 +49,7 @@ export function DataTable<T>({ table }: DataTableProps<T>) {
 						{row.getVisibleCells().map((cell) => (
 							<TableCell
 								key={cell.id}
-								className="border text-center"
+								className="border p-2 text-center"
 							>
 								{flexRender(
 									cell.column.columnDef.cell,
