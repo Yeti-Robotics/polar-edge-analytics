@@ -1,23 +1,26 @@
 name: Build Next.js
 on: workflow_call
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        environment: ci
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    environment: ci
+    defaults:
+      run:
+        working-directory: next
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-            - name: Install Node/node_modules
-              uses: ./.github/actions/site-setup
+      - name: Install Node/node_modules
+        uses: ./.github/actions/site-setup
 
-            - name: Create .env.local
-              env:
-                  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-              run: | # Secrets needed to create app
-                  echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> .env.local
-              shell: bash
+      - name: Create .env.local
+        env:
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: | # Secrets needed to create app
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> .env.local
+        shell: bash
 
-            - name: Run Next.js Build
-              run: npm run build
-              shell: bash
+      - name: Run Next.js Build
+        run: npm run build
+        shell: bash
