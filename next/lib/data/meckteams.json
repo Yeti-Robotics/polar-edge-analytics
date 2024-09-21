@@ -1,0 +1,272 @@
+[
+	{
+		"city": "Hendersonville",
+		"country": "USA",
+		"key": "frc1225",
+		"name": "Equilibar/The Bell Foundation/Optimum/BorgWarner Turbo Systems/Monday.com&Henderson County Public Schools",
+		"nickname": "The Gorillas",
+		"state_prov": "North Carolina",
+		"team_number": 1225
+	},
+	{
+		"city": "Greensboro",
+		"country": "USA",
+		"key": "frc1533",
+		"name": "ABCO/TE Connectivity/QualComm/Qorvo/Cross Company/HondaJet/ECG Robotics, Inc.&Family/Community",
+		"nickname": "Triple Strange",
+		"state_prov": "North Carolina",
+		"team_number": 1533
+	},
+	{
+		"city": "Reidsville",
+		"country": "USA",
+		"key": "frc2640",
+		"name": "Department of Public Instruction (DPI)/PPG/TE Connectivity&Rockingham Early College HS",
+		"nickname": "HOTBOTZ",
+		"state_prov": "North Carolina",
+		"team_number": 2640
+	},
+	{
+		"city": "Mooresville",
+		"country": "USA",
+		"key": "frc3196",
+		"name": "Motorola Solutions Foundation/Pine Lake Preparatory School/Davidson Day School/Gene Haas Foundation&Pine Lake Preparatory School",
+		"nickname": "Team SPORK",
+		"state_prov": "North Carolina",
+		"team_number": 3196
+	},
+	{
+		"city": "Holly Springs",
+		"country": "USA",
+		"key": "frc3349",
+		"name": "Family/Community",
+		"nickname": "Static",
+		"state_prov": "North Carolina",
+		"team_number": 3349
+	},
+	{
+		"city": "Charlotte",
+		"country": "USA",
+		"key": "frc3506",
+		"name": "WCP/Gerdau/Frontier Capital/BASF/Microsoft/Ortho Carolina/Van Buren Law, PLLC/D.R.Joseph Incorporated/Piedmont Natural Gas/Pester/Mariner USA&Queen City Robotics Alliance",
+		"nickname": "YETI Robotics",
+		"state_prov": "North Carolina",
+		"team_number": 3506
+	},
+	{
+		"city": "Statesville",
+		"country": "USA",
+		"key": "frc3680",
+		"name": "Argosy Foundation/SAVE - Students Achieving Valued Education/JPS Composite Materials/NC State Extension &4-H&Cctl Early College High School",
+		"nickname": "Elemental Dragons",
+		"state_prov": "North Carolina",
+		"team_number": 3680
+	},
+	{
+		"city": "Charlotte",
+		"country": "USA",
+		"key": "frc4290",
+		"name": "Synchrony/Albemarle/The Labcorp Charitable Foundation/John Deere/Raytheon/Collins Aerospace/Corning/Carrier/TE Connectivity/Little Hardware&BOW Community Robotics",
+		"nickname": "Bots on Wheels",
+		"state_prov": "North Carolina",
+		"team_number": 4290
+	},
+	{
+		"city": "Chapel Hill",
+		"country": "USA",
+		"key": "frc4829",
+		"name": "Medical Massage Clinic of Durham/The Gene Haas Foundation/Lenovo/Intuitive Foundation/Labcorp/Pinnacle Financial Partners/Rasrich Tax and Accounting Services/The Special Events Company/SmartJars/Pop's Pizzeria and Ristorante&Chapel Hill High School",
+		"nickname": "Titanium Tigers",
+		"state_prov": "North Carolina",
+		"team_number": 4829
+	},
+	{
+		"city": "Charlotte",
+		"country": "USA",
+		"key": "frc4935",
+		"name": "Microsoft/Carrier/SolidWorks/Gene Haas Foundation/Bosch/RTX-Raytheon/Jenkins Electric/Duke Energy/Wells Fargo/Pfaff Molds/Dyna-Tech Manufacturing/Rexroth/Tolleson and Saul/Ad Concepts/Livingston and Haven&Olympic High Sch",
+		"nickname": "T-Rex",
+		"state_prov": "North Carolina",
+		"team_number": 4935
+	},
+	{
+		"city": "Winston-Salem",
+		"country": "USA",
+		"key": "frc5679",
+		"name": "RTX-Raytheon/Kaleideum/Inmar Intelligence&Family/Community",
+		"nickname": "Girls on Fire",
+		"state_prov": "North Carolina",
+		"team_number": 5679
+	},
+	{
+		"city": "Forest City",
+		"country": "USA",
+		"key": "frc5727",
+		"name": "Rutherford County Schools/WestRock/Trelleborg&Rutherford Early College HS",
+		"nickname": "Omegabytes",
+		"state_prov": "North Carolina",
+		"team_number": 5727
+	},
+	{
+		"city": "Smithfield",
+		"country": "USA",
+		"key": "frc5919",
+		"name": "Johnston Community College/Duke Energy&Johnston Community College",
+		"nickname": "JoCo RoBos",
+		"state_prov": "North Carolina",
+		"team_number": 5919
+	},
+	{
+		"city": "Shallotte",
+		"country": "USA",
+		"key": "frc6512",
+		"name": "Argosy Foundation/American Nuclear Society/Archer Daniels Midland/Duke Energy/Brunswick Electric Membership Corporation/Brunswick County Schools & Family/Community",
+		"nickname": "Coastal Catastrophe 6512",
+		"state_prov": "North Carolina",
+		"team_number": 6512
+	},
+	{
+		"city": "Hickory",
+		"country": "USA",
+		"key": "frc6639",
+		"name": "Corning/Catawba County CTE Department/Utility Solutions/Catawba Valley Community College&St Stephens High School",
+		"nickname": "The Mechanical Minds",
+		"state_prov": "North Carolina",
+		"team_number": 6639
+	},
+	{
+		"city": "Lumberton",
+		"country": "USA",
+		"key": "frc6729",
+		"name": "Robeson Early College HS",
+		"nickname": "RobCoBots",
+		"state_prov": "North Carolina",
+		"team_number": 6729
+	},
+	{
+		"city": "Lenoir",
+		"country": "USA",
+		"key": "frc6888",
+		"name": "Baxter International Foundation/ E & B's Natural Way/Pepoli Property Preservation LLC/Joseph & Addie Pepoli/Dean Sheridan/Jo Ann Hassler/Karen And Ray Catlett&Family/Community",
+		"nickname": "Foothills Robotics",
+		"state_prov": "North Carolina",
+		"team_number": 6888
+	},
+	{
+		"city": "Mount Holly",
+		"country": "USA",
+		"key": "frc6894",
+		"name": "Mountain Island Charter School/Baker Wealth Management/Pratt Miller/Averna/GTP/CruiseOne/Cars, Trucks & RVs-Concord/Race City Steel-Denver/Marke One/Magnolia Print Collective&Mountain Island Charter School",
+		"nickname": "Iced Java",
+		"state_prov": "North Carolina",
+		"team_number": 6894
+	},
+	{
+		"city": "Cary",
+		"country": "USA",
+		"key": "frc6908",
+		"name": "InspireNC/Argosy Foundation/Gene Haas Foundation/Intuitive Foundation/SMILE Camp/Chipotle/Sheetz/IBM/NordVPN/Limited Run Games/Panda Express Community Fundraisers/SendCutSend&Family/Community",
+		"nickname": "Infuzed",
+		"state_prov": "North Carolina",
+		"team_number": 6908
+	},
+	{
+		"city": "Sylva",
+		"country": "USA",
+		"key": "frc6932",
+		"name": "North Carolina Department of Public Instruction /Jackson County Public Schools/Optimum/Andy Shaw Ford/Stanberry Insurance/Dillsboro Chocolate Factory/Stacy Adams Law/Western Carolina University/Southwestern Community College&Smoky Mountain High School&Jackson Co Early College HS",
+		"nickname": "SMART",
+		"state_prov": "North Carolina",
+		"team_number": 6932
+	},
+	{
+		"city": "Iron Station",
+		"country": "USA",
+		"key": "frc8030",
+		"name": "East Lincoln High School",
+		"nickname": "Scrapbots",
+		"state_prov": "North Carolina",
+		"team_number": 8030
+	},
+	{
+		"city": "Greensboro",
+		"country": "USA",
+		"key": "frc8757",
+		"name": "Volvo/Truliant Foundation/Truist Foundation/PPG/Nehemiah Community Empowerment Center/Forge Greensboro&Nehemiah Community Empowerment Center",
+		"nickname": "GeodeBots",
+		"state_prov": "North Carolina",
+		"team_number": 8757
+	},
+	{
+		"city": "Charlotte",
+		"country": "USA",
+		"key": "frc9005",
+		"name": "East Mecklenburg Sr High Sch",
+		"nickname": "Avian Robotics",
+		"state_prov": "North Carolina",
+		"team_number": 9005
+	},
+	{
+		"city": "Southport",
+		"country": "USA",
+		"key": "frc9198",
+		"name": "Rotary International-Southport Evening/Spikes Dairy Barn-Southport, NC/Wolfspeed/Brunswick County Schools/Lawn Care by Maria & Martin&South Brunswick High School",
+		"nickname": "The Beach Botz",
+		"state_prov": "North Carolina",
+		"team_number": 9198
+	},
+	{
+		"city": "Arden",
+		"country": "USA",
+		"key": "frc9298",
+		"name": "Christ School",
+		"nickname": "Greenies",
+		"state_prov": "North Carolina",
+		"team_number": 9298
+	},
+	{
+		"city": "Forest City",
+		"country": "USA",
+		"key": "frc9496",
+		"name": "Mack and Pam McKeithan/Fountain Electric & Services/NASA/Argosy Foundation&Inspire Carolina",
+		"nickname": "LYNK",
+		"state_prov": "North Carolina",
+		"team_number": 9496
+	},
+	{
+		"city": "Millers Creek",
+		"country": "USA",
+		"key": "frc9605",
+		"name": "West Wilkes High School",
+		"nickname": "Creek Commanders",
+		"state_prov": "North Carolina",
+		"team_number": 9605
+	},
+	{
+		"city": "Winston Salem",
+		"country": "USA",
+		"key": "frc9607",
+		"name": "R J Reynolds High School",
+		"nickname": "RJR Cyber Demons",
+		"state_prov": "North Carolina",
+		"team_number": 9607
+	},
+	{
+		"city": "Sanford",
+		"country": "USA",
+		"key": "frc9724",
+		"name": "Lee Christian School",
+		"nickname": "Cross Circuit Christians",
+		"state_prov": "North Carolina",
+		"team_number": 9724
+	},
+	{
+		"city": "Clyde",
+		"country": "USA",
+		"key": "frc9762",
+		"name": "Pisgah High School & Tuscola High School",
+		"nickname": "Raccoon Robotics",
+		"state_prov": "North Carolina",
+		"team_number": 9762
+	}
+]

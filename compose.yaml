@@ -1,0 +1,18 @@
+# https://docs.docker.com/go/compose-spec-reference/
+
+services:
+  next-app:
+    container_name: next
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - next/.env.local
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - server
+
+networks:
+  server:
