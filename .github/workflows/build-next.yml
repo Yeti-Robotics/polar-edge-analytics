@@ -12,5 +12,5 @@ jobs:
         uses: ./.github/actions/site-setup
 
       - name: Run Next.js Build
-        run: turbo build --filter=web
+        run: npm run build --filter=web
         shell: bash
