@@ -2,7 +2,6 @@ import { Button } from "@repo/ui/components/button";
 import Link from "next/link";
 import { ArrowRight, Code, Snowflake } from "lucide-react";
 import { MountainUnderlay } from "./mountain-underlay";
-import { Unlock } from "lucide-react";
 
 function Header() {
 	return (

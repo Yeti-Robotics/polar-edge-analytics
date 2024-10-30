@@ -1,5 +1,3 @@
-import { Button } from "@/lib/components/ui/button";
-
 export default function Error403Page() {
 	return (
 		<>

@@ -1,13 +1,6 @@
 "use client";
 import { Button } from "@components/ui/button";
-import {
-	CircleArrowOutDownRight,
-	PauseCircle,
-	PlayIcon,
-	Repeat,
-	Repeat2,
-	TimerReset,
-} from "lucide-react";
+import { PauseCircle, PlayIcon, TimerReset } from "lucide-react";
 import { Input } from "../../ui/input";
 import { useEffect, useMemo, useState } from "react";
 

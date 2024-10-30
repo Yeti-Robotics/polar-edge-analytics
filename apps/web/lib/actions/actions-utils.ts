@@ -68,8 +68,10 @@ export class ServerActionErrorWithDetails extends Error {
  * @returns The wrapped version of the server action.
  */
 export function createServerAction<Return, Args extends unknown[] = []>(
+	// eslint-disable-next-line no-unused-vars
 	callback: (...args: Args) => Promise<Return>,
 	environment: "all" | "production" | "development" = "all"
+	// eslint-disable-next-line no-unused-vars
 ): (...args: Args) => Promise<ServerActionResult<Return>> {
 	const nodeEnv = getNodeEnv();
 	if (
@@ -86,7 +88,7 @@ export function createServerAction<Return, Args extends unknown[] = []>(
 		try {
 			const value = await callback(...args);
 			return { success: true, value };
-		} catch (error) {
+		} catch (error: any) {
 			switch (error.constructor) {
 				case ServerActionError:
 					return { success: false, error: error.message };
