@@ -14,13 +14,6 @@ jobs:
       - name: Install Node/node_modules
         uses: ./.github/actions/site-setup
 
-      - name: Create .env.local
-        env:
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-        run: | # Secrets needed to create app
-          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> .env.local
-        shell: bash
-
       - name: Run Next.js Build
-        run: npm run build
+        run: turbo build --filter=web
         shell: bash
