@@ -34,6 +34,7 @@
 		"@radix-ui/react-slot": "^1.1.0",
 		"@radix-ui/react-tabs": "^1.1.0",
 		"@radix-ui/react-tooltip": "^1.1.2",
+		"@repo/ui": "^0.0.0",
 		"@supabase/ssr": "^0.4.0",
 		"@supabase/supabase-js": "^2.44.2",
 		"@tanstack/react-table": "^8.20.5",
@@ -54,6 +55,8 @@
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
+		"@repo/eslint-config": "^0.0.0",
+		"@repo/typescript-config": "^0.0.0",
 		"@tailwindcss/typography": "^0.5.13",
 		"@testing-library/dom": "^10.4.0",
 		"@testing-library/jest-dom": "^6.4.8",

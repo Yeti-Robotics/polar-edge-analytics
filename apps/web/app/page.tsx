@@ -1,9 +1,8 @@
-import { Button } from "@components/ui/button";
+import { Button } from "@repo/ui/components/button";
 import Link from "next/link";
 import { ArrowRight, Code, Snowflake } from "lucide-react";
 import { MountainUnderlay } from "./mountain-underlay";
 import { Unlock } from "lucide-react";
-import { signInWithDiscord } from "@/lib/actions/auth";
 
 function Header() {
 	return (
@@ -37,25 +36,6 @@ function Header() {
 }
 
 async function HeroSection() {
-	let signInButton;
-	if (process.env.NODE_ENV === "development") {
-		signInButton = (
-			<Button variant="secondary" asChild>
-				<Link href="/login-dev">
-					<Unlock size={16} className="mr-1" />
-					<span>YETI Login</span>
-				</Link>
-			</Button>
-		);
-	} else {
-		signInButton = (
-			<form action={signInWithDiscord}>
-				<Button variant="secondary">
-					<span>YETI Login</span>
-				</Button>
-			</form>
-		);
-	}
 	return (
 		<section className="relative left-0 top-0 z-10 flex min-h-screen w-full items-center justify-center p-16 text-center">
 			<div>
@@ -78,7 +58,6 @@ async function HeroSection() {
 						<Button className=" shadow-sm" variant="secondary">
 							Learn More
 						</Button>
-						{signInButton}
 					</div>
 				</div>
 			</div>

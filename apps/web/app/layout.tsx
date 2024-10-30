@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/lib/components/structural/ThemeProvider";
+import "@repo/ui/globals.css";
 
 const libreFranklin = Libre_Franklin({
 	subsets: ["latin"],
@@ -23,14 +22,7 @@ export default function RootLayout({
 			<body
 				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert`}
 			>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
-					{children}
-				</ThemeProvider>
+				{children}
 			</body>
 		</html>
 	);
