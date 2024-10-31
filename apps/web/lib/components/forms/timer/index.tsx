@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@components/ui/button";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
 import { PauseCircle, PlayIcon, TimerReset } from "lucide-react";
-import { Input } from "../../ui/input";
 import { useEffect, useMemo, useState } from "react";
 
 interface TimerProps {
