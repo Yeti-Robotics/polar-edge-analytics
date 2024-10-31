@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@components/ui/input";
-import { Button } from "@components/ui/button";
+import { Input } from "@repo/ui/components/input";
+import { Button } from "@repo/ui/components/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import React, { InputHTMLAttributes, useEffect, useState } from "react";
 import errors from "@/lib/errors";

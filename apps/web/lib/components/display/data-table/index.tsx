@@ -8,7 +8,7 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "../../ui/table";
+} from "@repo/ui/components/table";
 
 type DataTableProps<T> = {
 	table: TableType<T>;

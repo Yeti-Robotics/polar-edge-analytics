@@ -7,8 +7,7 @@
         },
       ],
       "paths": {
-        "@/*": ["./*"],
-        "@components/*": ["./lib/components/*"]
+        "@/*": ["./*", "../../packages/ui/src"],
       }
     },
     "include": [
