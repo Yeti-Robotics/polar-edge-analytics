@@ -1,0 +1,10 @@
+{
+    "extends": ["//"],
+    "tasks": {
+      "dev": {
+        "dependsOn": ["//#db:start"],
+        "persistent": true,
+        "cache": false
+      }
+    }
+  }

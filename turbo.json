@@ -10,6 +10,9 @@
       },
       "lint": {},
       "lint:fix": {},
+      "//#db:start": {
+        "cache": false
+      },
       "dev": {
         "persistent": true,
         "cache": false

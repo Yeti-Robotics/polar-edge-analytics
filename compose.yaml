@@ -1,18 +1,15 @@
-# https://docs.docker.com/go/compose-spec-reference/
-
 services:
-  next-app:
-    container_name: next
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    env_file:
-      - next/.env.local
-    restart: always
+  postgres:
+    image: postgres:17.0
+    container_name: polar_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: scout
     ports:
-      - 3000:3000
-    networks:
-      - server
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data
 
-networks:
-  server:
+volumes:
+  postgres-data:

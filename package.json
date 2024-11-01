@@ -2,6 +2,7 @@
     "name": "polar-edge-analytics-monorepo",
     "private": true,
     "scripts": {
+        "db:start": "./scripts/db-start.sh",
         "build": "turbo run build",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
