@@ -10,12 +10,16 @@
       },
       "lint": {},
       "lint:fix": {},
-      "//#db:start": {
+      "db:start": {
+        "cache": false
+      },
+      "db:generate": {
         "cache": false
       },
       "dev": {
+        "dependsOn": ["^db:generate", "^db:start"],
         "persistent": true,
         "cache": false
       }
     }
-  }
+}

@@ -2,6 +2,12 @@
   "name": "@repo/database",
   "version": "0.0.0",
   "description": "Database client for Polar Edge Analytics",
+  "scripts": {
+    "db:start": "./src/scripts/db-start.sh",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.0",
