@@ -2,8 +2,6 @@
     "name": "polar-edge-analytics",
     "private": true,
     "scripts": {
-        "db:start": "turbo run db:start",
-        "db:generate": "turbo run db:generate",
         "build": "turbo run build",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
