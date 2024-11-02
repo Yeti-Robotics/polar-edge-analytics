@@ -10,12 +10,22 @@
       },
       "lint": {},
       "lint:fix": {},
-      "//#db:start": {
+      "db:start": {
+        "cache": false
+      },
+      "db:generate": {
+        "cache": false
+      },
+      "db:migrate": {
+        "cache": false
+      },
+      "db:studio": {
         "cache": false
       },
       "dev": {
+        "dependsOn": ["^db:generate", "^db:start"],
         "persistent": true,
         "cache": false
       }
     }
-  }
+}

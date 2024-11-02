@@ -1,13 +1,11 @@
 {
-    "name": "polar-edge-analytics-monorepo",
+    "name": "polar-edge-analytics",
     "private": true,
     "scripts": {
-        "db:start": "./scripts/db-start.sh",
         "build": "turbo run build",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
-        "lint:fix": "turbo run lint:fix",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\""
+        "lint:fix": "turbo run lint:fix"
     },
     "devDependencies": {
         "turbo": "latest"
@@ -16,7 +14,5 @@
         "apps/*",
         "packages/*"
     ],
-    "packageManager": "npm@10.9.0",
-    "dependencies": {
-    }
+    "packageManager": "npm@10.9.0"
 }
