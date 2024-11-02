@@ -16,6 +16,12 @@
       "db:generate": {
         "cache": false
       },
+      "db:migrate": {
+        "cache": false
+      },
+      "db:studio": {
+        "cache": false
+      },
       "dev": {
         "dependsOn": ["^db:generate", "^db:start"],
         "persistent": true,
