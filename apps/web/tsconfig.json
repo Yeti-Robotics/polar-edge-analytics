@@ -8,7 +8,9 @@
       ],
       "paths": {
         "@/*": ["./*", "../../packages/ui/src"],
-      }
+      },
+      "declaration": false,
+      "declarationMap": false
     },
     "include": [
       "next-env.d.ts",
@@ -16,7 +18,8 @@
       "**/*.ts",
       "**/*.tsx",
       "**/*.json",
-      ".next/types/**/*.ts"
+      ".next/types/**/*.ts",
+      "lib/types/*.d.ts"
     ],
     "exclude": ["node_modules"]
   }
