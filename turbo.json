@@ -12,9 +12,8 @@
           ".env.development",
           ".env"
         ],
-        "env": ["AUTH_DISCORD_ID", "AUTH_DISCORD_SECRET", "DATABASE_URL"],
         "dependsOn": ["^build"],
-        "outputs": [".next/**", "!.next/cache/**"]
+        "outputs": [".next/**", "!.next/cache/**", "storybook-static/**"]
       },
       "lint": {},
       "lint:fix": {},
