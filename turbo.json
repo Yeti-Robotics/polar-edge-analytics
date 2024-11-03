@@ -5,13 +5,6 @@
     
     "tasks": {
       "build": {
-        "inputs": [
-          "$TURBO_DEFAULT$",
-          ".env.development.local",
-          ".env.local",
-          ".env.development",
-          ".env"
-        ],
         "dependsOn": ["^build"],
         "outputs": [".next/**", "!.next/cache/**", "storybook-static/**"]
       },
@@ -30,14 +23,6 @@
         "cache": false
       },
       "dev": {
-        "inputs": [
-          "$TURBO_DEFAULT$",
-          ".env.development.local",
-          ".env.local",
-          ".env.development",
-          ".env"
-        ],
-        "dependsOn": ["^db:generate", "^db:start"],
         "persistent": true,
         "cache": false
       }

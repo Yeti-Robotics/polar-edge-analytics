@@ -11,17 +11,6 @@ import {
 } from "@repo/database/schema";
 import type { UserRole } from "@/lib/types/auth";
 import Discord from "next-auth/providers/discord";
-import { z } from "zod";
-
-const envValidators = z.object({
-	AUTH_DISCORD_ID: z.string(),
-	AUTH_DISCORD_SECRET: z.string(),
-});
-
-const env = envValidators.parse({
-	AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
-	AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
-});
 
 async function getGuildNickname(accessToken: string) {
 	const guildId = "408711970305474560";
@@ -42,8 +31,8 @@ async function getGuildNickname(accessToken: string) {
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
 		Discord({
-			clientId: env.AUTH_DISCORD_ID,
-			clientSecret: env.AUTH_DISCORD_SECRET,
+			clientId: process.env.AUTH_DISCORD_ID,
+			clientSecret: process.env.AUTH_DISCORD_SECRET,
 			profile: async (profile, token) => {
 				if (token.access_token) {
 					profile.guildNickname = await getGuildNickname(

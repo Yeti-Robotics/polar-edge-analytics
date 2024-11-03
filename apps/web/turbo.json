@@ -1,0 +1,29 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"extends": ["//"],
+	"tasks": {
+		"build": {
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env.development.local",
+				".env.local",
+				".env.development",
+				".env"
+			],
+			"dependsOn": ["^build"],
+			"env": ["AUTH_DISCORD_ID", "AUTH_DISCORD_SECRET", "DATABASE_URL", "AUTH_SECRET"]
+		},
+		"dev": {
+			"persistent": true,
+			"cache": false,
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env.development.local",
+				".env.local",
+				".env.development",
+				".env"
+			],
+			"dependsOn": ["^db:start"]
+		}
+	}
+}
