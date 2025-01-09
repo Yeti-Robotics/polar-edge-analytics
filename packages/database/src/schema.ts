@@ -45,12 +45,3 @@ export const accounts = pgTable(
   },
   (acc) => [primaryKey({ columns: [acc.provider, acc.providerAccountId] })]
 );
-
-export const refreshTokenList = pgTable(
-  "refresh_token", {
-  userId: uuid("user_id")
-    .primaryKey()
-    .references(() => users.id, { onDelete: "cascade" }),
-  token: text("token").notNull().unique(),
-  expiration: timestamp("expiration", { mode: "date" }).notNull()
-})

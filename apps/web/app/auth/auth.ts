@@ -4,18 +4,13 @@ import { db } from "@repo/database";
 import { eq } from "drizzle-orm";
 import {
 	accounts,
-	refreshTokenList,
 	UserRole,
 	users,
 } from "@repo/database/schema";
 import Discord, { DiscordProfile } from "next-auth/providers/discord";
-import { JWT } from "next-auth/jwt";
-import { randomBytes } from "node:crypto";
 
-const YETI_GUILD_ID = "810276987465760800";
-const JWT_EXPIRY = 7 * 24 * 60 * 60; // in seconds
-const ACCESS_TOKEN_EXPIRY = 5;
-const REFRESH_TOKEN_EXPIRY = 3 * 24 * 60 * 60; // also in seconds
+const YETI_GUILD_ID = "408711970305474560";
+const JWT_EXPIRY = 3 * 24 * 60 * 60; //3 days, in seconds
 
 const getImgFromProfile = (profile: DiscordProfile): string => {
 	if (profile.avatar === null) {
@@ -47,84 +42,6 @@ async function getGuildNickname(accessToken: string) {
 	return null;
 }
 
-function dateSecondsFromNow(seconds: number): Date {
-	const date = new Date();
-	date.setSeconds(date.getSeconds() + seconds);
-	return date;
-}
-
-function generateRefreshToken() {
-	return randomBytes(128).toString("hex")
-}
-
-async function createRefreshToken(userId: string, accessToken: JWT) {
-	const expiration = dateSecondsFromNow(REFRESH_TOKEN_EXPIRY);
-	const token = generateRefreshToken();
-
-	const refreshTokenResult = await db
-		.insert(refreshTokenList)
-		.values({ userId, token, expiration })
-		.onConflictDoUpdate({
-			target: refreshTokenList.userId,
-			set: { token }
-		}).returning();
-
-	console.log("Refresh result")
-	console.log(refreshTokenResult)
-
-	if (!refreshTokenResult.length) {
-		throw new AuthError("REFRESH_TOKEN_ERROR");
-	}
-
-	const refreshToken = refreshTokenResult[0]!;
-
-	accessToken.refresh_token = refreshToken.token;
-	accessToken.expires_at = dateSecondsFromNow(ACCESS_TOKEN_EXPIRY).getTime();
-
-	return accessToken;
-}
-
-async function refreshToken(accessToken: JWT) {
-	const refreshToken = accessToken.refresh_token as string;
-
-	if (!refreshToken) {
-		throw new AuthError("REFRESH_TOKEN_ERROR");
-	}
-
-	const userInfo = await db
-		.select({
-			id: users.id,
-			role: users.role,
-			isBanned: users.isBanned,
-			tokenExpiration: refreshTokenList.expiration
-		})
-		.from(refreshTokenList)
-		.where(eq(refreshTokenList.token, refreshToken))
-		.innerJoin(users, eq(users.id, refreshTokenList.userId))
-		.limit(1);
-
-	console.log("User info")
-	console.log(userInfo)
-
-	if (!userInfo.length) {
-		throw new AuthError("INVALID_REFRESH_TOKEN");
-	}
-
-	const user = userInfo[0]!;
-
-	if (user.tokenExpiration.getTime() < Date.now()) {
-		throw new AuthError("EXPIRED");
-	}
-
-	if (user.isBanned) {
-		throw new AuthError("BANNED");
-	}
-
-	const token = await createRefreshToken(user.id, accessToken);
-	token.role = user.role;
-
-	return token;
-}
 
 export const discordProvider = Discord({
 	clientId: process.env.AUTH_DISCORD_ID,
@@ -196,24 +113,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			return true;
 		},
 		async jwt({ token, account, user, profile }) {
-			console.log(token)
 			if (account) {
 				token.name = user.guildNickname ?? user.name;
 				token.role = user.role;
 				token.picture = profile?.image_url as string ?? null;
-
-				if (!user.id) {
-					throw new Error("INVALID_TOKEN");
-				}
-
-				return await createRefreshToken(user.id, token);
-			} else if (token.expires_at && token.expires_at as number < Date.now()) {
-				const refreshedToken = await refreshToken(token);
-
-				return refreshedToken;
-			} else if (!token.expires_at) {
-				throw new AuthError("INVALID_TOKEN");
-			}
+			} 
 
 			return token;
 		}
