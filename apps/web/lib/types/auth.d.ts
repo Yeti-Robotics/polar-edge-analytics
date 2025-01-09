@@ -1,12 +1,12 @@
 import "next-auth";
-
-export type UserRole = "admin" | "user";
+import { UserRole } from "@repo/database/schema";
 
 declare module "next-auth" {
 	// eslint-disable-next-line no-unused-vars
 	interface User {
 		role: UserRole;
 		guildNickname: string | null;
+		emailVerified: boolean;
 		isBanned: boolean;
 	}
 
@@ -17,7 +17,10 @@ declare module "next-auth" {
 			name: string;
 			guildNickname: string | null;
 			role: UserRole;
-			isBanned: boolean;
 		};
+	}
+
+	interface Profile {
+		guildNickname: string
 	}
 }
