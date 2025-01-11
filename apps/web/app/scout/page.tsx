@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/app/auth/auth";
 
 export default async function ScoutingPage() {
 	const session = await auth();
