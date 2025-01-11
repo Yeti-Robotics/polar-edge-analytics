@@ -1,5 +1,5 @@
 import { Button } from "@repo/ui/components/button";
-import { auth, banUser, signIn, signOut } from "@/app/auth/auth";
+import { auth, signIn, signOut } from "@/app/auth/auth";
 
 export default async function Home() {
 	const session = await auth();
@@ -23,16 +23,6 @@ export default async function Home() {
 				)}
 			</form>
 			<pre>{JSON.stringify(session, null, 2)}</pre>
-			{session?.user?.id && (
-				<form
-					action={async () => {
-						"use server";
-						await banUser(session.user.id as string);
-					}}
-				>
-					<Button type="submit">Ban User</Button>
-				</form>
-			)}
 		</main>
 	);
 }

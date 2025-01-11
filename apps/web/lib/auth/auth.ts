@@ -65,6 +65,8 @@ export const discordProvider = Discord({
 			role: UserRole.USER,
 			guildNickname: guildNickname ?? "",
 			email: discordProfile.email,
+			image: discordProfile.image_url,
+			emailVerified: discordProfile.verified ? new Date() : null,
 		};
 	},
 });
@@ -116,6 +118,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 						.update(users)
 						.set({
 							guildNickname: profile?.guildNickname,
+							image: profile?.image_url as string,
+							emailVerified: profile?.verified
+								? new Date()
+								: null,
 						})
 						.where(eq(users.id, user.id));
 				} catch (error) {
