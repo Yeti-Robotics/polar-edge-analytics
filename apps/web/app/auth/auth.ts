@@ -105,10 +105,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			if (user.isBanned) throw new AuthError("BANNED");
 			if (!guildNickname) throw new AuthError("GUILD_NICKNAME");
 
-			await db
-				.update(users)
-				.set({ guildNickname: profile.guildNickname })
-				.where(eq(users.id, user.id as string));
+			try {
+				await db
+					.update(users)
+					.set({ guildNickname: profile.guildNickname })
+					.where(eq(users.id, user.id as string));
+			} catch (err) {
+				console.error("Failed to update guild nickname: ")
+				console.error(err)
+			}
 
 			return true;
 		},
@@ -117,13 +122,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				token.name = user.guildNickname ?? user.name;
 				token.role = user.role;
 				token.picture = profile?.image_url as string ?? null;
-			} 
+			}
 
 			return token;
 		}
 	},
 });
-
-export async function banUser(userId: string) {
-	await db.update(users).set({ isBanned: true }).where(eq(users.id, userId));
-}
