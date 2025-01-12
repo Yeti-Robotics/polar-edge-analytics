@@ -6,8 +6,7 @@ declare module "next-auth" {
 	interface User {
 		role: UserRole;
 		guildNickname: string | null;
-		emailVerified: boolean;
-		isBanned: boolean;
+		emailVerified: Date | null;
 	}
 
 	// eslint-disable-next-line no-unused-vars
@@ -20,7 +19,9 @@ declare module "next-auth" {
 		};
 	}
 
+	// eslint-disable-next-line no-unused-vars
 	interface Profile {
-		guildNickname: string
+		guildNickname: string,
+		image_url: string
 	}
 }

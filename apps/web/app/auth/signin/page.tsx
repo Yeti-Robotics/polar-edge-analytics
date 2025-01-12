@@ -1,12 +1,16 @@
-import { discordProvider, signIn } from "../auth";
+import { providers, signIn } from "@/lib/auth";
 
 export default function SignInPage() {
-    return (
-        <>
-            <button onClick={async () => {
-                "use server"
-                await signIn(discordProvider.id, { redirectTo: "/scout" })
-            }}>Sign in With Discord</button><br />
-        </>
-    )
+	return (
+		<>
+			<form
+				action={async () => {
+					"use server";
+					await signIn(providers.discord, { redirectTo: "/scout" });
+				}}
+			>
+				<button type="submit">Sign in With Discord</button>
+			</form>
+		</>
+	);
 }
