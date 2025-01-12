@@ -6,8 +6,7 @@ declare module "next-auth" {
 	interface User {
 		role: UserRole;
 		guildNickname: string | null;
-		emailVerified: boolean;
-		isBanned: boolean;
+		emailVerified: Date | null;
 	}
 
 	// eslint-disable-next-line no-unused-vars

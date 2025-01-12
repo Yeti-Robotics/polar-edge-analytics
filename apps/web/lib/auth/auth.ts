@@ -1,7 +1,7 @@
 import NextAuth, { AuthError } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@repo/database";
-import { UserRole, users } from "@repo/database/schema";
+import { accounts, authenticators, sessions, UserRole, users, verificationTokens } from "@repo/database/schema";
 import Discord, { DiscordProfile } from "next-auth/providers/discord";
 import { eq } from "drizzle-orm";
 
@@ -37,15 +37,13 @@ async function getGuildNickname(accessToken: string) {
 	return null;
 }
 
+const scopes = ["identify", "email", "guilds.members.read"];
+
 export const discordProvider = Discord({
-	authorization: {
-		params: {
-			scope: "identify email guilds.members.read",
-		},
-	},
+	authorization: `https://discord.com/api/oauth2/authorize?scope=${scopes.join("+")}`,
 	clientId: process.env.AUTH_DISCORD_ID,
 	clientSecret: process.env.AUTH_DISCORD_SECRET,
-	// @ts-ignore
+
 	profile: async (discordProfile, token) => {
 		if (!discordProfile.verified) {
 			throw new AuthError("DISCORD_UNVERIFIED");
@@ -58,6 +56,20 @@ export const discordProvider = Discord({
 			discordProfile.guildNickname = guildNickname;
 			discordProfile.image_url = getImgFromProfile(discordProfile);
 		}
+
+		console.log("PROFILE HATH BEEN SUMMONED+++++++++")
+
+		console.log(
+			{
+				id: discordProfile.id,
+				name: discordProfile.username,
+				role: UserRole.USER,
+				guildNickname: guildNickname ?? "",
+				email: discordProfile.email,
+				image: discordProfile.image_url,
+				emailVerified: discordProfile.verified ? new Date() : null,
+			}
+		)
 
 		return {
 			id: discordProfile.id,
@@ -82,26 +94,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		strategy: "database",
 		maxAge: 3 * 24 * 60 * 60, // 3 days
 	},
-	adapter: DrizzleAdapter(db),
+	adapter: DrizzleAdapter(db, {
+		usersTable: users,
+		accountsTable: accounts,
+		sessionsTable: sessions,
+		verificationTokensTable: verificationTokens,
+		authenticatorsTable: authenticators
+	}),
 	callbacks: {
 		async session({ session, user }) {
+			console.log("Session callback")
 			// Check if user is banned
-			const dbUser = await db
-				.select({ role: users.role })
-				.from(users)
-				.where(eq(users.id, user.id))
-				.limit(1);
 
-			if (dbUser[0]?.role === UserRole.BANISHED) {
+			if (user.role === UserRole.BANISHED) {
 				// If banned, throw error which will invalidate their session
 				throw new AuthError("BANISHED");
 			}
 
 			if (session.user) {
 				session.user.id = user.id;
-				session.user.role = user.role ?? UserRole.USER;
+				session.user.role = user.role;
 				session.user.name = user.guildNickname ?? user.name;
 			}
+
+			console.log(session)
+			console.log(user)
+
 			return session;
 		},
 		async signIn({ user, account, profile }) {
