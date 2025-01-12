@@ -1,10 +1,18 @@
 import NextAuth, { AuthError } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@repo/database";
-import { accounts, authenticators, sessions, UserRole, users, verificationTokens } from "@repo/database/schema";
+import {
+	accounts,
+	authenticators,
+	sessions,
+	UserRole,
+	users,
+	verificationTokens,
+} from "@repo/database/schema";
 import Discord from "next-auth/providers/discord";
 import { eq } from "drizzle-orm";
 import { AuthErrors, getGuildNickname, getImgFromProfile } from "./utils";
+import { Adapter } from "next-auth/adapters";
 
 const scopes = ["identify", "email", "guilds.members.read"];
 
@@ -26,6 +34,8 @@ export const discordProvider = Discord({
 			discordProfile.image_url = getImgFromProfile(discordProfile);
 		}
 
+		console.log(discordProfile);
+
 		return {
 			id: discordProfile.id,
 			name: discordProfile.username,
@@ -39,7 +49,7 @@ export const discordProvider = Discord({
 });
 
 export const providers = {
-	"discord": discordProvider.id
+	discord: discordProvider.id,
 };
 
 const authenticationProvider = NextAuth({
@@ -58,18 +68,23 @@ const authenticationProvider = NextAuth({
 		accountsTable: accounts,
 		sessionsTable: sessions,
 		verificationTokensTable: verificationTokens,
-		authenticatorsTable: authenticators
-	}),
+		authenticatorsTable: authenticators,
+	}) as Adapter,
 	callbacks: {
 		async session({ session, user }) {
 			if (user.role === UserRole.BANISHED) {
 				throw new Error(AuthErrors.BANISHED);
 			}
 
+			if (!user.guildNickname) {
+				throw new AuthError(AuthErrors.NO_GUILD_NICKNAME);
+			}
+
 			if (session.user) {
+				session.user.emailVerified = user.emailVerified;
 				session.user.id = user.id;
 				session.user.role = user.role;
-				session.user.name = user.guildNickname ?? user.name;
+				session.user.guildNickname = user.guildNickname;
 			}
 
 			return session;
@@ -78,9 +93,12 @@ const authenticationProvider = NextAuth({
 			if (account?.provider === "discord") {
 				const guildNickname = profile?.guildNickname;
 
-				if (!account?.access_token) throw new AuthError(AuthErrors.LOGIN_FAILED);
-				if (!user.id || user.role === UserRole.BANISHED) throw new AuthError(AuthErrors.BANISHED);
-				if (!guildNickname) throw new AuthError(AuthErrors.NO_GUILD_NICKNAME);
+				if (!account?.access_token)
+					throw new AuthError(AuthErrors.LOGIN_FAILED);
+				if (!user.id || user.role === UserRole.BANISHED)
+					throw new AuthError(AuthErrors.BANISHED);
+				if (!guildNickname)
+					throw new AuthError(AuthErrors.NO_GUILD_NICKNAME);
 
 				try {
 					await db
@@ -111,21 +129,22 @@ export const auth = async () => {
 	} catch (err) {
 		return await signOut({
 			redirectTo: `/error?error=${err instanceof Error ? err.message : "SERVER_ERROR"}`,
-			redirect: true
+			redirect: true,
 		});
 	}
-}
-
+};
 
 declare module "next-auth" {
 	// eslint-disable-next-line no-unused-vars
-	interface Session {
-		user: {
-			id: string;
-			name?: string | null;
-			email?: string | null;
-			image?: string | null;
-			role: UserRole;
-		};
+	interface User {
+		role: UserRole;
+		guildNickname: string | null;
+		emailVerified: Date | null;
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	interface Profile {
+		guildNickname: string;
+		image_url: string;
 	}
 }
