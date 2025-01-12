@@ -19,7 +19,9 @@ declare module "next-auth" {
 		};
 	}
 
+	// eslint-disable-next-line no-unused-vars
 	interface Profile {
-		guildNickname: string
+		guildNickname: string,
+		image_url: string
 	}
 }

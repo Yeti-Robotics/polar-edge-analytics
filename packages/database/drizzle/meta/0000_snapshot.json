@@ -1,5 +1,5 @@
 {
-  "id": "147d04ad-42d9-45d4-96e7-509e24957bcd",
+  "id": "28625021-4521-4474-81ae-bebc1ba48972",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -275,9 +275,10 @@
         },
         "role": {
           "name": "role",
-          "type": "text",
+          "type": "user_role",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "'user'"
         }
       },
@@ -329,7 +330,18 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "user",
+        "admin",
+        "guest",
+        "banished"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

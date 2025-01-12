@@ -1,3 +1,4 @@
+CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'guest', 'banished');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account" (
 	"userId" text NOT NULL,
 	"type" text NOT NULL,
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"emailVerified" timestamp,
 	"image" text,
 	"guildNickname" text,
-	"role" text DEFAULT 'user' NOT NULL,
+	"role" "user_role" DEFAULT 'user',
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

@@ -6,8 +6,10 @@ import {
   primaryKey,
   integer,
   uuid,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
+import { enumToPgEnum } from "./utils";
 
 export enum UserRole {
   USER = "user",
@@ -15,6 +17,8 @@ export enum UserRole {
   GUEST = "guest",
   BANISHED = "banished",
 }
+
+export const userRoleEnum = pgEnum("user_role", enumToPgEnum(UserRole));
 
 export const users = pgTable("user", {
   id: text("id")
@@ -25,7 +29,7 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified"),
   image: text("image"),
   guildNickname: text("guildNickname"),
-  role: text("role").$type<`${UserRole}`>().notNull().default(UserRole.USER),
+  role: userRoleEnum().default(UserRole.USER),
 });
 
 export const accounts = pgTable(
