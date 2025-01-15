@@ -31,6 +31,8 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.0.0",
         "lucide-react": "^0.454.0",
+        "react": "19.0.0",
+        "react-dom": "19.0.0",
         "react-hook-form": "^7.53.1",
         "tailwind-merge": "^2.5.4",
         "vaul": "^1.1.1",

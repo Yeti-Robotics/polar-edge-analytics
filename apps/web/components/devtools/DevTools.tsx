@@ -108,51 +108,49 @@ async function SessionTool() {
 
 export function DevTools() {
 	return (
-		<Suspense fallback={<div>Loading...</div>}>
-			<DevToolsContainer>
-				<div className="fixed bottom-4 right-4 z-50">
-					<Drawer>
-						<DrawerTrigger asChild>
-							<Button
-								variant="default"
-								className="size-16 rounded-full p-0 [&_svg]:size-8"
-							>
-								<WrenchIcon className="text-white" />
-								<span className="sr-only">Open DevTools</span>
-							</Button>
-						</DrawerTrigger>
-						<DrawerContent className="max-h-[85vh]">
-							<div className="h-full flex flex-col">
-								<div className="flex-1 min-h-0">
-									<Tabs
-										defaultValue="session"
-										orientation="vertical"
-										className="flex h-full divide-x"
-									>
-										<div className="w-40 shrink-0">
-											<div className="p-1">
-												<TabsList className="flex flex-col h-auto space-y-2 bg-transparent">
-													<TabsTrigger
-														value="session"
-														className="w-full justify-start data-[state=active]:bg-muted/80"
-													>
-														Session
-													</TabsTrigger>
-												</TabsList>
-											</div>
+		<DevToolsContainer>
+			<div className="fixed bottom-4 right-4 z-50">
+				<Drawer>
+					<DrawerTrigger asChild>
+						<Button
+							variant="default"
+							className="size-16 rounded-full p-0 [&_svg]:size-8"
+						>
+							<WrenchIcon className="text-white" />
+							<span className="sr-only">Open DevTools</span>
+						</Button>
+					</DrawerTrigger>
+					<DrawerContent className="max-h-[85vh]">
+						<div className="h-full flex flex-col">
+							<div className="flex-1 min-h-0">
+								<Tabs
+									defaultValue="session"
+									orientation="vertical"
+									className="flex h-full divide-x"
+								>
+									<div className="w-40 shrink-0">
+										<div className="p-1">
+											<TabsList className="flex flex-col h-auto space-y-2 bg-transparent">
+												<TabsTrigger
+													value="session"
+													className="w-full justify-start data-[state=active]:bg-muted/80"
+												>
+													Session
+												</TabsTrigger>
+											</TabsList>
 										</div>
-										<div className="flex-1 min-w-0 overflow-auto">
-											<div className="p-4">
-												<SessionTool />
-											</div>
+									</div>
+									<div className="flex-1 min-w-0 overflow-auto">
+										<div className="p-4">
+											<SessionTool />
 										</div>
-									</Tabs>
-								</div>
+									</div>
+								</Tabs>
 							</div>
-						</DrawerContent>
-					</Drawer>
-				</div>
-			</DevToolsContainer>
-		</Suspense>
+						</div>
+					</DrawerContent>
+				</Drawer>
+			</div>
+		</DevToolsContainer>
 	);
 }
