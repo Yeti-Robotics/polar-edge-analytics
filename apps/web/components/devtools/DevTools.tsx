@@ -2,6 +2,7 @@ import { Button } from "@repo/ui/components/button";
 import {
 	Drawer,
 	DrawerContent,
+	DrawerTitle,
 	DrawerTrigger,
 } from "@repo/ui/components/drawer";
 import { DevToolsContainer } from "./DevToolsContainer";
@@ -111,10 +112,11 @@ export function DevTools() {
 		<DevToolsContainer>
 			<div className="fixed bottom-4 right-4 z-50">
 				<Drawer>
+					<DrawerTitle className="sr-only">DevTools</DrawerTitle>
 					<DrawerTrigger asChild>
 						<Button
 							variant="default"
-							className="size-16 rounded-full p-0 [&_svg]:size-8"
+							className="size-16 p-0 [&_svg]:size-8 rounded-full shadow-lg hover:shadow-xl shadow-black/40 hover:shadow-black/25 transition-all duration-300"
 						>
 							<WrenchIcon className="text-white" />
 							<span className="sr-only">Open DevTools</span>

@@ -7,7 +7,7 @@ export default function generateConfig(app: AppName) {
   return {
     darkMode: ["class"],
     content: [
-      `../../apps/${app}/**/*.{ts,tsx,html}`,
+      `../../apps/${app}/{app,components,pages,lib}/**/*.{ts,tsx,html}`,
       `../../packages/ui/src/**/*.{ts,tsx}`,
     ],
     prefix: "",
