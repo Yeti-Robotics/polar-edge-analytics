@@ -1,0 +1,32 @@
+.App {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1, h2 {color: #333;}
+  
+  label {
+    display: block;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  input, textarea, select, button {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
