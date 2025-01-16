@@ -7,10 +7,6 @@
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix"
     },
-    "dependencies": {
-        "react": "19.0.0",
-        "react-dom": "19.0.0"
-    },
     "devDependencies": {
         "turbo": "latest"
     },
