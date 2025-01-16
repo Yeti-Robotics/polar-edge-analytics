@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
+    "drizzle-orm": "^0.36.0",
     "@repo/database": "*",
     "@repo/ui": "*",
     "lucide-react": "^0.471.0",
