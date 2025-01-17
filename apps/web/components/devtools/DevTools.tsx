@@ -1,3 +1,5 @@
+import { DevToolsContainer } from "./DevToolsContainer";
+
 import { Button } from "@repo/ui/components/button";
 import {
 	Drawer,
@@ -5,7 +7,6 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@repo/ui/components/drawer";
-import { DevToolsContainer } from "./DevToolsContainer";
 import { WrenchIcon } from "lucide-react";
 import {
 	Tabs,
@@ -14,7 +15,6 @@ import {
 	TabsContent,
 } from "@repo/ui/components/tabs";
 import { auth } from "@/lib/auth";
-import { Suspense } from "react";
 
 function SessionStatus({ isActive }: { isActive: boolean }) {
 	return (
