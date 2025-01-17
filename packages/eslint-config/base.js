@@ -28,6 +28,10 @@ export const config = [
     rules: {
         "import/order": ["error", {
             "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
             "groups": [
               // Imports of builtins are first
               "builtin",

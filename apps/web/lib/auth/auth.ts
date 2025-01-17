@@ -1,6 +1,5 @@
 import { AuthErrors, getGuildNickname, getImgFromProfile } from "./utils";
 
-import NextAuth, { AuthError } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@repo/database";
 import {
@@ -11,9 +10,10 @@ import {
 	users,
 	verificationTokens,
 } from "@repo/database/schema";
-import Discord from "next-auth/providers/discord";
 import { eq } from "drizzle-orm";
+import NextAuth, { AuthError } from "next-auth";
 import { Adapter } from "next-auth/adapters";
+import Discord from "next-auth/providers/discord";
 
 const scopes = ["identify", "email", "guilds.members.read"];
 
