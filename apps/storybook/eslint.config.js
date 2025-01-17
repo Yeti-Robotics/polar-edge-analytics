@@ -1,8 +1,10 @@
+import { config } from '@repo/eslint-config/base'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
+  ...config,
   ignores: ['dist'],
 	root: true,
 	extends: ["@repo/eslint-config/library.js"],
