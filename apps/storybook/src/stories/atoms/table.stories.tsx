@@ -31,6 +31,7 @@ export const FirstStory: Story = {
             <TableHead colSpan={4} className="border-r font-bold">Teleop</TableHead>
             <TableHead colSpan={5} className="border-r font-bold">Endgame</TableHead>
           </TableRow>
+          
           <TableRow>
             {[
               "Team Name & #",
