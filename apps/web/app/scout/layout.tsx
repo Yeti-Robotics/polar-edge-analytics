@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { AuthErrors, authorized, redirectError } from "@/lib/auth/utils";
 import { UserRole } from "@repo/database/schema";
+import { Toaster } from "@repo/ui/components/toaster";
 
 
 export default async function ScoutLayout({ children }: { children: React.ReactNode }) {
@@ -13,5 +14,8 @@ export default async function ScoutLayout({ children }: { children: React.ReactN
         redirectError(AuthErrors.UNAUTHORIZED);
     }
 
-    return <>{children}</>
+    return <main>
+        <div>{children}</div>
+        <Toaster />
+    </main>
 }

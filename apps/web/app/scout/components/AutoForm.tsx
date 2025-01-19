@@ -85,14 +85,16 @@ type FormContentProps<T extends ZodSchema> = {
 const formFieldComponents = [
 	{
 		type: ZodBoolean,
-		render: (props: ControllerRenderProps) => (
-			<Checkbox
-				className="size-6"
-				checked={props.value}
-				onCheckedChange={props.onChange}
-				{...props}
-			/>
-		),
+		render: (props: ControllerRenderProps) => {
+			return (
+				<Checkbox
+					className="size-6"
+					checked={props.value}
+					onCheckedChange={props.onChange}
+					{...props}
+				/>
+			);
+		},
 	},
 	{
 		type: ZodNumber,
@@ -266,15 +268,27 @@ export function AutoForm<T extends ZodSchema>({
 
 	const { toast } = useToast();
 
+	useEffect(() => {
+		const formMsg = form.formState.errors.root?.serverError
+			? `Error: ${form.formState.errors.root?.serverError
+				.message}`
+			: form.formState.isSubmitSuccessful &&
+				!form.formState.isSubmitting &&
+				!form.formState.isDirty
+				? `Successfully submitted!`
+				: "";
+
+		if (formMsg?.length) {
+			toast({ title: formMsg, variant: form.formState.errors.root?.serverError ? "destructive" : "" })
+		}
+	}, [form.formState.errors.root?.serverError, form.formState.isSubmitSuccessful])
+
 	const submitHandler = async (formData: z.infer<T>) => {
 		try {
 			const result = await onSubmit(formData);
 
 			if (result.success) {
 				form.reset();
-				toast({
-					title: "Submitted"
-				});
 			} else {
 				if (
 					result.error.toLowerCase().startsWith("invalid input") &&
@@ -351,7 +365,7 @@ export function AutoForm<T extends ZodSchema>({
 						>
 							Submit
 						</Button>
-						<div
+						{/* <div
 							className={
 								form.formState.errors.root?.serverError
 									? "text-red-500"
@@ -360,15 +374,8 @@ export function AutoForm<T extends ZodSchema>({
 										: "hidden"
 							}
 						>
-							{form.formState.errors.root?.serverError
-								? form.formState.errors.root?.serverError
-									.message
-								: form.formState.isSubmitSuccessful &&
-									!form.formState.isSubmitting &&
-									!form.formState.isDirty
-									? `Successfully submitted!`
-									: ""}
-						</div>
+							{}
+						</div> */}
 					</CardFooter>
 				</Card>
 			</form>

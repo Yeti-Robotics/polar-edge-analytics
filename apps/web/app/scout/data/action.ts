@@ -9,7 +9,6 @@ import { db } from "@repo/database";
 import { and, eq } from "drizzle-orm";
 
 export const submitStandForm = createServerAction(async (data: StandFormData) => {
-    console.log(data)
     const session = await auth();
 
     if (!authorized({
@@ -29,7 +28,7 @@ export const submitStandForm = createServerAction(async (data: StandFormData) =>
     if (!matchInfo) {
         throw new ServerActionError("Invalid team/match number!");
     }
-
+    
     try {
         await db.insert(standForm)
             .values({
