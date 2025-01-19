@@ -34,8 +34,6 @@ export const discordProvider = Discord({
 			discordProfile.image_url = getImgFromProfile(discordProfile);
 		}
 
-		console.log(discordProfile);
-
 		return {
 			id: discordProfile.id,
 			name: discordProfile.username,

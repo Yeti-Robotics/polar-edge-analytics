@@ -1,11 +1,12 @@
-import { auth } from "@/lib/auth";
+import { StandForm } from "./components/StandForm";
+import { Toaster } from "@repo/ui/components/toaster";
+import { submitStandForm } from "./data/action";
 
 export default async function ScoutingPage() {
-	const session = await auth();
-
-	if (!session?.user?.id) {
-		return <div>You must be logged in to view this page</div>;
-	}
-
-	return <div>scout here</div>;
+	return (
+		<main>
+			<StandForm onSubmit={submitStandForm} />
+			<Toaster />
+		</main>
+	);
 }
