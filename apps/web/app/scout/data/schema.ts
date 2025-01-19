@@ -109,7 +109,7 @@ export const standFormSchema = z.object({
 		.describe("Defense rating"),
 	comments: z
 		.string({ message: "Comments must be at least 32 characters" })
-		.min(0, { message: "Comments must be at least 32 characters" })
+		.min(32, { message: "Comments must be at least 32 characters" })
 		.describe("Comments about robot performance"),
 });
 
