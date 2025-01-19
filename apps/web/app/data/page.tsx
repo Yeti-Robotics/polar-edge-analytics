@@ -11,7 +11,6 @@ import {
     getSortedRowModel,
     useReactTable,
  } from "@tanstack/react-table"
- import DataTable from "./DataTable";
 
 export default async function dataTablePage() {
     const session = await auth();
