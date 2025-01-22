@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense, type ReactNode } from "react";
 
 export function DevToolsLoader({ children }: { children: ReactNode }) {
 	const params = useSearchParams();

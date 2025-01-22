@@ -1,5 +1,5 @@
-import { Button } from "@repo/ui/components/button";
 import { auth, signIn, signOut } from "@/lib/auth";
+import { Button } from "@repo/ui/components/button";
 
 export default async function Home() {
 	const session = await auth();

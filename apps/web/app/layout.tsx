@@ -1,7 +1,7 @@
+import { DevTools } from "@/components/devtools/DevTools";
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import "@repo/ui/globals.css";
-import { DevTools } from "@/components/devtools/DevTools";
 
 const libreFranklin = Libre_Franklin({
 	subsets: ["latin"],

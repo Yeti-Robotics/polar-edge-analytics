@@ -1,4 +1,5 @@
-import NextAuth, { AuthError } from "next-auth";
+import { AuthErrors, getGuildNickname, getImgFromProfile } from "./utils";
+
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@repo/database";
 import {
@@ -9,10 +10,10 @@ import {
 	users,
 	verificationTokens,
 } from "@repo/database/schema";
-import Discord from "next-auth/providers/discord";
 import { eq } from "drizzle-orm";
-import { AuthErrors, getGuildNickname, getImgFromProfile } from "./utils";
+import NextAuth, { AuthError } from "next-auth";
 import { Adapter } from "next-auth/adapters";
+import Discord from "next-auth/providers/discord";
 
 const scopes = ["identify", "email", "guilds.members.read"];
 
@@ -133,14 +134,12 @@ export const auth = async () => {
 };
 
 declare module "next-auth" {
-	// eslint-disable-next-line no-unused-vars
 	interface User {
 		role: UserRole;
 		guildNickname: string | null;
 		emailVerified: Date | null;
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	interface Profile {
 		guildNickname: string;
 		image_url: string;
