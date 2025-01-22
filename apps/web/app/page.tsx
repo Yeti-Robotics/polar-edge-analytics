@@ -1,72 +1,84 @@
-"use client";
-import { signIn } from '@/lib/auth';
-import { Button } from '@repo/ui/components/button';
-import React, { useState } from 'react';
 
-function SignIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+import { Snowflake } from "lucide-react"
 
-	await signIn("discord")
+import Link from "next/link"
+import { Button } from "@repo/ui/components/button"
+import { Badge } from "@repo/ui/components/badge"
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
-
-    if (!email || !password) {
-      setError('Please fill out all fields.');
-      return;
-    }
-
-    if (email === 'vidyuth.ashok@gmail.com' && password === 'passwordyay123') {
-      alert('Sign-in successful!');
-    } else {
-      setError('Invalid email or password');
-    }
-  };
-
+export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Polar Edge Analytics</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium">Email</label>
-            <input
-              type="email"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#7FB3D5] via-[#5499C7] to-primary">
+      {/* Frost overlay */}
+      <div className="absolute inset-0 backdrop-blur-[1px] mix-blend-overlay pointer-events-none" />
+
+
+      {/* Navigation */}
+      <nav className="absolute top-0 w-full p-6 z-10">
+        <div className="container mx-auto flex justify-between items-center">
+          <Link href="/" className="text-white transform hover:scale-110 transition-transform">
+            <Snowflake className="w-8 h-8 drop-shadow-glow" />
+          </Link>
+          <div className="flex items-center space-x-8">
+            <div className="space-x-8 text-white/90">
+              {["Data"].map((item) => (
+                <Link
+                  key={item}
+                  href={`/${item.toLowerCase()}`}
+                  className="relative hover:text-white transition-colors group"
+                >
+                  {item}
+                  <span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
+                </Link>
+              ))}
+            </div>
+            <Button
+              variant="ghost"
+              className="text-white hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border border-white/20"
+            >
+              Login →
+            </Button>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium">Password</label>
-            <input
-              type="password"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="min-h-screen flex flex-col items-center justify-center px-4 relative">
+        <div
+          className="text-center space-y-6 relative"
+        >
+          <div className="flex justify-center mb-4">
+            <Badge
+              variant="secondary"
+              className="bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-glow"
+            >
+              In Development
+            </Badge>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
-          >
-            Sign In
-          </button>
-        </form>
-        <Button className="text-center text-gray-500 mt-4">
-          Don't have an account? <a href="#" className="text-blue-500">Sign Up</a>
-        </p>
-      </div>
+
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-glow">
+            Polar Edge Analytics
+          </h1>
+
+          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8 drop-shadow">
+            Publicly accessible, advanced scouting data for teams in North Carolina.
+            <span className="block mt-2 font-semibold">Brought to you by YETI Robotics.</span>
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Button
+              variant="secondary"
+              size="lg"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm shadow-glow transition-all hover:shadow-glow-hover"
+            >
+              Learn More
+            </Button>
+            
+          </div>
+        </div>
+      </main>
     </div>
-  );
+  )
 }
 
-export default SignIn;
+
+
