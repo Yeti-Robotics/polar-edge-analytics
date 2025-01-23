@@ -4,6 +4,9 @@ import { Snowflake } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@repo/ui/components/button"
 import { Badge } from "@repo/ui/components/badge"
+import { signIn } from "@/lib/auth"
+
+
 
 export default function Home() {
   return (
@@ -31,12 +34,18 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            <Button
-              variant="ghost"
-              className="text-white hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border border-white/20"
-            >
-              Login →
-            </Button>
+            <form action={async () => {
+              "use server";
+              await signIn("discord");
+            }}>
+              <Button
+                type="submit"
+                variant="ghost"
+                className="text-white hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border border-white/20"
+              >
+                Login →
+              </Button>
+            </form>
           </div>
         </div>
       </nav>
@@ -65,14 +74,18 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button
-              variant="secondary"
-              size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm shadow-glow transition-all hover:shadow-glow-hover"
-            >
-              Learn More
-            </Button>
-            
+            <form action={async () => {
+              "use server";
+              await signIn("discord");
+            }}>
+              <Button
+                type="submit"
+                variant="ghost"
+                className="text-white text-lg hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border p-5 border-white/20"
+              >
+                Scout →
+              </Button>
+            </form>
           </div>
         </div>
       </main>
