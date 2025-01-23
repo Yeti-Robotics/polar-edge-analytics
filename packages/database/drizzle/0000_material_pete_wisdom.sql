@@ -1,3 +1,4 @@
+CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'guest', 'banished');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account" (
 	"userId" text NOT NULL,
 	"type" text NOT NULL,
@@ -22,7 +23,6 @@ CREATE TABLE IF NOT EXISTS "authenticator" (
 	"credentialDeviceType" text NOT NULL,
 	"credentialBackedUp" boolean NOT NULL,
 	"transports" text,
-	CONSTRAINT "authenticator_userId_credentialID_pk" PRIMARY KEY("userId","credentialID"),
 	CONSTRAINT "authenticator_credentialID_unique" UNIQUE("credentialID")
 );
 --> statement-breakpoint
@@ -35,20 +35,18 @@ CREATE TABLE IF NOT EXISTS "session" (
 CREATE TABLE IF NOT EXISTS "user" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
-	"guildNickname" text,
 	"email" text,
 	"emailVerified" timestamp,
 	"image" text,
-	"role" text NOT NULL,
-	"isBanned" boolean DEFAULT false NOT NULL,
+	"guildNickname" text,
+	"role" "user_role" DEFAULT 'user',
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "verificationToken" (
 	"identifier" text NOT NULL,
 	"token" text NOT NULL,
-	"expires" timestamp NOT NULL,
-	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
+	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN

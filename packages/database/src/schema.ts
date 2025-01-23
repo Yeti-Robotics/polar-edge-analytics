@@ -5,20 +5,31 @@ import {
   text,
   primaryKey,
   integer,
+  uuid,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
+import { enumToPgEnum } from "./utils";
+
+export enum UserRole {
+  USER = "user",
+  ADMIN = "admin",
+  GUEST = "guest",
+  BANISHED = "banished",
+}
+
+export const userRoleEnum = pgEnum("user_role", enumToPgEnum(UserRole));
 
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
-  guildNickname: text("guildNickname"),
   email: text("email").unique(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  emailVerified: timestamp("emailVerified"),
   image: text("image"),
-  role: text("role").$type<"admin" | "user">().notNull(),
-  isBanned: boolean("isBanned").notNull().default(false),
+  guildNickname: text("guildNickname"),
+  role: userRoleEnum().default(UserRole.USER),
 });
 
 export const accounts = pgTable(
@@ -56,10 +67,12 @@ export const verificationTokens = pgTable(
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (vt) => [
-    primaryKey({
-      columns: [vt.identifier, vt.token],
-    }),
+  (verificationToken) => [
+    {
+      compositePk: primaryKey({
+        columns: [verificationToken.identifier, verificationToken.token],
+      }),
+    },
   ]
 );
 
@@ -77,9 +90,11 @@ export const authenticators = pgTable(
     credentialBackedUp: boolean("credentialBackedUp").notNull(),
     transports: text("transports"),
   },
-  (auth) => [
-    primaryKey({
-      columns: [auth.userId, auth.credentialID],
-    }),
+  (authenticator) => [
+    {
+      compositePK: primaryKey({
+        columns: [authenticator.userId, authenticator.credentialID],
+      }),
+    },
   ]
 );

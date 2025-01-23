@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import animate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
 
 type AppName = "storybook" | "web";
 
@@ -7,8 +9,8 @@ export default function generateConfig(app: AppName) {
   return {
     darkMode: ["class"],
     content: [
-      `../../apps/${app}/{app,lib,src}/**/*.{ts,tsx,html,stories.tsx}`,
-      `../../packages/*/src/**/*.{ts,tsx,html,stories.tsx}`,
+      `../../apps/${app}/{app,components,pages,lib}/**/*.{ts,tsx,html}`,
+      `../../packages/ui/src/**/*.{ts,tsx}`,
     ],
     prefix: "",
     theme: {
@@ -91,9 +93,6 @@ export default function generateConfig(app: AppName) {
         },
       },
     },
-    plugins: [
-      require("tailwindcss-animate"),
-      require("@tailwindcss/typography"),
-    ],
+    plugins: [animate, typography],
   } satisfies Config;
 }
