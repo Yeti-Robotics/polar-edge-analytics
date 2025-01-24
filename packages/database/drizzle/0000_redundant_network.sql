@@ -155,7 +155,7 @@ WITH combinedStats AS (
         AVG(tf.teleop_algae_netted) AS teleop_algae_net,
         AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, 
         AVG(tf.defense_rating) AS defense_rating,
-        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initation_line,
+        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,
         CAST(SUM(CASE WHEN tf.cage_climb = 'park' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,
         CAST(SUM(CASE WHEN tf.cage_climb = 'deep' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
         CAST(SUM(CASE WHEN tf.cage_climb = 'shallow' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
@@ -185,7 +185,7 @@ SELECT
     cs.teleop_algae_net,
     cs.teleop_algae_thrown,
     cs.defense_rating,
-    cs.initation_line,
+    cs.initiation_line,
     cs.park_percentage,
     cs.deep_percentage,
     cs.shallow_percentage,

@@ -1,6 +1,5 @@
 "use client";
 
-import { flexRender, Table as TableType } from "@tanstack/react-table";
 import {
 	Table,
 	TableBody,
@@ -9,6 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
+import { flexRender, Table as TableType } from "@tanstack/react-table";
 
 type DataTableProps<T> = {
 	table: TableType<T>;

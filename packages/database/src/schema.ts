@@ -13,7 +13,8 @@ import {
   smallint,
   pgView,
   decimal,
-  check
+  check,
+  doublePrecision
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 import { enumToPgEnum } from "./utils";
@@ -170,24 +171,24 @@ export const team = pgTable("team", {
 export const teamStats = pgView("team_stats", {
   teamNumber: integer("team_number").notNull(),
   teamName: varchar("team_name", { length: 256 }).notNull(),
-  autoCoralLevel1: integer("auto_coral_level_1").notNull(),
-  autoCoralLevel2: integer("auto_coral_level_2").notNull(),
-  autoCoralLevel3: integer("auto_coral_level_3").notNull(),
-  autoCoralLevel4: integer("auto_coral_level_4").notNull(),
-  autoAlgaeProcessor: integer("auto_algae_processor").notNull(),
-  autoAlgaeNet: integer("auto_algae_net").notNull(),
-  teleopCoralLevel1: integer("teleop_coral_level_1").notNull(),
-  teleopCoralLevel2: integer("teleop_coral_level_2").notNull(),
-  teleopCoralLevel3: integer("teleop_coral_level_3").notNull(),
-  teleopCoralLevel4: integer("teleop_coral_level_4").notNull(),
-  teleopAlgaeProcessor: integer("teleop_algae_processor").notNull(),
-  teleopAlgaeNet: integer("teleop_algae_net").notNull(),
-  teleopAlgaeThrown: integer("teleop_algae_thrown").notNull(),
-  parkPercentage: decimal("park_percentage").notNull(),
-  shallowPercentage: decimal("shallow_percentage").notNull(),
-  deepPercentage: decimal("deep_percentage").notNull(),
-  initiationLine: decimal("initiation_line").notNull(),
-  defenseRating: decimal("defense_rating").notNull()
+  autoCoralLevel1: doublePrecision("auto_coral_level_1").notNull(),
+  autoCoralLevel2: doublePrecision("auto_coral_level_2").notNull(),
+  autoCoralLevel3: doublePrecision("auto_coral_level_3").notNull(),
+  autoCoralLevel4: doublePrecision("auto_coral_level_4").notNull(),
+  autoAlgaeProcessor: doublePrecision("auto_algae_processor").notNull(),
+  autoAlgaeNet: doublePrecision("auto_algae_net").notNull(),
+  teleopCoralLevel1: doublePrecision("teleop_coral_level_1").notNull(),
+  teleopCoralLevel2: doublePrecision("teleop_coral_level_2").notNull(),
+  teleopCoralLevel3: doublePrecision("teleop_coral_level_3").notNull(),
+  teleopCoralLevel4: doublePrecision("teleop_coral_level_4").notNull(),
+  teleopAlgaeProcessor: doublePrecision("teleop_algae_processor").notNull(),
+  teleopAlgaeNet: doublePrecision("teleop_algae_net").notNull(),
+  teleopAlgaeThrown: doublePrecision("teleop_algae_thrown").notNull(),
+  parkPercentage: doublePrecision("park_percentage").notNull(),
+  shallowPercentage: doublePrecision("shallow_percentage").notNull(),
+  deepPercentage: doublePrecision("deep_percentage").notNull(),
+  initiationLine: doublePrecision("initiation_line").notNull(),
+  defenseRating: doublePrecision("defense_rating").notNull()
 }).as(sql`
 WITH combinedStats AS (
     SELECT 
@@ -206,7 +207,7 @@ WITH combinedStats AS (
         AVG(tf.teleop_algae_netted) AS teleop_algae_net,
         AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, 
         AVG(tf.defense_rating) AS defense_rating,
-        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initation_line,
+        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,
         CAST(SUM(CASE WHEN tf.cage_climb = 'park' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,
         CAST(SUM(CASE WHEN tf.cage_climb = 'deep' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
         CAST(SUM(CASE WHEN tf.cage_climb = 'shallow' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
@@ -236,7 +237,7 @@ SELECT
     cs.teleop_algae_net,
     cs.teleop_algae_thrown,
     cs.defense_rating,
-    cs.initation_line,
+    cs.initiation_line,
     cs.park_percentage,
     cs.deep_percentage,
     cs.shallow_percentage,

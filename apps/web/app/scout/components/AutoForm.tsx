@@ -132,10 +132,10 @@ function FormContent<T extends ZodSchema>({
 				const FormComponent = ui[name]?.Component
 					? ui[name].Component
 					: formFieldComponents.find(
-							(f) =>
-								recurseSchema(data.shape[name]) instanceof
-								f.type
-						)?.render;
+						(f) =>
+							recurseSchema(data.shape[name]) instanceof
+							f.type
+					)?.render;
 
 				if (!FormComponent) {
 					throw new Error(`Form component for ${name} not found!`);
@@ -272,8 +272,8 @@ export function AutoForm<T extends ZodSchema>({
 		const formMsg = form.formState.errors.root?.serverError
 			? `Error: ${form.formState.errors.root?.serverError.message}`
 			: form.formState.isSubmitSuccessful &&
-				  !form.formState.isSubmitting &&
-				  !form.formState.isDirty
+				!form.formState.isSubmitting &&
+				!form.formState.isDirty
 				? `Successfully submitted!`
 				: "";
 
@@ -317,7 +317,7 @@ export function AutoForm<T extends ZodSchema>({
 					});
 				}
 			}
-		} catch (e) {
+		} catch {
 			form.setError("root.serverError", {
 				message: "Server Error",
 			});
@@ -365,7 +365,7 @@ export function AutoForm<T extends ZodSchema>({
 					</CardContent>
 					<CardFooter className="flex flex-col space-y-4">
 						<Button
-							onClick={() => {}}
+							onClick={() => { }}
 							type="submit"
 							className="flex w-full"
 						>

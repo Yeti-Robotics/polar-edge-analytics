@@ -1,5 +1,16 @@
 "use client";
 
+import { DataTable } from "./DataTable";
+import { TeamData } from "../actions";
+
+import { Button } from "@repo/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Input } from "@repo/ui/components/input";
 import {
     Column,
     ColumnDef,
@@ -13,25 +24,15 @@ import {
     VisibilityState,
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { DataTable } from "./DataTable";
 import { useState } from "react";
-import { Button } from "@repo/ui/components/button";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
-import { Input } from "@repo/ui/components/input";
-import { toUpperCase } from "@/lib/utils";
-import { TeamData } from "../actions/types";
+
 
 function NumberDisplay({ value }: { value: number }) {
     return <>{value.toFixed(1)}</>;
 }
 
 function PercentDisplay({ value }: { value: number }) {
-    return <>{(value * 100).toFixed(0)}</>
+    return <>{(value * 100).toFixed(0)}%</>
 }
 
 function SortableHeader({
@@ -39,7 +40,7 @@ function SortableHeader({
     column,
 }: {
     label: string;
-    column: Column<any, any>;
+    column: Column<TeamData, string | number>;
 }) {
     return (
         <Button
@@ -59,13 +60,18 @@ function SortableHeader({
 }
 
 const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
-    const columns = Array(4).map((_, i) => i + 1).map(i => columnHelper.accessor(`${gamePeriod}_coral_level_${i}` as keyof TeamData, {
-        cell: (info) => <NumberDisplay value={info.getValue() as number} />,
-        header: ({ column }) => (
-            <SortableHeader label={`L${i}`} column={column} />
-        ),
-        footer: (info) => info.column.id,
-    }));
+    const columns = Array(4).fill(null).map((_, i) => ++i).map(i => {
+        return (
+            columnHelper.accessor(
+                `${gamePeriod}CoralLevel${i}` as keyof TeamData, {
+                cell: (info) => <NumberDisplay value={info.getValue() as number} />,
+                header: ({ column }) => (
+                    <SortableHeader label={`L${i}`} column={column} />
+                ),
+                footer: (info) => info.column.id,
+            })
+        )
+    });
 
     return columnHelper.group({
         header: "Coral",
@@ -75,23 +81,23 @@ const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
 }
 
 const generateAlgaeColumns = (gamePeriod: "auto" | "teleop", ...actions: string[]) => {
-    const algaeActions = ["net", "processor"]
+    const algaeActions = ["Net", "Processor"] // must capitalize
 
     if (actions?.length > 0) {
         algaeActions.push(...actions);
     }
 
     const columns = algaeActions.map(a => columnHelper.accessor(
-        `${gamePeriod}_algae_${a}` as keyof TeamData, {
+        `${gamePeriod}Algae${a}` as keyof TeamData, {
         cell: (info) => <NumberDisplay value={info.getValue() as number} />,
         header: ({ column }) => (
-            <SortableHeader label={toUpperCase(a)} column={column} />
+            <SortableHeader label={a} column={column} />
         ),
         footer: (info) => info.column.id,
     }));
 
     return columnHelper.group({
-        header: "Coral",
+        header: "Algae",
         footer: (props) => props.column.id,
         columns
     });
@@ -104,7 +110,7 @@ const columns: ColumnDef<TeamData>[] = [
         footer: (props) => props.column.id,
         enableHiding: false,
         columns: [
-            columnHelper.accessor("team_number", {
+            columnHelper.accessor("teamNumber", {
                 cell: (info) => info.getValue(),
                 header: ({ column }) => (
                     <SortableHeader label={"Team Number"} column={column} />
@@ -116,7 +122,7 @@ const columns: ColumnDef<TeamData>[] = [
                     );
                 },
             }),
-            columnHelper.accessor("team_name", {
+            columnHelper.accessor("teamName", {
                 cell: (info) => info.getValue(),
                 header: ({ column }) => (
                     <SortableHeader label={"Team Name"} column={column} />
@@ -129,8 +135,8 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Auto",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("initiation_line", {
-                cell: (info) => (info.getValue() ? "Y" : "N"),
+            columnHelper.accessor("initiationLine", {
+                cell: (info) => (<PercentDisplay value={info.getValue()} />),
                 header: ({ column }) => (
                     <SortableHeader label={"Auto Line"} column={column} />
                 ),
@@ -145,31 +151,31 @@ const columns: ColumnDef<TeamData>[] = [
         footer: (props) => props.column.id,
         columns: [
             generateCoralColumns("teleop"),
-            generateAlgaeColumns("teleop", "thrown")
+            generateAlgaeColumns("teleop", "Thrown"),
         ],
     }),
     columnHelper.group({
-        header: "Climb",
+        header: "Cage",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("shallow_percentage", {
+            columnHelper.accessor("shallowPercentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
-                    <SortableHeader label={"Climbed"} column={column} />
+                    <SortableHeader label={"Shallow"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
-            columnHelper.accessor("deep_percentage", {
+            columnHelper.accessor("deepPercentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
-                    <SortableHeader label={"Parked"} column={column} />
+                    <SortableHeader label={"Deep"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
-            columnHelper.accessor("park_percentage", {
+            columnHelper.accessor("parkPercentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
-                    <SortableHeader label={"Parked"} column={column} />
+                    <SortableHeader label={"Park"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
@@ -179,7 +185,7 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Misc",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("defense_rating", {
+            columnHelper.accessor("defenseRating", {
                 cell: (info) => <NumberDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Defense"} column={column} />
@@ -233,12 +239,12 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
                         placeholder="Find team number..."
                         value={
                             (table
-                                .getColumn("team_number")
+                                .getColumn("teamNumber")
                                 ?.getFilterValue() as string) ?? ""
                         }
                         onChange={(event) =>
                             table
-                                .getColumn("team_number")
+                                .getColumn("teamNumber")
                                 ?.setFilterValue(event.target.value)
                         }
                     />

@@ -1,14 +1,27 @@
-import { auth } from "@/lib/auth";
+import { scoutedTeamData } from "./actions";
+import { TeamDataTable } from "./components/TeamDataTable";
 
 
-export default async function dataTablePage() {
-    const session = await auth();
+export default async function TeamData() {
+    const teamDataResult = await scoutedTeamData();
 
-    if (!session?.user?.id) {
-        return <div>"You must be logged in to view this page"</div>
-    }
-
-    return <div>dataTable page hello world </div>
+    return (
+        <div>
+            <h1 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl">
+                Team Data
+            </h1>
+            <div className="mx-1 my-4">
+                {!teamDataResult.success
+                    ? "Error fetching team data"
+                    : teamDataResult.value.length < 1
+                        ? "No team data yet"
+                        : ""}
+            </div>
+            {teamDataResult.success && (
+                <TeamDataTable teamData={teamDataResult.value} />
+            )}
+        </div>
+    )
 }
 
 
