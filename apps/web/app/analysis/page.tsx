@@ -1,10 +1,15 @@
-export default async function AnalysisPage() {
-	return (
-		<div>
-			<h1 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl">
-				Team Data
-			</h1>
-			<div className="mx-1 my-4">Team data goes here eventually...</div>
-		</div>
-	);
+import { auth } from "@/lib/auth";
+
+
+export default async function dataTablePage() {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+        return <div>"You must be logged in to view this page"</div>
+    }
+
+    return <div>dataTable page hello world </div>
 }
+
+
+

@@ -14,3 +14,5 @@ export const prettyPrint = (string: string) =>
 		.split("_")
 		.map((s) => `${s.charAt(0).toUpperCase()}${s.slice(1)}`)
 		.join(" ");
+
+export const toUpperCase = (string: string) => `${string.charAt(0).toUpperCase()}${string.slice(1)}`
