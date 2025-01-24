@@ -14,7 +14,7 @@ Polar Edge requires a local installation of [Node.js](https://nodejs.org/en/down
 
 Setting up Polar Edge requires running a local instance of the database, and building the application. If Docker Desktop is installed and running, this will be handled automatically on dev startup. Otherwise, you will need to start the database manually.
 
-In the root directory, run `npm install` to install the dependencies for the entire project. We recommend also installing the `turbo` CLI globally to make running commands easier. This can be done by running `npm install -g turbo`.
+In the root directory, run `pnpm install` to install the dependencies for the entire project. We recommend also installing the `turbo` CLI globally to make running commands easier. This can be done by running `pnpm install -g turbo`.
 
 Two `.env.local` files are required for the project to build: one for the Next.js frontend, and one for the database package.
 
