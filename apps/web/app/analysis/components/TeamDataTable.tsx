@@ -31,6 +31,10 @@ function NumberDisplay({ value }: { value: number }) {
     return <>{value.toFixed(1)}</>;
 }
 
+function PercentDisplay({ value }: { value: number }) {
+    return <>{(value * 100).toFixed(0)}</>
+}
+
 function SortableHeader({
     label,
     column,
@@ -149,15 +153,22 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Climb",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("Shallow", {
-                cell: (info) => (info.getValue() ? "Y" : "N"),
+            columnHelper.accessor("shallow", {
+                cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Climbed"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
+            columnHelper.accessor("deep", {
+                cell: (info) => <PercentDisplay value={info.getValue()} />,
+                header: ({ column }) => (
+                    <SortableHeader label={"Parked"} column={column} />
+                ),
+                footer: (info) => info.column.id,
+            }),
             columnHelper.accessor("park", {
-                cell: (info) => (info.getValue() ? "Y" : "N"),
+                cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Parked"} column={column} />
                 ),
@@ -175,7 +186,7 @@ const columns: ColumnDef<TeamData>[] = [
                     <SortableHeader label={"Defense"} column={column} />
                 ),
                 footer: (info) => info.column.id,
-            }),
+        }),
             // columnHelper.display({
             // 	id: "external",
             // 	header: "Notes",
