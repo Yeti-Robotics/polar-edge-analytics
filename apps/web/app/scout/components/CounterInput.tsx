@@ -33,7 +33,7 @@ const CounterInput = React.forwardRef<HTMLInputElement, CounterInputProps>(
 			defaultValue = 0,
 			increaseBy = 1,
 			decreaseBy = 1,
-			max = 999999,
+			max = 99,
 			min = 0,
 			...props
 		}: CounterInputProps,
@@ -49,13 +49,12 @@ const CounterInput = React.forwardRef<HTMLInputElement, CounterInputProps>(
 		const [value, setValue] = useState(defaultValue);
 
 		const handleCount = (increase: boolean) => {
-			setValue((v) => {
-				const newValue = increase
-					? Math.min(max, v + increaseBy)
-					: Math.max(min, v - decreaseBy);
-				field.onChange(newValue);
-				return newValue;
-			});
+			const newValue = increase
+					? Math.min(max, value + increaseBy)
+					: Math.max(min, value - decreaseBy);
+
+			field.onChange(newValue);
+			setValue(newValue);
 		};
 
 		useEffect(() => {

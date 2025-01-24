@@ -10,10 +10,10 @@
     "rsc": true,
     "tsx": true,
     "aliases": {
-        "utils": "@/lib/utils",
-        "components": "@/components",
-        "ui": "@/components",
-        "lib": "@/lib",
-        "hooks": "@/hooks"
+        "utils": "@repo/ui/lib/utils",
+        "components": "@repo/ui/components",
+        "ui": "@repo/ui/components",
+        "lib": "@repo/ui/lib",
+        "hooks": "@repo/ui/hooks"
     }
   }

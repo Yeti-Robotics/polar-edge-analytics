@@ -1,5 +1,5 @@
 {
-  "id": "0be0b052-0c3b-4bbc-a7d9-3adc5b5f5794",
+  "id": "031e4766-2edd-442c-b0d4-24f0ed225b3b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,7 +10,7 @@
       "columns": {
         "userId": {
           "name": "userId",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -117,7 +117,7 @@
         },
         "userId": {
           "name": "userId",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -174,15 +174,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "authenticator_userId_credentialID_pk": {
-          "name": "authenticator_userId_credentialID_pk",
-          "columns": [
-            "userId",
-            "credentialID"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "authenticator_credentialID_unique": {
           "name": "authenticator_credentialID_unique",
@@ -208,7 +200,7 @@
         },
         "userId": {
           "name": "userId",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -241,24 +233,321 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.stand_form": {
+      "name": "stand_form",
+      "schema": "",
+      "columns": {
+        "stand_form_id": {
+          "name": "stand_form_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "team_match_id": {
+          "name": "team_match_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "left_black_line": {
+          "name": "left_black_line",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level1": {
+          "name": "auto_coral_level1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level2": {
+          "name": "auto_coral_level2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level3": {
+          "name": "auto_coral_level3",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level4": {
+          "name": "auto_coral_level4",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_algae_processed": {
+          "name": "auto_algae_processed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_algae_netted": {
+          "name": "auto_algae_netted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level1": {
+          "name": "teleop_coral_level1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level2": {
+          "name": "teleop_coral_level2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level3": {
+          "name": "teleop_coral_level3",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level4": {
+          "name": "teleop_coral_level4",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_algae_processed": {
+          "name": "teleop_algae_processed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_algae_netted": {
+          "name": "teleop_algae_netted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_algae_thrown": {
+          "name": "teleop_algae_thrown",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cage_climb": {
+          "name": "cage_climb",
+          "type": "cage",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "defense_rating": {
+          "name": "defense_rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comments": {
+          "name": "comments",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "stand_form_team_match_id_team_match_team_match_id_fk": {
+          "name": "stand_form_team_match_id_team_match_team_match_id_fk",
+          "tableFrom": "stand_form",
+          "tableTo": "team_match",
+          "columnsFrom": [
+            "team_match_id"
+          ],
+          "columnsTo": [
+            "team_match_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "stand_form_user_id_user_id_fk": {
+          "name": "stand_form_user_id_user_id_fk",
+          "tableFrom": "stand_form",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.team": {
+      "name": "team",
+      "schema": "",
+      "columns": {
+        "team_number": {
+          "name": "team_number",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "team_name": {
+          "name": "team_name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.team_match": {
+      "name": "team_match",
+      "schema": "",
+      "columns": {
+        "team_match_id": {
+          "name": "team_match_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tournament_id": {
+          "name": "tournament_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match_number": {
+          "name": "match_number",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_number": {
+          "name": "team_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alliance": {
+          "name": "alliance",
+          "type": "alliance",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alliance_position": {
+          "name": "alliance_position",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_match_tournament_id_tournament_tournament_id_fk": {
+          "name": "team_match_tournament_id_tournament_tournament_id_fk",
+          "tableFrom": "team_match",
+          "tableTo": "tournament",
+          "columnsFrom": [
+            "tournament_id"
+          ],
+          "columnsTo": [
+            "tournament_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "team_match_team_number_team_team_number_fk": {
+          "name": "team_match_team_number_team_team_number_fk",
+          "tableFrom": "team_match",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_number"
+          ],
+          "columnsTo": [
+            "team_number"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tournament": {
+      "name": "tournament",
+      "schema": "",
+      "columns": {
+        "tournament_id": {
+          "name": "tournament_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_name": {
+          "name": "event_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "guildNickname": {
-          "name": "guildNickname",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -281,18 +570,19 @@
           "primaryKey": false,
           "notNull": false
         },
-        "role": {
-          "name": "role",
+        "guildNickname": {
+          "name": "guildNickname",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "isBanned": {
-          "name": "isBanned",
-          "type": "boolean",
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
-          "default": false
+          "notNull": false,
+          "default": "'user'"
         }
       },
       "indexes": {},
@@ -336,22 +626,42 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "verificationToken_identifier_token_pk": {
-          "name": "verificationToken_identifier_token_pk",
-          "columns": [
-            "identifier",
-            "token"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.alliance": {
+      "name": "alliance",
+      "schema": "public",
+      "values": [
+        "red",
+        "blue"
+      ]
+    },
+    "public.cage": {
+      "name": "cage",
+      "schema": "public",
+      "values": [
+        "shallow",
+        "deep",
+        "park"
+      ]
+    },
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "user",
+        "admin",
+        "guest",
+        "banished"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

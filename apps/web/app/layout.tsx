@@ -1,3 +1,4 @@
+import { DevTools } from "@/components/devtools/DevTools";
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import "@repo/ui/globals.css";
@@ -20,9 +21,10 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert`}
+				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert min-h-screen`}
 			>
 				{children}
+				<DevTools />
 			</body>
 		</html>
 	);
