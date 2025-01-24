@@ -15,8 +15,8 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
     "drizzle-orm": "^0.36.0",
-    "@repo/database": "*",
-    "@repo/ui": "*",
+    "@repo/database": "workspace:*",
+    "@repo/ui": "workspace:*",
     "lucide-react": "^0.471.0",
     "next": "15.1.4",
     "next-auth": "^5.0.0-beta.25",
@@ -27,8 +27,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^20.14.7",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
