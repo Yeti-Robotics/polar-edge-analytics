@@ -22,20 +22,20 @@ export default function Home() {
           </Link>
           <div className="flex items-center space-x-8">
             <div className="space-x-8 text-white/90">
-              {["Data"].map((item) => (
+              {[{ name: "Data", href: "/analysis" }].map((item) => (
                 <Link
-                  key={item}
-                  href={`/${item.toLowerCase()}`}
+                  key={item.href}
+                  href={`/${item.name.toLowerCase()}`}
                   className="relative hover:text-white transition-colors group"
                 >
-                  {item}
+                  {item.name}
                   <span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
                 </Link>
               ))}
             </div>
             <form action={async () => {
               "use server";
-              await signIn("discord");
+              await signIn("discord", { redirectTo: "/scout" });
             }}>
               <Button
                 type="submit"
@@ -75,7 +75,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <form action={async () => {
               "use server";
-              await signIn("discord");
+              await signIn("discord", { redirectTo: "/scout" });
             }}>
               <Button
                 type="submit"
