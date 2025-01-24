@@ -24,8 +24,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
 import { toUpperCase } from "@/lib/utils";
-
-export type TeamData = any;
+import { TeamData } from "../actions/types";
 
 function NumberDisplay({ value }: { value: number }) {
     return <>{value.toFixed(1)}</>;
@@ -60,8 +59,8 @@ function SortableHeader({
 }
 
 const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
-    const columns = Array(4).map((_, i) => i + 1).map(i => columnHelper.accessor(`${gamePeriod}_coral_level_${i}`, {
-        cell: (info) => <NumberDisplay value={info.getValue()} />,
+    const columns = Array(4).map((_, i) => i + 1).map(i => columnHelper.accessor(`${gamePeriod}_coral_level_${i}` as keyof TeamData, {
+        cell: (info) => <NumberDisplay value={info.getValue() as number} />,
         header: ({ column }) => (
             <SortableHeader label={`L${i}`} column={column} />
         ),
@@ -83,8 +82,8 @@ const generateAlgaeColumns = (gamePeriod: "auto" | "teleop", ...actions: string[
     }
 
     const columns = algaeActions.map(a => columnHelper.accessor(
-        `${gamePeriod}_algae_${a}`, {
-        cell: (info) => <NumberDisplay value={info.getValue()} />,
+        `${gamePeriod}_algae_${a}` as keyof TeamData, {
+        cell: (info) => <NumberDisplay value={info.getValue() as number} />,
         header: ({ column }) => (
             <SortableHeader label={toUpperCase(a)} column={column} />
         ),
@@ -153,21 +152,21 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Climb",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("shallow", {
+            columnHelper.accessor("shallow_percentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Climbed"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
-            columnHelper.accessor("deep", {
+            columnHelper.accessor("deep_percentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Parked"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
-            columnHelper.accessor("park", {
+            columnHelper.accessor("park_percentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Parked"} column={column} />
@@ -180,13 +179,13 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Misc",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("defense", {
+            columnHelper.accessor("defense_rating", {
                 cell: (info) => <NumberDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Defense"} column={column} />
                 ),
                 footer: (info) => info.column.id,
-        }),
+            }),
             // columnHelper.display({
             // 	id: "external",
             // 	header: "Notes",

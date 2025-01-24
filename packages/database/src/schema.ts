@@ -186,7 +186,8 @@ export const teamStats = pgView("team_stats", {
   parkPercentage: decimal("park_percentage").notNull(),
   shallowPercentage: decimal("shallow_percentage").notNull(),
   deepPercentage: decimal("deep_percentage").notNull(),
-  initiationLine: decimal("initiation_line").notNull()
+  initiationLine: decimal("initiation_line").notNull(),
+  defenseRating: decimal("defense_rating").notNull()
 }).as(sql`
 WITH combinedStats AS (
     SELECT 
