@@ -1,4 +1,6 @@
+import { UserRole } from "@repo/database/schema";
 import { DiscordProfile } from "next-auth/providers/discord";
+import { redirect } from "next/navigation";
 
 const YETI_GUILD_ID = "408711970305474560";
 
@@ -36,5 +38,18 @@ export enum AuthErrors {
     DISCORD_UNVERIFIED = "DISCORD_UNVERIFIED",
     BANISHED = "BANISHED",
     LOGIN_FAILED = "LOGIN_FAILED",
-    NO_GUILD_NICKNAME = "NO_GUILD_NICKNAME"
+    NO_GUILD_NICKNAME = "NO_GUILD_NICKNAME",
+    UNAUTHORIZED = "UNAUTHORIZED"
+}
+
+export function redirectError(error: AuthErrors) {
+    redirect(`/error?error=${error}`)
+}
+
+function roleIndex(userRole: UserRole) {
+    return Object.values(UserRole).indexOf(userRole);
+}
+
+export function authorized({ requiredRole, currentUserRole }: { requiredRole: UserRole, currentUserRole?: UserRole }) {
+    return currentUserRole && roleIndex(currentUserRole) >= roleIndex(requiredRole);
 }
