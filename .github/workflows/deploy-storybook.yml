@@ -19,6 +19,6 @@ jobs:
         uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
           checkout: true
-          install_command: npm install
+          install_command: pnpm install
           build_command: turbo build --filter=storybook
           path: apps/web/storybook-static # change to your build folder
