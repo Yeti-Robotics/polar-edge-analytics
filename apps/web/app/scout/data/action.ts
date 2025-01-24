@@ -1,29 +1,42 @@
 "use server";
 
-import { createServerAction, ServerActionError } from "@/lib/actions/actions-utils";
 import { StandFormData } from "./schema";
+
+import {
+	createServerAction,
+	ServerActionError,
+} from "@/lib/actions/actions-utils";
 import { auth } from "@/lib/auth";
 import { AuthErrors, authorized } from "@/lib/auth/utils";
-import { standForm, team_match, UserRole } from "@repo/database/schema";
 import { db } from "@repo/database";
+import { standForm, team_match, UserRole } from "@repo/database/schema";
 import { and, eq } from "drizzle-orm";
 
-export const submitStandForm = createServerAction(async (data: StandFormData) => {
-    const session = await auth();
+export const submitStandForm = createServerAction(
+	async (data: StandFormData) => {
+		const session = await auth();
 
-    if (!authorized({
-        requiredRole: UserRole.USER,
-        currentUserRole: session?.user.role
-    }) || !session?.user.id) {
-        throw new ServerActionError(AuthErrors.UNAUTHORIZED);
-    }
+		if (
+			!authorized({
+				requiredRole: UserRole.USER,
+				currentUserRole: session?.user.role,
+			}) ||
+			!session?.user.id
+		) {
+			throw new ServerActionError(AuthErrors.UNAUTHORIZED);
+		}
 
-    const teamMatch = await db
-        .select()
-        .from(team_match)
-        .where(and(eq(team_match.teamNumber, data.team_number), eq(team_match.matchNumber, data.match_number)));
+		const teamMatch = await db
+			.select()
+			.from(team_match)
+			.where(
+				and(
+					eq(team_match.teamNumber, data.team_number),
+					eq(team_match.matchNumber, data.match_number)
+				)
+			);
 
-    const matchInfo = teamMatch.shift();
+		const matchInfo = teamMatch.shift();
 
     if (!matchInfo) {
         throw new ServerActionError("Invalid team/match number!");

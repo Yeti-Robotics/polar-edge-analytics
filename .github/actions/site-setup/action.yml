@@ -4,9 +4,13 @@ on: workflow_call
 runs:
   using: composite
   steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.15.4
     - uses: actions/setup-node@v4
       with:
-          node-version: 22.11.0
+        node-version: 22.13.0
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install
       shell: bash

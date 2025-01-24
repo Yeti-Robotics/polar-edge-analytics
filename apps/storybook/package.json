@@ -8,14 +8,14 @@
     "build": "storybook build"
   },
   "dependencies": {
-    "@repo/ui": "*",
+    "@repo/ui": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
-    "@repo/eslint-config": "*",
+    "@repo/eslint-config": "workspace:*",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-links": "^8.4.7",
     "@storybook/addon-onboarding": "^8.4.7",
@@ -24,8 +24,8 @@
     "@storybook/react-vite": "^8.4.7",
     "@storybook/test": "^8.4.7",
     "@tailwindcss/typography": "^0.5.15",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
     "eslint-plugin-storybook": "^0.10.1",
