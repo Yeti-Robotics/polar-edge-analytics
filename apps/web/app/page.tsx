@@ -1,3 +1,4 @@
+import { MenuTrigger } from "@/components/app-sidebar";
 import { signIn } from "@/lib/auth";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -5,6 +6,7 @@ import { Snowflake } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
+
 	return (
 		<div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#7FB3D5] via-[#5499C7] to-primary">
 			{/* Frost overlay */}
@@ -13,12 +15,7 @@ export default function Home() {
 			{/* Navigation */}
 			<nav className="absolute top-0 w-full p-6 z-10">
 				<div className="container mx-auto flex justify-between items-center">
-					<Link
-						href="/"
-						className="text-white transform hover:scale-110 transition-transform"
-					>
-						<Snowflake className="w-8 h-8 drop-shadow-glow" />
-					</Link>
+						<MenuTrigger />
 					<div className="flex items-center space-x-8">
 						<div className="space-x-8 text-white/90">
 							{["Data"].map((item) => (
@@ -95,3 +92,4 @@ export default function Home() {
 		</div>
 	);
 }
+

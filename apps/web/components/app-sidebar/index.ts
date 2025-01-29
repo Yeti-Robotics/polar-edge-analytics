@@ -1,2 +1,2 @@
 export * from './AppSidebar'
-export * from './SnowflakeTrigger'
+export * from './MenuTrigger'
