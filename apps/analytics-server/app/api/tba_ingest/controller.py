@@ -24,13 +24,15 @@ class TBAIngestController:
         match (payload["message_type"]):
             case "ping":
                 return TBAIngestService.handle_ping()
-            case "match":
+            case "match_score":
                 return TBAIngestService.handle_match(payload)
             case "verification":
                 return TBAIngestService.handle_verification(payload)
             case _:
+                # Not an event we care about, need to handle this gracefully otherwise TBA *may* prune the webhook
                 return JSONResponse(
-                    content={"error": "Invalid event type"}, status_code=400
+                    content={"message": "Server received unhandled event type"},
+                    status_code=200,
                 )
 
     @staticmethod

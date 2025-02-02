@@ -13,6 +13,7 @@ class TBAIngestService:
         """
         Ingest a match into the database.
         """
+        logger.info(f"match received\n{json.dumps(match, indent=4)}")
         return JSONResponse(content={"message": "Match ingested"}, status_code=200)
 
     @staticmethod
