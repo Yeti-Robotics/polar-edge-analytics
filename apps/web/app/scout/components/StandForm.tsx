@@ -1,14 +1,13 @@
 "use client";
 
-import { KeyboardEvent } from "react";
+import { AutoForm, FormAction } from "./AutoForm";
 import {
     StandFormData,
     standFormSchema,
 } from "../data/schema";
+
+import { Cage } from "@repo/database/schema";
 import { Input } from "@repo/ui/components/input";
-import { DefaultValues } from "react-hook-form";
-import { AutoForm, FormAction } from "./AutoForm";
-import { Textarea } from "@repo/ui/components/textarea";
 import {
     Select,
     SelectContent,
@@ -16,7 +15,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@repo/ui/components/select";
-import { Cage } from "@repo/database/schema";
+import { Textarea } from "@repo/ui/components/textarea";
+import { KeyboardEvent } from "react";
+import { DefaultValues } from "react-hook-form";
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
     if (e.code === "Minus") {

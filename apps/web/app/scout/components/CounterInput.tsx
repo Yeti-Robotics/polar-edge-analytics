@@ -1,10 +1,10 @@
 "use client";
 
-import { Input } from "@repo/ui/components/input";
+import errors from "@/lib/errors";
 import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import React, { InputHTMLAttributes, useEffect, useState } from "react";
-import errors from "@/lib/errors";
 import { useController } from "react-hook-form";
 
 export interface CounterInputProps

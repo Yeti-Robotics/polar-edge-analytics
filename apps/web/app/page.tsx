@@ -71,25 +71,23 @@ export default function Home() {
 						</span>
 					</p>
 
-					<div className="flex flex-col sm:flex-row justify-center gap-4">
-						<form
-							action={async () => {
-								"use server";
-								await signIn("discord");
-							}}
-						>
-							<Button
-								type="submit"
-								variant="ghost"
-								className="text-white text-lg hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border p-5 border-white/20"
-							>
-								Scout →
-							</Button>
-						</form>
-					</div>
-				</div>
-			</main>
-		</div>
-	);
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <form action={async () => {
+              "use server";
+              await signIn("discord", { redirectTo: "/scout" });
+            }}>
+              <Button
+                type="submit"
+                variant="ghost"
+                className="text-white text-lg hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border p-5 border-white/20"
+              >
+                Scout →
+              </Button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
 }
 
