@@ -7,7 +7,9 @@
         },
       ],
       "paths": {
-        "@/*": ["./*", "../../packages/ui/src"],
+        "@/*": ["./*"],
+        "@repo/ui/*": ["../../packages/ui/src/*"]
+        
       },
       "declaration": false,
       "declarationMap": false

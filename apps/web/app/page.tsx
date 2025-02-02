@@ -1,3 +1,4 @@
+import { MenuTrigger } from "@/components/app-sidebar";
 import { signIn } from "@/lib/auth";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -5,45 +6,46 @@ import { Snowflake } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
+
 	return (
 		<div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#7FB3D5] via-[#5499C7] to-primary">
 			{/* Frost overlay */}
 			<div className="absolute inset-0 backdrop-blur-[1px] mix-blend-overlay pointer-events-none" />
 
-      {/* Navigation */}
-      <nav className="absolute top-0 w-full p-6 z-10">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href="/" className="text-white transform hover:scale-110 transition-transform">
-            <Snowflake className="w-8 h-8 drop-shadow-glow" />
-          </Link>
-          <div className="flex items-center space-x-8">
-            <div className="space-x-8 text-white/90">
-              {[{ name: "Data", href: "/analysis" }].map((item) => (
-                <Link
-                  key={item.href}
-                  href={`/${item.name.toLowerCase()}`}
-                  className="relative hover:text-white transition-colors group"
-                >
-                  {item.name}
-                  <span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
-                </Link>
-              ))}
-            </div>
-            <form action={async () => {
-              "use server";
-              await signIn("discord", { redirectTo: "/scout" });
-            }}>
-              <Button
-                type="submit"
-                variant="ghost"
-                className="text-white hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border border-white/20"
-              >
-                Login →
-              </Button>
-            </form>
-          </div>
-        </div>
-      </nav>
+			{/* Navigation */}
+			<nav className="absolute top-0 w-full p-6 z-10">
+				<div className="container mx-auto flex justify-between items-center">
+						<MenuTrigger />
+					<div className="flex items-center space-x-8">
+						<div className="space-x-8 text-white/90">
+							{["Data"].map((item) => (
+								<Link
+									key={item}
+									href={`/${item.toLowerCase()}`}
+									className="relative hover:text-white transition-colors group"
+								>
+									{item}
+									<span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
+								</Link>
+							))}
+						</div>
+						<form
+							action={async () => {
+								"use server";
+								await signIn("discord");
+							}}
+						>
+							<Button
+								type="submit"
+								variant="ghost"
+								className="text-white hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border border-white/20"
+							>
+								Login →
+							</Button>
+						</form>
+					</div>
+				</div>
+			</nav>
 
 			{/* Main Content */}
 			<main className="min-h-screen flex flex-col items-center justify-center px-4 relative">
@@ -88,3 +90,4 @@ export default function Home() {
     </div>
   )
 }
+
