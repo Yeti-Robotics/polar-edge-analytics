@@ -1,4 +1,3 @@
-import { MenuTrigger } from "@/components/app-sidebar";
 import { signIn } from "@/lib/auth";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -14,17 +13,16 @@ export default function Home() {
 
 			{/* Navigation */}
 			<nav className="absolute top-0 w-full p-6 z-10">
-				<div className="container mx-auto flex justify-between items-center">
-						<MenuTrigger />
+				<div className="container mx-auto flex justify-end items-center">
 					<div className="flex items-center space-x-8">
 						<div className="space-x-8 text-white/90">
-							{["Data"].map((item) => (
+							{[{name: "Data", href: "/analysis"}].map((item) => (
 								<Link
-									key={item}
-									href={`/${item.toLowerCase()}`}
+									key={item.name}
+									href={item.href}
 									className="relative hover:text-white transition-colors group"
 								>
-									{item}
+									{item.name}
 									<span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
 								</Link>
 							))}

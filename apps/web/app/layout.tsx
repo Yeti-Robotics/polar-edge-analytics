@@ -24,13 +24,8 @@ export default function RootLayout({
 		<html lang="en">
 			<body
 				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert min-h-screen`}
-				>
-				<SidebarProvider>
-					<AppSidebar />
-					<main className="w-full">
-						{children}
-					</main>
-				</SidebarProvider>
+			>
+				{children}
 				<DevTools />
 			</body>
 		</html>
