@@ -20,14 +20,14 @@ const items = [
   },
   {
     title: "Data",
-    url: "/data",
+    url: "/analysis",
     icon: Grid2X2,
   }
 ]
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="bg-background">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>

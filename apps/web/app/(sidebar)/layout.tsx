@@ -8,7 +8,7 @@ export default function SidebarLayout({ children }: Readonly<{
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main className="w-full">
+            <main className="w-full p-4 container">
                 {children}
             </main>
         </SidebarProvider>
