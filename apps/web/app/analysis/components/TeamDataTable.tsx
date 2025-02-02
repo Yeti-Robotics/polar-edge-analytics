@@ -12,6 +12,7 @@ import {
 } from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
 import {
+    CellContext,
     Column,
     ColumnDef,
     ColumnFiltersState,
@@ -59,19 +60,22 @@ function SortableHeader({
     );
 }
 
-const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
-    const columns = Array(4).fill(null).map((_, i) => ++i).map(i => {
-        return (
-            columnHelper.accessor(
-                `${gamePeriod}CoralLevel${i}` as keyof TeamData, {
-                cell: (info) => <NumberDisplay value={info.getValue() as number} />,
-                header: ({ column }) => (
-                    <SortableHeader label={`L${i}`} column={column} />
-                ),
-                footer: (info) => info.column.id,
-            })
-        )
+const columnHelper = createColumnHelper<TeamData>();
+
+function numericAccessor(key: keyof TeamData, label: string) {
+    return columnHelper.accessor(key, {
+        cell: (info: CellContext<TeamData, number>) => <NumberDisplay value={info.getValue()} />,
+        header: ({ column }) => (
+            <SortableHeader label={label} column={column} />
+        ),
+        footer: (props) => props.column.id,
     });
+}
+
+const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
+    const columns = Array(4).fill(null).map((_, i) => ++i).map(i =>
+        numericAccessor(`${gamePeriod}CoralLevel${i}` as keyof TeamData, `L${i}`)
+    );
 
     return columnHelper.group({
         header: "Coral",
@@ -80,21 +84,14 @@ const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
     });
 }
 
-const generateAlgaeColumns = (gamePeriod: "auto" | "teleop", ...actions: string[]) => {
+const generateAlgaeColumns = (gamePeriod: "auto" | "teleop") => {
     const algaeActions = ["Net", "Processor"] // must capitalize
 
-    if (actions?.length > 0) {
-        algaeActions.push(...actions);
+    if (gamePeriod === "teleop") {
+        algaeActions.push("Thrown")
     }
 
-    const columns = algaeActions.map(a => columnHelper.accessor(
-        `${gamePeriod}Algae${a}` as keyof TeamData, {
-        cell: (info) => <NumberDisplay value={info.getValue() as number} />,
-        header: ({ column }) => (
-            <SortableHeader label={a} column={column} />
-        ),
-        footer: (info) => info.column.id,
-    }));
+    const columns = algaeActions.map(a => numericAccessor(`${gamePeriod}Algae${a}` as keyof TeamData, a));
 
     return columnHelper.group({
         header: "Algae",
@@ -103,7 +100,6 @@ const generateAlgaeColumns = (gamePeriod: "auto" | "teleop", ...actions: string[
     });
 }
 
-const columnHelper = createColumnHelper<TeamData>();
 const columns: ColumnDef<TeamData>[] = [
     columnHelper.group({
         header: "Team",
@@ -151,7 +147,7 @@ const columns: ColumnDef<TeamData>[] = [
         footer: (props) => props.column.id,
         columns: [
             generateCoralColumns("teleop"),
-            generateAlgaeColumns("teleop", "Thrown"),
+            generateAlgaeColumns("teleop"),
         ],
     }),
     columnHelper.group({

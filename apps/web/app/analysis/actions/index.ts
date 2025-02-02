@@ -4,7 +4,7 @@ import { teamStats } from "@repo/database/schema";
 
 export const scoutedTeamData = createServerAction(async () => {
     try {
-        return await db.select().from(teamStats) as unknown as TeamData[];
+        return await db.select().from(teamStats);
     } catch (error) {
         console.error("Error fetching team data:", error);
         throw new ServerActionError("Failed to fetch team data");
