@@ -8,7 +8,7 @@ export function NavbarLink({ children, href }: Readonly<{ children: React.ReactN
     const { toggleSidebar } = useSidebar();
     
     return (
-        <Link onClick={toggleSidebar} href={href} className="flex items-center space-x-2 w-full">
+        <Link onClick={toggleSidebar} href={href} className="flex items-center -space-x-6 w-full">
             {children}
         </Link>
     );

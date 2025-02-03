@@ -66,16 +66,16 @@ export function AppSidebar({ session }: SidebarProps) {
           navbarData.map((nav) => {
             return (
               <SidebarGroup key={nav.title}>
-                <SidebarGroupLabel className="capitalize text-lg">
+                <SidebarGroupLabel className="capitalize">
                   {nav.title}
                 </SidebarGroupLabel>
                 <SidebarMenu>
                   {
                     nav.items.map((item) => (
                       <SidebarMenuItem key={item.name}>
-                        <SidebarMenuButton className="cursor-pointer" size="lg">
+                        <SidebarMenuButton className="cursor-pointer">
                           <NavbarLink href={item.href}>
-                            <div>
+                            <div className="size-16 flex items-center">
                               <item.icon />
                             </div>
                             <span>{item.name}</span>

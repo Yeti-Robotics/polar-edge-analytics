@@ -228,7 +228,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
     });
 
     return (
-        <div className="flex flex-col space-y-4 scale-90 md:scale-100">
+        <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-center space-x-4">
                 <div>
                     <Input

@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar, AppSidebarTrigger } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme";
 import { auth } from "@/lib/auth";
 import { SidebarProvider, SidebarTrigger } from "@repo/ui/components/sidebar";
@@ -23,7 +23,7 @@ export default async function SidebarLayout({ children }: Readonly<{
                     <main className="w-full p-4 container">
                         {children}
                     </main>
-                    <SidebarTrigger className="fixed top-4 right-4 scale-150 bg-accent/70" />
+                    <AppSidebarTrigger />
                 </SidebarProvider>
             </SessionProvider>
         </ThemeProvider>

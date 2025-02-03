@@ -35,7 +35,7 @@ export function StandForm({
     onSubmit: FormAction<typeof standFormSchema>;
 }) {
     return (
-        <div className="flex justify-center scale-90 md:scale-100">
+        <div className="flex justify-center">
             <AutoForm
                 title="Stand Form"
                 data={standFormSchema}
