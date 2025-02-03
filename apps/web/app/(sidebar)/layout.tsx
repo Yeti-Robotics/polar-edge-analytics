@@ -1,7 +1,7 @@
 import { AppSidebar, AppSidebarTrigger } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme";
 import { auth } from "@/lib/auth";
-import { SidebarProvider, SidebarTrigger } from "@repo/ui/components/sidebar";
+import { SidebarProvider } from "@repo/ui/components/sidebar";
 import { SessionProvider } from "next-auth/react";
 
 
