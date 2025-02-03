@@ -1,4 +1,4 @@
-import { ArrowBigRight, Binoculars, Grid2X2, LogIn, LogOut } from "lucide-react"
+import { Binoculars, ChartBarIncreasing, Grid2X2, Key, LogIn, LogOut, NotepadText } from "lucide-react"
 
 import {
   Sidebar,
@@ -6,10 +6,14 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
+  SidebarTrigger,
+  useSidebar,
 } from "@repo/ui/components/sidebar"
 
 import Logo from "@/components/logo"
@@ -17,19 +21,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
 import { Session } from "next-auth";
 import { getInitials } from "./utils";
 import { signIn, signOut } from "@/lib/auth";
-import { useTheme } from "next-themes";
 import { ThemeToggle } from "./ThemeToggle";
-// Menu items.
-const items = [
+import Link from "next/link";
+import { NavbarLink } from "./NavbarLink";
+
+const navbarData = [
   {
     title: "Scout",
-    url: "/scout",
-    icon: Binoculars,
+    items: [{ name: "Stand Form", icon: NotepadText, href: "/scout" }]
   },
   {
-    title: "Data",
-    url: "/analysis",
-    icon: Grid2X2,
+    title: "Analysis",
+    items: [
+      { name: "Team Data Table", icon: Grid2X2, href: "/analysis" }
+    ]
   }
 ]
 
@@ -38,55 +43,76 @@ type SidebarProps = {
 }
 
 export function AppSidebar({ session }: SidebarProps) {
+  const authFunction = async () => {
+    "use server";
+
+    if (session?.user) {
+      await signOut({ redirectTo: "/" });
+    } else {
+      await signIn("discord", { redirectTo: "/scout" });
+    }
+  };
+
+  const nickname = session?.user.guildNickname ?? "Guest";
+  const AuthIcon = session?.user ? LogOut : LogIn;
+
   return (
     <Sidebar className="bg-background">
       <SidebarHeader>
-        <Logo className="w-10 h-10 m-2" />
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <div className="flex flex-col items-baseline">
-          <div className="flex flex-row items-center p-4 bg-background hover:bg-accent rounded-2xl cursor-pointer">
-            <Avatar>
-              <AvatarImage className="rounded-full" src={session?.user.image} alt="User Avatar" />
-              <AvatarFallback>{session?.user.name ? getInitials(session.user.name) : "G"}</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col ml-4">
-              <p className="capitalize">{session?.user.guildNickname ?? "Guest"}</p>
-              <p className="text-xs font-normal">{session?.user.name ?? ""}</p>
-            </div>
-            <div className="ml-auto hover:bg-accent rounded-2xl">
-              {
-                session?.user ? <LogOut onClick={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/" });
-                }} /> : <LogIn onClick={async () => {
-                  "use server";
-                  await signIn("discord", { redirectTo: "/scout" });
-                }} />
-              }
-            </div>
+        <SidebarMenuButton className="hover:bg-transparent focus:bg-transparent" size="lg">
+          <div className="size-6 aspect-square">
+            <Logo />
           </div>
-          <ThemeToggle />
-        </div>
+        </SidebarMenuButton>
+      </SidebarHeader>
+      <SidebarContent className="-space-y-3">
+        {
+          navbarData.map((nav) => {
+            return (
+              <SidebarGroup key={nav.title}>
+                <SidebarGroupLabel className="capitalize text-lg">
+                  {nav.title}
+                </SidebarGroupLabel>
+                <SidebarMenu>
+                  {
+                    nav.items.map((item) => (
+                      <SidebarMenuItem key={item.name}>
+                        <SidebarMenuButton className="cursor-pointer" size="lg">
+                          <NavbarLink href={item.href}>
+                            <div>
+                              <item.icon />
+                            </div>
+                            <span>{item.name}</span>
+                          </NavbarLink>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))
+                  }
+                </SidebarMenu>
+              </SidebarGroup>
+            )
+          })
+        }
+      </SidebarContent>
+      <SidebarFooter >
+        <ThemeToggle />
+        <SidebarMenuButton
+          size="lg"
+          onClick={authFunction}
+          className="cursor-pointer"
+        >
+          <Avatar className="size-8 rounded-lg">
+            <AvatarImage src={session?.user.image} alt="User Avatar" />
+            <AvatarFallback>{getInitials(nickname)}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col ml-4">
+            <p className="capitalize">{nickname}</p>
+            <p className="text-xs font-normal">{session?.user.name ?? ""}</p>
+          </div>
+          <AuthIcon className="ml-auto" onClick={authFunction} />
+        </SidebarMenuButton>
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   )
 }

@@ -18,12 +18,12 @@ export default async function SidebarLayout({ children }: Readonly<{
             disableTransitionOnChange
         >
             <SessionProvider session={session}>
-                <SidebarProvider>
+                <SidebarProvider defaultOpen={false}>
                     <AppSidebar session={session} />
-                    <SidebarTrigger />
                     <main className="w-full p-4 container">
                         {children}
                     </main>
+                    <SidebarTrigger className="fixed top-4 right-4 scale-150 bg-accent/70" />
                 </SidebarProvider>
             </SessionProvider>
         </ThemeProvider>
