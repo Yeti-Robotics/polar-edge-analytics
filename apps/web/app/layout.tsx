@@ -20,8 +20,11 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+
+	// note that suppressHydrationWarning must be added b/c of next-themes
+	// see: https://github.com/pacocoursey/next-themes
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert min-h-screen`}
 			>

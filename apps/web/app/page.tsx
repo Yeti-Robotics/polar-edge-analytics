@@ -16,7 +16,7 @@ export default function Home() {
 				<div className="container mx-auto flex justify-end items-center">
 					<div className="flex items-center space-x-8">
 						<div className="space-x-8 text-white/90">
-							{[{name: "Data", href: "/analysis"}].map((item) => (
+							{[{ name: "Data", href: "/analysis" }].map((item) => (
 								<Link
 									key={item.name}
 									href={item.href}
@@ -30,7 +30,7 @@ export default function Home() {
 						<form
 							action={async () => {
 								"use server";
-								await signIn("discord");
+								await signIn("discord", { redirectTo: "/scout" });
 							}}
 						>
 							<Button
@@ -69,23 +69,23 @@ export default function Home() {
 						</span>
 					</p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <form action={async () => {
-              "use server";
-              await signIn("discord", { redirectTo: "/scout" });
-            }}>
-              <Button
-                type="submit"
-                variant="ghost"
-                className="text-white text-lg hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border p-5 border-white/20"
-              >
-                Scout →
-              </Button>
-            </form>
-          </div>
-        </div>
-      </main>
-    </div>
-  )
+					<div className="flex flex-col sm:flex-row justify-center gap-4">
+						<form action={async () => {
+							"use server";
+							await signIn("discord", { redirectTo: "/scout" });
+						}}>
+							<Button
+								type="submit"
+								variant="ghost"
+								className="text-white text-lg hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border p-5 border-white/20"
+							>
+								Scout →
+							</Button>
+						</form>
+					</div>
+				</div>
+			</main>
+		</div>
+	)
 }
 
