@@ -1,29 +1,25 @@
-import { Binoculars, ChartBarIncreasing, Grid2X2, Key, LogIn, LogOut, NotepadText } from "lucide-react"
+import { NavbarLink } from "./NavbarLink";
+import { ThemeToggle } from "./ThemeToggle";
+import { getInitials } from "./utils";
 
+import Logo from "@/components/logo"
+import { signIn, signOut } from "@/lib/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarTrigger,
-  useSidebar,
 } from "@repo/ui/components/sidebar"
-
-import Logo from "@/components/logo"
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/avatar"
+import { Grid2X2, LogIn, LogOut, NotepadText } from "lucide-react"
 import { Session } from "next-auth";
-import { getInitials } from "./utils";
-import { signIn, signOut } from "@/lib/auth";
-import { ThemeToggle } from "./ThemeToggle";
-import Link from "next/link";
-import { NavbarLink } from "./NavbarLink";
+
 
 const navbarData = [
   {

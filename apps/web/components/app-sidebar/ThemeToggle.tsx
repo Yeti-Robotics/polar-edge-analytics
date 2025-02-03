@@ -1,9 +1,9 @@
 "use client";
 
-import { useTheme } from "next-themes";
+import { SidebarMenuButton } from "@repo/ui/components/sidebar";
 import { SunIcon, MoonIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { SidebarMenuButton, SidebarMenuSkeleton } from "@repo/ui/components/sidebar";
 
 export const ThemeToggle = () => {
     const { theme, setTheme } = useTheme();

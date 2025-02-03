@@ -1,7 +1,6 @@
 import { signIn } from "@/lib/auth";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Snowflake } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
