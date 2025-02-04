@@ -1,29 +1,65 @@
 "use client";
 
-import { SidebarMenuButton } from "@repo/ui/components/sidebar";
-import { SunIcon, MoonIcon } from "lucide-react";
+import { Button } from "@repo/ui/components/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { SunIcon, MoonIcon, MonitorIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export const ThemeToggle = () => {
-    const { theme, setTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
+	const { theme, setTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
 
-    const Icon = theme === "dark" ? MoonIcon : SunIcon;
+	const Icon = theme === "dark" ? MoonIcon : SunIcon;
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
-    return (
-        <SidebarMenuButton className="cursor-pointer" size="lg" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-            <div className="rounded-lg aspect-square size-8 flex items-center justify-center">
-                {mounted ? <Icon /> : ""}
-            </div>
-            <div className="flex flex-col ml-4">
-                <p className="capitalize">{mounted ? `${theme} mode` : ""}</p>
-            </div>
-        </SidebarMenuButton>
-    );
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="ghost"
+					size="icon"
+					className="rounded-full cursor-pointer"
+					aria-label="Toggle theme"
+				>
+					{mounted ? <Icon /> : ""}
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="mr-1">
+				<DropdownMenuLabel className="text-xs">Theme</DropdownMenuLabel>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem
+					className="cursor-pointer text-xs"
+					onClick={() => setTheme("light")}
+				>
+					<SunIcon />
+					Light
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					className="cursor-pointer text-xs"
+					onClick={() => setTheme("dark")}
+				>
+					<MoonIcon />
+					Dark
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					className="cursor-pointer text-xs"
+					onClick={() => setTheme("system")}
+				>
+					<MonitorIcon />
+					System
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
 };
-
