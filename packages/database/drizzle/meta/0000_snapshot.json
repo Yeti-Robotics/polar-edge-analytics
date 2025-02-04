@@ -1,5 +1,5 @@
 {
-  "id": "031e4766-2edd-442c-b0d4-24f0ed225b3b",
+  "id": "90d22cd9-7efe-4e21-a124-50c8d7b56b76",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -666,7 +666,137 @@
   "sequences": {},
   "roles": {},
   "policies": {},
-  "views": {},
+  "views": {
+    "public.team_stats": {
+      "columns": {
+        "team_number": {
+          "name": "team_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_name": {
+          "name": "team_name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level_1": {
+          "name": "auto_coral_level_1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level_2": {
+          "name": "auto_coral_level_2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level_3": {
+          "name": "auto_coral_level_3",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_coral_level_4": {
+          "name": "auto_coral_level_4",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_algae_processor": {
+          "name": "auto_algae_processor",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_algae_net": {
+          "name": "auto_algae_net",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level_1": {
+          "name": "teleop_coral_level_1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level_2": {
+          "name": "teleop_coral_level_2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level_3": {
+          "name": "teleop_coral_level_3",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_coral_level_4": {
+          "name": "teleop_coral_level_4",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_algae_processor": {
+          "name": "teleop_algae_processor",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_algae_net": {
+          "name": "teleop_algae_net",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_algae_thrown": {
+          "name": "teleop_algae_thrown",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "park_percentage": {
+          "name": "park_percentage",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shallow_percentage": {
+          "name": "shallow_percentage",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deep_percentage": {
+          "name": "deep_percentage",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "initiation_line": {
+          "name": "initiation_line",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "defense_rating": {
+          "name": "defense_rating",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "definition": "\nWITH combinedStats AS (\n    SELECT \n        tf.team_match_id, \n        AVG(tf.auto_coral_level1) AS auto_coral_level_1, \n        AVG(tf.auto_coral_level2) AS auto_coral_level_2, \n        AVG(tf.auto_coral_level3) AS auto_coral_level_3, \n        AVG(tf.auto_coral_level4) AS auto_coral_level_4,\n        AVG(tf.auto_algae_processed) AS auto_algae_processor, \n        AVG(tf.auto_algae_netted) AS auto_algae_net,\n        AVG(tf.teleop_coral_level1) AS teleop_coral_level_1, \n        AVG(tf.teleop_coral_level2) AS teleop_coral_level_2, \n        AVG(tf.teleop_coral_level3) AS teleop_coral_level_3, \n        AVG(tf.teleop_coral_level4) AS teleop_coral_level_4,\n        AVG(tf.teleop_algae_processed) AS teleop_algae_processor, \n        AVG(tf.teleop_algae_netted) AS teleop_algae_net,\n        AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, \n        AVG(tf.defense_rating) AS defense_rating,\n        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,\n        CAST(SUM(CASE WHEN tf.cage_climb = 'park' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,\n        CAST(SUM(CASE WHEN tf.cage_climb = 'deep' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,\n        CAST(SUM(CASE WHEN tf.cage_climb = 'shallow' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage\n    FROM stand_form tf\n    GROUP BY tf.team_match_id\n),\nteamMatches AS (\n    SELECT \n        tm.team_number, \n        t.team_name, \n        tm.team_match_id\n    FROM team_match tm \n    JOIN team t ON tm.team_number = t.team_number\n)\nSELECT\n    cs.auto_coral_level_1,\n    cs.auto_coral_level_2,\n    cs.auto_coral_level_3,\n    cs.auto_coral_level_4,\n    cs.auto_algae_processor,\n    cs.auto_algae_net,\n    cs.teleop_coral_level_1,\n    cs.teleop_coral_level_2,\n    cs.teleop_coral_level_3,\n    cs.teleop_coral_level_4,\n    cs.teleop_algae_processor,\n    cs.teleop_algae_net,\n    cs.teleop_algae_thrown,\n    cs.defense_rating,\n    cs.initiation_line,\n    cs.park_percentage,\n    cs.deep_percentage,\n    cs.shallow_percentage,\n    tm.team_number,\n    tm.team_name\nFROM\n    combinedStats cs\nJOIN\n    teamMatches tm ON cs.team_match_id = tm.team_match_id\nORDER BY\n    tm.team_number\n",
+      "name": "team_stats",
+      "schema": "public",
+      "isExisting": false,
+      "materialized": false
+    }
+  },
   "_meta": {
     "columns": {},
     "schemas": {},

@@ -1,4 +1,10 @@
 services:
+  analytics-server:
+    build:
+      context: ./apps/analytics-server
+    ports:
+      - 8000:8000
+  
   postgres:
     image: postgres:17.0
     container_name: polar_postgres
@@ -9,7 +15,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   postgres-data:

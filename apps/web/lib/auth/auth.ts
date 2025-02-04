@@ -54,7 +54,7 @@ export const providers = {
 const authenticationProvider = NextAuth({
 	providers: [discordProvider],
 	pages: {
-		signIn: "/auth/signin",
+		signIn: "/",
 		error: "/error", // Error code passed in query string as ?error=
 		newUser: "/scout", // If set, new users will be directed here on first sign in
 	},

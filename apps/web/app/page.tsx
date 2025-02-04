@@ -1,10 +1,10 @@
 import { signIn } from "@/lib/auth";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Snowflake } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
+
 	return (
 		<div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#7FB3D5] via-[#5499C7] to-primary">
 			{/* Frost overlay */}
@@ -12,22 +12,16 @@ export default function Home() {
 
 			{/* Navigation */}
 			<nav className="absolute top-0 w-full p-6 z-10">
-				<div className="container mx-auto flex justify-between items-center">
-					<Link
-						href="/"
-						className="text-white transform hover:scale-110 transition-transform"
-					>
-						<Snowflake className="w-8 h-8 drop-shadow-glow" />
-					</Link>
+				<div className="container mx-auto flex justify-end items-center">
 					<div className="flex items-center space-x-8">
 						<div className="space-x-8 text-white/90">
-							{["Data"].map((item) => (
+							{[{ name: "Data", href: "/analysis" }].map((item) => (
 								<Link
-									key={item}
-									href={`/${item.toLowerCase()}`}
+									key={item.name}
+									href={item.href}
 									className="relative hover:text-white transition-colors group"
 								>
-									{item}
+									{item.name}
 									<span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
 								</Link>
 							))}
@@ -35,7 +29,7 @@ export default function Home() {
 						<form
 							action={async () => {
 								"use server";
-								await signIn("discord");
+								await signIn("discord", { redirectTo: "/scout" });
 							}}
 						>
 							<Button
@@ -75,12 +69,10 @@ export default function Home() {
 					</p>
 
 					<div className="flex flex-col sm:flex-row justify-center gap-4">
-						<form
-							action={async () => {
-								"use server";
-								await signIn("discord");
-							}}
-						>
+						<form action={async () => {
+							"use server";
+							await signIn("discord", { redirectTo: "/scout" });
+						}}>
 							<Button
 								type="submit"
 								variant="ghost"
@@ -93,5 +85,6 @@ export default function Home() {
 				</div>
 			</main>
 		</div>
-	);
+	)
 }
+
