@@ -22,17 +22,36 @@ import {
 } from "@repo/ui/components/sidebar";
 import { NotepadText, Grid2X2, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
-// Menu items.
+import { UserRole } from "@repo/database/schema";
+import React from "react";
+import { ActiveLink } from "./ActiveLink";
+import { authorized } from "@/lib/auth/utils";
+
 const navbarData = [
 	{
 		title: "Scout",
+		role: UserRole.USER,
 		items: [{ name: "Stand Form", icon: NotepadText, href: "/scout" }],
 	},
 	{
 		title: "Analysis",
 		items: [{ name: "Team Data Table", icon: Grid2X2, href: "/analysis" }],
 	},
-] as const;
+];
+
+
+type RoleObject = {
+	role?: UserRole;
+} & Record<string, unknown>;
+
+type RoleMapFunction<T extends RoleObject> = (value: T, index: number, array: T[]) => React.ReactNode;
+
+const roleMap = <T extends RoleObject,>(navData: T[], userRole: UserRole | undefined, mapFn: RoleMapFunction<T>) => {
+	return navData.map((o, i, a) => !o.role || authorized({
+		requiredRole: o.role, 
+		currentUserRole: userRole, 
+	}) ? mapFn(o, i, a) : null);
+}
 
 export async function AppSidebar() {
 	const session = await auth();
@@ -52,7 +71,7 @@ export async function AppSidebar() {
 
 	return (
 		<Sidebar>
-			<SidebarHeader className="p-2">
+			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild>
@@ -70,18 +89,18 @@ export async function AppSidebar() {
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				{navbarData.map((nav) => (
+				{roleMap(navbarData, session?.user.role, (nav) => (
 					<SidebarGroup key={nav.title}>
 						<SidebarGroupLabel>{nav.title}</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
-								{nav.items.map((item) => (
+								{roleMap(nav.items, session?.user.role, (item) => (
 									<SidebarMenuItem key={item.name}>
 										<SidebarMenuButton asChild>
-											<Link href={item.href}>
-												<item.icon />
+											<ActiveLink href={item.href}>
+												<item.icon className="size-4" />
 												<span>{item.name}</span>
-											</Link>
+											</ActiveLink>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								))}
