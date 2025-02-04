@@ -24,6 +24,7 @@ import { NotepadText, Grid2X2, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
 import { UserRole } from "@repo/database/schema";
 import React from "react";
+import { ActiveLink } from "./ActiveLink";
 
 const navbarData = [
 	{
@@ -66,7 +67,7 @@ export async function AppSidebar() {
 
 	return (
 		<Sidebar>
-			<SidebarHeader className="p-2">
+			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild>
@@ -92,10 +93,10 @@ export async function AppSidebar() {
 								{roleMap(nav.items, session?.user.role, (item) => (
 									<SidebarMenuItem key={item.name}>
 										<SidebarMenuButton asChild>
-											<Link href={item.href}>
-												<item.icon />
+											<ActiveLink href={item.href}>
+												<item.icon className="size-4" />
 												<span>{item.name}</span>
-											</Link>
+											</ActiveLink>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								))}

@@ -2,7 +2,6 @@ import { AppSidebarTrigger, AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/app-sidebar/ThemeToggle";
 import { ThemeProvider } from "@/components/theme";
 import { auth } from "@/lib/auth";
-import { Button } from "@repo/ui/components/button";
 import { SidebarProvider } from "@repo/ui/components/sidebar";
 import { SessionProvider } from "next-auth/react";
 
