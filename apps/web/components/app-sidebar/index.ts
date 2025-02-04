@@ -1,2 +1,2 @@
 export * from './AppSidebar'
-export * from './MenuTrigger'
+export * from "./AppSidebarTrigger"

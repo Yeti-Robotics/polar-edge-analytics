@@ -6,8 +6,8 @@ export default async function TeamData() {
     const teamDataResult = await scoutedTeamData();
 
     return (
-        <div>
-            <h1 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl">
+        <div className="flex flex-col">
+            <h1 className="text-2xl md:text-3xl font-semibold leading-none tracking-tight pl-5 md:pl-0">
                 Team Data
             </h1>
             <div className="mx-1 my-4">
@@ -17,9 +17,11 @@ export default async function TeamData() {
                         ? "No team data yet"
                         : ""}
             </div>
-            {teamDataResult.success && (
-                <TeamDataTable teamData={teamDataResult.value} />
-            )}
+            <div>
+                {teamDataResult.success && (
+                    <TeamDataTable teamData={teamDataResult.value} />
+                )}
+            </div>
         </div>
     )
 }

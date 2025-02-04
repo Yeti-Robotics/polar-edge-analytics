@@ -224,12 +224,12 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
             sorting,
             columnVisibility,
             columnFilters,
-        },
+        }
     });
 
     return (
         <div className="flex flex-col space-y-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center space-x-4">
                 <div>
                     <Input
                         placeholder="Find team number..."
@@ -245,7 +245,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
                         }
                     />
                 </div>
-                <div>
+                <div className="pr-4 md:pr-0">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="ml-auto">
@@ -278,7 +278,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
                     </DropdownMenu>
                 </div>
             </div>
-            <div className="w-[calc(100vw-96px)]">
+            <div className="overflow-x-auto max-w-full border-2">
                 <DataTable table={table} />
             </div>
         </div>

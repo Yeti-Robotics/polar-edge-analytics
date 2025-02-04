@@ -2,8 +2,6 @@ import { DevTools } from "@/components/devtools/DevTools";
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import "@repo/ui/globals.css";
-import { SidebarProvider } from "@repo/ui/components/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
 
 const libreFranklin = Libre_Franklin({
 	subsets: ["latin"],
@@ -20,17 +18,15 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+
+	// note that suppressHydrationWarning must be added b/c of next-themes
+	// see: https://github.com/pacocoursey/next-themes
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${libreFranklin.variable} bg-background font-sans dark:prose-invert min-h-screen`}
-				>
-				<SidebarProvider>
-					<AppSidebar />
-					<main className="w-full">
-						{children}
-					</main>
-				</SidebarProvider>
+			>
+				{children}
 				<DevTools />
 			</body>
 		</html>

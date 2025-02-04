@@ -72,6 +72,7 @@ export function StandForm({
                     defense: {
                         Component: (props) => {
                             return (
+                                /* eslint-disable react/prop-types */
                                 <Select
                                     value={props.value}
                                     onValueChange={props.onChange}
@@ -142,9 +143,9 @@ export function StandForm({
                     teleop_algae_processed: 0,
                     teleop_algae_netted: 0,
                     teleop_algae_thrown: 0,
-                    cage_climb: "", 
-                    defense: "", 
-                    comments: "", 
+                    cage_climb: "",
+                    defense: "",
+                    comments: "",
                 } as DefaultValues<unknown>
                 }
             />
