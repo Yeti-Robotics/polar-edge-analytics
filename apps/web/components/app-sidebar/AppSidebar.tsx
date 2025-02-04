@@ -25,6 +25,7 @@ import Link from "next/link";
 import { UserRole } from "@repo/database/schema";
 import React from "react";
 import { ActiveLink } from "./ActiveLink";
+import { authorized } from "@/lib/auth/utils";
 
 const navbarData = [
 	{
@@ -45,8 +46,11 @@ type RoleObject = {
 
 type RoleMapFunction<T extends RoleObject> = (value: T, index: number, array: T[]) => React.ReactNode;
 
-const roleMap = <T extends RoleObject,>(navData: T[], userRole: UserRole | null | undefined, mapFn: RoleMapFunction<T>) => {
-	return navData.map((o, i, a) => !o.role || o.role === userRole ? mapFn(o, i, a) : null);
+const roleMap = <T extends RoleObject,>(navData: T[], userRole: UserRole | undefined, mapFn: RoleMapFunction<T>) => {
+	return navData.map((o, i, a) => !o.role || authorized({
+		requiredRole: o.role, 
+		currentUserRole: userRole, 
+	}) ? mapFn(o, i, a) : null);
 }
 
 export async function AppSidebar() {
