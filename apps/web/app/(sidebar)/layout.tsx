@@ -21,7 +21,7 @@ export default async function SidebarLayout({
 			disableTransitionOnChange
 		>
 			<SessionProvider session={session}>
-				<SidebarProvider defaultOpen={false}>
+				<SidebarProvider>
 					<AppSidebar />
 					<main className="w-full">
 						<nav className="flex items-center z-40 sticky top-0 bg-background justify-between border-b mb-2 px-4 py-2">
