@@ -1,7 +1,10 @@
 import { getInitials } from "./utils";
 import Logo from "../logo";
+import { ActiveLink } from "./ActiveLink";
 
 import { auth, signIn, signOut } from "@/lib/auth";
+import { authorized } from "@/lib/auth/utils";
+import { UserRole } from "@repo/database/schema";
 import {
 	Avatar,
 	AvatarFallback,
@@ -22,10 +25,7 @@ import {
 } from "@repo/ui/components/sidebar";
 import { NotepadText, Grid2X2, LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
-import { UserRole } from "@repo/database/schema";
 import React from "react";
-import { ActiveLink } from "./ActiveLink";
-import { authorized } from "@/lib/auth/utils";
 
 const navbarData = [
 	{
@@ -39,19 +39,31 @@ const navbarData = [
 	},
 ];
 
-
 type RoleObject = {
 	role?: UserRole;
 } & Record<string, unknown>;
 
-type RoleMapFunction<T extends RoleObject> = (value: T, index: number, array: T[]) => React.ReactNode;
+type RoleMapFunction<T extends RoleObject> = (
+	value: T,
+	index: number,
+	array: T[]
+) => React.ReactNode;
 
-const roleMap = <T extends RoleObject,>(navData: T[], userRole: UserRole | undefined, mapFn: RoleMapFunction<T>) => {
-	return navData.map((o, i, a) => !o.role || authorized({
-		requiredRole: o.role, 
-		currentUserRole: userRole, 
-	}) ? mapFn(o, i, a) : null);
-}
+const roleMap = <T extends RoleObject>(
+	navData: T[],
+	userRole: UserRole | undefined,
+	mapFn: RoleMapFunction<T>
+) => {
+	return navData.map((o, i, a) =>
+		!o.role ||
+		authorized({
+			requiredRole: o.role,
+			currentUserRole: userRole,
+		})
+			? mapFn(o, i, a)
+			: null
+	);
+};
 
 export async function AppSidebar() {
 	const session = await auth();
@@ -94,16 +106,20 @@ export async function AppSidebar() {
 						<SidebarGroupLabel>{nav.title}</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
-								{roleMap(nav.items, session?.user.role, (item) => (
-									<SidebarMenuItem key={item.name}>
-										<SidebarMenuButton asChild>
-											<ActiveLink href={item.href}>
-												<item.icon className="size-4" />
-												<span>{item.name}</span>
-											</ActiveLink>
-										</SidebarMenuButton>
-									</SidebarMenuItem>
-								))}
+								{roleMap(
+									nav.items,
+									session?.user.role,
+									(item) => (
+										<SidebarMenuItem key={item.name}>
+											<SidebarMenuButton asChild>
+												<ActiveLink href={item.href}>
+													<item.icon className="size-4" />
+													<span>{item.name}</span>
+												</ActiveLink>
+											</SidebarMenuButton>
+										</SidebarMenuItem>
+									)
+								)}
 							</SidebarMenu>
 						</SidebarGroupContent>
 					</SidebarGroup>
