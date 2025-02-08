@@ -1,15 +1,30 @@
 "use client";
 
+import { cn } from "@repo/ui/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+type ActiveLinkProps = React.ComponentProps<typeof Link>;
 
-export const ActiveLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
-    const pathname = usePathname();
-    
-    return (
-        <Link className={`${pathname === href ? "bg-accent" : ""} flex items-center space-x-2 p-1.5 rounded-md`} href={href}>
-            {children}
-        </Link>
-    );
+export const ActiveLink = ({
+	href,
+	className,
+	children,
+	...props
+}: ActiveLinkProps) => {
+	const pathname = usePathname();
+
+	return (
+		<Link
+			className={cn(
+				"flex items-center space-x-2 p-1.5 rounded-md",
+				pathname === href ? "bg-accent" : "",
+				className
+			)}
+			href={href}
+			{...props}
+		>
+			{children}
+		</Link>
+	);
 };

@@ -1,8 +1,9 @@
 import { CounterInput } from "./CounterInput";
 import { TabsContentForceMount } from "./ForceMountTab";
+import { deleteLocalSave, getLocalSave, setLocalSave } from "./localStorage";
+import { prettyPrint } from "./utils";
 
 import { ServerActionResult } from "@/lib/actions/actions-utils";
-import { prettyPrint } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -24,6 +25,7 @@ import {
 } from "@repo/ui/components/form";
 import { ClickablePopover } from "@repo/ui/components/popover";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
+import { ToastAction } from "@repo/ui/components/toast";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { Info } from "lucide-react";
 import React, { ComponentProps, useEffect, useState } from "react";
@@ -46,6 +48,7 @@ import {
 	ZodOptional,
 	ZodType,
 } from "zod";
+
 
 export type ZodSchema = AnyZodObject;
 
@@ -269,6 +272,41 @@ export function AutoForm<T extends ZodSchema>({
 	const { toast } = useToast();
 
 	useEffect(() => {
+		const existingLocalSave = getLocalSave(props.title);
+
+		if (existingLocalSave) {
+			const loadSave = (saveData: z.infer<T>) => {
+				form.reset(saveData);
+
+				setTimeout(() => {
+					toast({
+						title: "Local save loaded."
+					});
+				})
+			}
+
+			setTimeout(() => {
+				toast({
+					title: "Saved form",
+					description: "Load local save?",
+					action: (
+						<ToastAction onClick={() => loadSave(existingLocalSave)} altText="Load local save">
+							Load
+						</ToastAction>
+					)
+				});
+			});
+		}
+
+
+		const { unsubscribe } = form.watch((watched) => {
+			setLocalSave(props.title, watched)
+		});
+
+		return () => unsubscribe();
+	}, []);
+
+	useEffect(() => {
 		const formMsg = form.formState.errors.root?.serverError
 			? `Error: ${form.formState.errors.root?.serverError.message}`
 			: form.formState.isSubmitSuccessful &&
@@ -294,7 +332,8 @@ export function AutoForm<T extends ZodSchema>({
 			const result = await onSubmit(formData);
 
 			if (result.success) {
-				form.reset();
+				form.reset(defaultValues);
+				deleteLocalSave(props.title);
 			} else {
 				if (
 					result.error.toLowerCase().startsWith("invalid input") &&
@@ -371,17 +410,6 @@ export function AutoForm<T extends ZodSchema>({
 						>
 							Submit
 						</Button>
-						{/* <div
-							className={
-								form.formState.errors.root?.serverError
-									? "text-red-500"
-									: form.formState.isSubmitSuccessful
-										? "text-green-500"
-										: "hidden"
-							}
-						>
-							{}
-						</div> */}
 					</CardFooter>
 				</Card>
 			</form>
