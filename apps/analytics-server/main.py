@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.api.spr.router import router as spr_router
-from app.api.tba_ingest.router import router as tba_ingest_router
+from .app.api.spr.router import router as spr_router
+from .app.api.tba_ingest.router import router as tba_ingest_router
 
 app = FastAPI()
 
