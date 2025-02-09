@@ -1,5 +1,6 @@
 CREATE TYPE "public"."alliance" AS ENUM('red', 'blue');--> statement-breakpoint
-CREATE TYPE "public"."cage" AS ENUM('shallow', 'deep', 'park');--> statement-breakpoint
+CREATE TYPE "public"."auto_start_location" AS ENUM('Left', 'Center', 'Right');--> statement-breakpoint
+CREATE TYPE "public"."cage" AS ENUM('none', 'shallow', 'deep', 'park');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'guest', 'banished');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account" (
 	"userId" uuid NOT NULL,
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS "stand_form" (
 	"stand_form_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"team_match_id" uuid,
 	"user_id" uuid NOT NULL,
+	"auto_start_location" "auto_start_location" NOT NULL,
 	"left_black_line" boolean NOT NULL,
 	"auto_coral_level1" integer NOT NULL,
 	"auto_coral_level2" integer NOT NULL,
@@ -51,9 +53,9 @@ CREATE TABLE IF NOT EXISTS "stand_form" (
 	"teleop_coral_level4" integer NOT NULL,
 	"teleop_algae_processed" integer NOT NULL,
 	"teleop_algae_netted" integer NOT NULL,
-	"teleop_algae_thrown" integer NOT NULL,
 	"cage_climb" "cage" NOT NULL,
 	"defense_rating" integer NOT NULL,
+	"did_breakdown" boolean NOT NULL,
 	"comments" text NOT NULL
 );
 --> statement-breakpoint
@@ -153,7 +155,6 @@ WITH combinedStats AS (
         AVG(tf.teleop_coral_level4) AS teleop_coral_level_4,
         AVG(tf.teleop_algae_processed) AS teleop_algae_processor, 
         AVG(tf.teleop_algae_netted) AS teleop_algae_net,
-        AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, 
         AVG(tf.defense_rating) AS defense_rating,
         CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,
         CAST(SUM(CASE WHEN tf.cage_climb = 'park' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,
@@ -183,7 +184,6 @@ SELECT
     cs.teleop_coral_level_4,
     cs.teleop_algae_processor,
     cs.teleop_algae_net,
-    cs.teleop_algae_thrown,
     cs.defense_rating,
     cs.initiation_line,
     cs.park_percentage,

@@ -1,4 +1,4 @@
-import { Cage } from "@repo/database/schema";
+import { AutoStartLocation, Cage } from "@repo/database/schema";
 import { z } from "zod";
 
 const zCageEnum = z.nativeEnum(Cage);
@@ -16,6 +16,9 @@ export const standFormSchema = z.object({
 		.positive({ message: "Match number must be greater than zero" })
 		.max(200, { message: "Match number is too large" })
 		.describe("Match number"),
+	auto_start_location: z
+		.nativeEnum(AutoStartLocation)
+		.describe("From the driver's perspective"),
 	auto_initiation_line: z.coerce
 		.boolean()
 		.nullish()
@@ -94,12 +97,6 @@ export const standFormSchema = z.object({
 		.nonnegative({ message: "Teleop Algae Netted must be positive" })
 		.default(0)
 		.describe("Algae netted by a robot"),
-	teleop_algae_thrown: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Teleop Algae Thrown must be positive" })
-		.default(0)
-		.describe("Algae thrown into net by human player"),
 	cage_climb: zCageEnum.describe("What does the robot do in the cage area?"),
 	defense: z.coerce
 		.number({ message: "Defense rating must be a number" })
@@ -107,11 +104,11 @@ export const standFormSchema = z.object({
 		.min(1, { message: "Defense rating must be valid" })
 		.max(5)
 		.describe("Defense rating"),
+	did_breakdown: z.boolean().describe("Did the robot breakdown?"),
 	comments: z
 		.string({ message: "Comments must be at least 32 characters" })
 		.min(32, { message: "Comments must be at least 32 characters" })
 		.describe("Comments about robot performance"),
 });
-
 
 export type StandFormData = z.infer<typeof standFormSchema>;
