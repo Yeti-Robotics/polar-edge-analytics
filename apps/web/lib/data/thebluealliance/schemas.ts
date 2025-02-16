@@ -8,19 +8,23 @@ const EndGameState2025 = z.enum([
 	Cage.DEEP,
 ]);
 
+function getReefBreakdown2025RowCount(row: ReefBreakdown2025Row) {
+	return Object.values(row).filter(Boolean).length;
+}
+
 const ReefBreakdown2025Row = z.object({
-	nodeA: z.number(),
-	nodeB: z.number(),
-	nodeC: z.number(),
-	nodeD: z.number(),
-	nodeE: z.number(),
-	nodeF: z.number(),
-	nodeG: z.number(),
-	nodeH: z.number(),
-	nodeI: z.number(),
-	nodeJ: z.number(),
-	nodeK: z.number(),
-	nodeL: z.number(),
+	nodeA: z.boolean(),
+	nodeB: z.boolean(),
+	nodeC: z.boolean(),
+	nodeD: z.boolean(),
+	nodeE: z.boolean(),
+	nodeF: z.boolean(),
+	nodeG: z.boolean(),
+	nodeH: z.boolean(),
+	nodeI: z.boolean(),
+	nodeJ: z.boolean(),
+	nodeK: z.boolean(),
+	nodeL: z.boolean(),
 });
 
 const ReefBreakdown2025 = z.object({
@@ -41,7 +45,12 @@ const MatchScoreBreakdown2025Alliance = z.object({
 	autoLineRobot3: z.enum(["No", "Yes"]).transform((val) => val === "Yes"),
 	autoMobilityPoints: z.number(),
 	autoPoints: z.number(),
-	autoReef: ReefBreakdown2025,
+	autoReef: ReefBreakdown2025.transform((val) => ({
+		topRow: getReefBreakdown2025RowCount(val.topRow),
+		midRow: getReefBreakdown2025RowCount(val.midRow),
+		botRow: getReefBreakdown2025RowCount(val.botRow),
+		trough: val.trough,
+	})),
 	bargeBonusAchieved: z.boolean(),
 	coopertitionCriteriaMet: z.boolean(),
 	coralBonusAchieved: z.boolean(),
@@ -61,7 +70,12 @@ const MatchScoreBreakdown2025Alliance = z.object({
 	teleopCoralPoints: z.number(),
 	teleopPoints: z.number(),
 	totalPoints: z.number(),
-	teleopReef: ReefBreakdown2025,
+	teleopReef: ReefBreakdown2025.transform((val) => ({
+		topRow: getReefBreakdown2025RowCount(val.topRow),
+		midRow: getReefBreakdown2025RowCount(val.midRow),
+		botRow: getReefBreakdown2025RowCount(val.botRow),
+		trough: val.trough,
+	})),
 	wallAlgaeCount: z.number(),
 });
 

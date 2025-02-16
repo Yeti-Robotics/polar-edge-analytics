@@ -41,6 +41,10 @@ function parseMatchScoreBreakdown(
 				autoLineRobot3: allianceBreakdown.autoLineRobot3,
 				autoMobilityPoints: allianceBreakdown.autoMobilityPoints,
 				autoPoints: allianceBreakdown.autoPoints,
+				autoReefTopRow: allianceBreakdown.autoReef.topRow,
+				autoReefMidRow: allianceBreakdown.autoReef.midRow,
+				autoReefBotRow: allianceBreakdown.autoReef.botRow,
+				autoReefTrough: allianceBreakdown.autoReef.trough,
 				bargeBonusAchieved: allianceBreakdown.bargeBonusAchieved,
 				coopertitionCriteriaMet:
 					allianceBreakdown.coopertitionCriteriaMet,
@@ -60,6 +64,10 @@ function parseMatchScoreBreakdown(
 				teleopCoralCount: allianceBreakdown.teleopCoralCount,
 				teleopCoralPoints: allianceBreakdown.teleopCoralPoints,
 				teleopPoints: allianceBreakdown.teleopPoints,
+				teleopReefTopRow: allianceBreakdown.teleopReef.topRow,
+				teleopReefMidRow: allianceBreakdown.teleopReef.midRow,
+				teleopReefBotRow: allianceBreakdown.teleopReef.botRow,
+				teleopReefTrough: allianceBreakdown.teleopReef.trough,
 				totalPoints: allianceBreakdown.totalPoints,
 				wallAlgaeCount: allianceBreakdown.wallAlgaeCount,
 			};

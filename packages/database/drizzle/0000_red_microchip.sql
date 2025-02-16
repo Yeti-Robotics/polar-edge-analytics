@@ -46,6 +46,10 @@ CREATE TABLE IF NOT EXISTS "match_score_breakdown" (
 	"auto_line_robot3" boolean NOT NULL,
 	"auto_mobility_points" integer NOT NULL,
 	"auto_points" integer NOT NULL,
+	"auto_reef_top_row" integer NOT NULL,
+	"auto_reef_mid_row" integer NOT NULL,
+	"auto_reef_bot_row" integer NOT NULL,
+	"auto_reef_trough" integer NOT NULL,
 	"barge_bonus_achieved" boolean NOT NULL,
 	"coopertition_criteria_met" boolean NOT NULL,
 	"coral_bonus_achieved" boolean NOT NULL,
@@ -64,8 +68,13 @@ CREATE TABLE IF NOT EXISTS "match_score_breakdown" (
 	"teleop_coral_count" integer NOT NULL,
 	"teleop_coral_points" integer NOT NULL,
 	"teleop_points" integer NOT NULL,
+	"teleop_reef_top_row" integer NOT NULL,
+	"teleop_reef_mid_row" integer NOT NULL,
+	"teleop_reef_bot_row" integer NOT NULL,
+	"teleop_reef_trough" integer NOT NULL,
 	"total_points" integer NOT NULL,
-	"wall_algae_count" integer NOT NULL
+	"wall_algae_count" integer NOT NULL,
+	CONSTRAINT "match_score_breakdown_match_id_alliance_pk" PRIMARY KEY("match_id","alliance")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "session" (

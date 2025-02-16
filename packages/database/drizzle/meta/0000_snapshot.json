@@ -1,5 +1,5 @@
 {
-  "id": "0efcf85a-498c-43f4-b091-fd837bda7137",
+  "id": "69b21af4-1dd8-44f6-916d-8b7c1ebc29c1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -285,6 +285,30 @@
           "primaryKey": false,
           "notNull": true
         },
+        "auto_reef_top_row": {
+          "name": "auto_reef_top_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_reef_mid_row": {
+          "name": "auto_reef_mid_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_reef_bot_row": {
+          "name": "auto_reef_bot_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auto_reef_trough": {
+          "name": "auto_reef_trough",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "barge_bonus_achieved": {
           "name": "barge_bonus_achieved",
           "type": "boolean",
@@ -396,6 +420,30 @@
           "primaryKey": false,
           "notNull": true
         },
+        "teleop_reef_top_row": {
+          "name": "teleop_reef_top_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_reef_mid_row": {
+          "name": "teleop_reef_mid_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_reef_bot_row": {
+          "name": "teleop_reef_bot_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "teleop_reef_trough": {
+          "name": "teleop_reef_trough",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "total_points": {
           "name": "total_points",
           "type": "integer",
@@ -425,7 +473,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "match_score_breakdown_match_id_alliance_pk": {
+          "name": "match_score_breakdown_match_id_alliance_pk",
+          "columns": [
+            "match_id",
+            "alliance"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
