@@ -23,7 +23,7 @@ import {
 	SidebarRail,
 	SidebarHeader,
 } from "@repo/ui/components/sidebar";
-import { NotepadText, Grid2X2, LogIn, LogOut } from "lucide-react";
+import { NotepadText, Grid2X2, LogIn, LogOut, Wrench } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -36,6 +36,11 @@ const navbarData = [
 	{
 		title: "Analysis",
 		items: [{ name: "Team Data Table", icon: Grid2X2, href: "/analysis" }],
+	},
+	{
+		title: "Admin",
+		role: UserRole.ADMIN,
+		items: [{ name: "Tools", icon: Wrench, href: "/admin/tools" }],
 	},
 ];
 
