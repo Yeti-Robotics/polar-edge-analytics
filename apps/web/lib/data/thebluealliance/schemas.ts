@@ -9,18 +9,18 @@ const EndGameState2025 = z.enum([
 ]);
 
 const ReefBreakdown2025Row = z.object({
-	NodeA: z.number(),
-	NodeB: z.number(),
-	NodeC: z.number(),
-	NodeD: z.number(),
-	NodeE: z.number(),
-	NodeF: z.number(),
-	NodeG: z.number(),
-	NodeH: z.number(),
-	NodeI: z.number(),
-	NodeJ: z.number(),
-	NodeK: z.number(),
-	NodeL: z.number(),
+	nodeA: z.number(),
+	nodeB: z.number(),
+	nodeC: z.number(),
+	nodeD: z.number(),
+	nodeE: z.number(),
+	nodeF: z.number(),
+	nodeG: z.number(),
+	nodeH: z.number(),
+	nodeI: z.number(),
+	nodeJ: z.number(),
+	nodeK: z.number(),
+	nodeL: z.number(),
 });
 
 const ReefBreakdown2025 = z.object({
