@@ -16,6 +16,8 @@ jobs:
       contents: read
       packages: write
 
+    environment: "production"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,3 +46,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Send POST to deployment webhook
+        run: |
+          curl -X POST \
+            ${{ secrets.DEPLOY_WEBHOOK_URL }} \
+            -H "Content-Type: application/json"/
