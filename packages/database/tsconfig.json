@@ -1,6 +1,7 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "drizzle.config.ts"],
+  
   "exclude": ["node_modules", "dist", "build"],
   "compilerOptions": {
     "baseUrl": ".",

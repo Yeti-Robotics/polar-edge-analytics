@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.17.16",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.27.1",
     "tsx": "^4.19.2"
