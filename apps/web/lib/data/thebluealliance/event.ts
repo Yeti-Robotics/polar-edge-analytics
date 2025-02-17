@@ -2,8 +2,8 @@
 
 import { EventSimple, TeamSimple } from "./schemas";
 
-import { db } from "@repo/database";
-import { team, tournament } from "@repo/database/schema";
+import { db } from "@/lib/database";
+import { team, tournament } from "@/lib/database/schema";
 import { sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";

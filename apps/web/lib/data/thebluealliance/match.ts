@@ -1,13 +1,13 @@
 "use server";
 import { Match, MatchAlliance, MatchScoreBreakdown2025 } from "./schemas";
 
-import { db } from "@repo/database";
+import { db } from "@/lib/database";
 import {
 	Alliance,
 	match,
 	matchScoreBreakdown,
 	teamMatch,
-} from "@repo/database/schema";
+} from "@/lib/database/schema";
 import { sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";

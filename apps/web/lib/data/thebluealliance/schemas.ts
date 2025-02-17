@@ -1,4 +1,4 @@
-import { Alliance, Cage } from "@repo/database/schema";
+import { Alliance, Cage } from "@/lib/database/schema";
 import { z } from "zod";
 
 const EndGameState2025 = z.enum([
