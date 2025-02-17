@@ -45,6 +45,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@storybook/addon-essentials':
         specifier: ^8.4.7
         version: 8.5.1(@types/react@18.3.18)(storybook@8.5.1(prettier@3.4.2))
