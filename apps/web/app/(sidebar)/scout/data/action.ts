@@ -8,14 +8,14 @@ import {
 } from "@/lib/actions/actions-utils";
 import { auth } from "@/lib/auth";
 import { AuthErrors, authorized } from "@/lib/auth/utils";
-import { db } from "@repo/database";
+import { db } from "@/lib/database";
 import {
 	match,
 	standForm,
 	teamMatch,
 	tournament,
 	UserRole,
-} from "@repo/database/schema";
+} from "@/lib/database/schema";
 import { eq, and } from "drizzle-orm";
 
 export const submitStandForm = createServerAction(

@@ -1,7 +1,6 @@
 import { AuthErrors, getGuildNickname, getImgFromProfile } from "./utils";
 
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@repo/database";
+import { db } from "@/lib/database";
 import {
 	accounts,
 	authenticators,
@@ -9,7 +8,8 @@ import {
 	UserRole,
 	users,
 	verificationTokens,
-} from "@repo/database/schema";
+} from "@/lib/database/schema";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { eq } from "drizzle-orm";
 import NextAuth, { AuthError } from "next-auth";
 import { Adapter } from "next-auth/adapters";

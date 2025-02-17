@@ -1,4 +1,4 @@
-import { Cage } from "@repo/database/schema";
+import { Cage } from "@/lib/database/schema";
 import { z } from "zod";
 
 const zCageEnum = z.nativeEnum(Cage);
@@ -112,6 +112,5 @@ export const standFormSchema = z.object({
 		.min(32, { message: "Comments must be at least 32 characters" })
 		.describe("Comments about robot performance"),
 });
-
 
 export type StandFormData = z.infer<typeof standFormSchema>;

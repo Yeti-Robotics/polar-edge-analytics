@@ -1,5 +1,5 @@
 import "next-auth";
-import { UserRole } from "@repo/database/schema";
+import { UserRole } from "@/lib/database/schema";
 
 declare module "next-auth" {
 	interface User {

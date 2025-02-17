@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@repo/database";
-import { tournament } from "@repo/database/schema";
+import { db } from "@/lib/database";
+import { tournament } from "@/lib/database/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";

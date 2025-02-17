@@ -4,7 +4,7 @@ import { ActiveLink } from "./ActiveLink";
 
 import { auth, signIn, signOut } from "@/lib/auth";
 import { authorized } from "@/lib/auth/utils";
-import { UserRole } from "@repo/database/schema";
+import { UserRole } from "@/lib/database/schema";
 import {
 	Avatar,
 	AvatarFallback,

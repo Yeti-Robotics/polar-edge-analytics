@@ -23,9 +23,6 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN corepack enable
 RUN pnpm install --frozen-lockfile
-# Copy migrations to the image
-COPY --from=builder /app/out/full/packages/database/drizzle ./packages/database/drizzle
-COPY --from=builder /app/out/full/packages/database/src/schema.ts ./packages/database/src/schema.ts
 
 # Build the project
 COPY --from=builder /app/out/full/ .
@@ -41,7 +38,7 @@ USER nextjs
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /app/packages/database ./packages/database
+# COPY --from=installer --chown=nextjs:nodejs /app/packages/database ./packages/database
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 # COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
