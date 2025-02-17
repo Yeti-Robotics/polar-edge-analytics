@@ -1,3 +1,6 @@
+import { enumToPgEnum } from "./utils";
+
+import { sql } from "drizzle-orm";
 import {
   boolean,
   timestamp,
@@ -18,8 +21,6 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
-import { enumToPgEnum } from "./utils";
-import { sql } from "drizzle-orm";
 
 export enum UserRole {
   USER = "user",
