@@ -50,5 +50,4 @@ jobs:
       - name: Send POST to deployment webhook
         run: |
           curl -X POST \
-            ${{ secrets.DEPLOY_WEBHOOK_URL }} \
-            -H "Content-Type: application/json"/
+            ${{ secrets.DEPLOY_WEBHOOK_URL }}
