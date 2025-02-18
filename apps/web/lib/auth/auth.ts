@@ -99,11 +99,20 @@ const authenticationProvider = NextAuth({
 				if (!guildNickname)
 					throw new AuthError(AuthErrors.NO_GUILD_NICKNAME);
 
+				if (
+					process.env.ADMIN_USERS?.split(",").includes(
+						profile.username as string
+					)
+				) {
+					profile.role = UserRole.ADMIN;
+				}
+
 				try {
 					await db
 						.update(users)
 						.set({
 							guildNickname: profile?.guildNickname,
+							role: profile?.role ?? UserRole.USER,
 							image: profile?.image_url as string,
 							emailVerified: profile?.verified
 								? new Date()
@@ -141,6 +150,7 @@ declare module "next-auth" {
 	}
 
 	interface Profile {
+		role: UserRole;
 		guildNickname: string;
 		image_url: string;
 	}
