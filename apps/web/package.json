@@ -15,8 +15,7 @@
     "@auth/drizzle-adapter": "^1.7.2",
     "@hookform/resolvers": "^3.9.1",
     "@repo/ui": "workspace:*",
-    "drizzle-kit": "^0.27.1",
-    "drizzle-orm": "^0.36.0",
+    "drizzle-orm": "^0.39.3",
     "lucide-react": "^0.471.0",
     "next": "15.1.4",
     "next-auth": "^5.0.0-beta.25",
@@ -36,6 +35,7 @@
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.30.4",
     "eslint": "^9.15.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^4.0.0"
