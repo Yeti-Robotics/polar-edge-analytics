@@ -278,7 +278,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
                     </DropdownMenu>
                 </div>
             </div>
-            <div className="overflow-x-auto max-w-full border-2">
+            <div className="border-2">
                 <DataTable table={table} />
             </div>
         </div>
