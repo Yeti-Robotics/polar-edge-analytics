@@ -92,8 +92,8 @@ const MatchAlliance = z.object({
 });
 
 const MatchVideo = z.object({
-	key: z.enum(["youtube", "tba"]),
-	type: z.string(),
+	key: z.string(),
+	type: z.enum(["youtube", "tba"]),
 });
 
 const Match = z.object({
