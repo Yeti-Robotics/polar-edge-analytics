@@ -2,7 +2,7 @@ import { scoutedTeamData } from "./actions/team-data";
 import { getAllTournaments } from "./actions/tournament-data";
 import { TeamDataTable } from "./components/TeamDataTable";
 
-export default async function TeamData({ searchParams }: { searchParams: { id: string } }) {
+export default async function TeamData({ searchParams }: { searchParams: Promise<{ id: string }> }) {
 	const tournamentId = (await searchParams).id;
 	const teamDataResult = await scoutedTeamData(tournamentId);
 	const tournamentData = await getAllTournaments();
