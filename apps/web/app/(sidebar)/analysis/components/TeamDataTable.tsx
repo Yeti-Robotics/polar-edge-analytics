@@ -28,6 +28,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 
 function NumberDisplay({ value }: { value: number }) {
@@ -109,7 +110,11 @@ const columns: ColumnDef<TeamData>[] = [
         enableHiding: false,
         columns: [
             columnHelper.accessor("team_number", {
-                cell: (info) => info.getValue(),
+                cell: (info) => (
+                    <Link className="text-blue-400 decoration-dotted underline underline-offset-2" href={`/team/${info.getValue()}`}>
+                        {info.getValue()}
+                    </Link>
+                ),
                 header: ({ column }) => (
                     <SortableHeader label={"Team Number"} column={column} />
                 ),
@@ -189,21 +194,7 @@ const columns: ColumnDef<TeamData>[] = [
                     <SortableHeader label={"Defense"} column={column} />
                 ),
                 footer: (info) => info.column.id,
-            }),
-            // columnHelper.display({
-            // 	id: "external",
-            // 	header: "Notes",
-            // 	footer: (props) => props.column.id,
-            // 	cell: () => (
-            // 		<Link
-            // 			target="_blank"
-            // 			href="/"
-            // 			className="flex items-center justify-center"
-            // 		>
-            // 			<ExternalLink className="size-5 stroke-foreground" />
-            // 		</Link>
-            // 	),
-            // }),
+            })
         ],
     }),
 ];
