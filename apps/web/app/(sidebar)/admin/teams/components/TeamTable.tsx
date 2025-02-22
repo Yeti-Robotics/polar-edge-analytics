@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@repo/ui/components/button";
 import {
 	Table,
 	TableBody,
@@ -8,14 +9,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
-import { Button } from "@repo/ui/components/button";
 import {
 	ChevronDown,
 	ChevronLeft,
 	ChevronRight,
 	ChevronUp,
 	Hash,
-	Search,
 	Text,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";

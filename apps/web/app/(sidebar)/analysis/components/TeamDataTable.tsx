@@ -1,7 +1,9 @@
 "use client";
 
 import { DataTable } from "./DataTable";
-import { TeamData } from "../actions";
+import { TournamentPicker } from "./TournamentPicker";
+import { TeamData } from "../actions/team-data";
+import { TournamentData } from "../actions/tournament-data";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -29,7 +31,7 @@ import { useState } from "react";
 
 
 function NumberDisplay({ value }: { value: number }) {
-    return <>{value.toFixed(1)}</>;
+    return <>{Number(value).toFixed(1)}</>;
 }
 
 function PercentDisplay({ value }: { value: number }) {
@@ -74,7 +76,7 @@ function numericAccessor(key: keyof TeamData, label: string) {
 
 const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
     const columns = Array(4).fill(null).map((_, i) => ++i).map(i =>
-        numericAccessor(`${gamePeriod}CoralLevel${i}` as keyof TeamData, `L${i}`)
+        numericAccessor(`${gamePeriod}_coral_level_${i}` as keyof TeamData, `L${i}`)
     );
 
     return columnHelper.group({
@@ -85,13 +87,13 @@ const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
 }
 
 const generateAlgaeColumns = (gamePeriod: "auto" | "teleop") => {
-    const algaeActions = ["Net", "Processor"] // must capitalize
+    const algaeActions = ["net", "processor"];
 
     if (gamePeriod === "teleop") {
-        algaeActions.push("Thrown")
+        algaeActions.push("thrown")
     }
 
-    const columns = algaeActions.map(a => numericAccessor(`${gamePeriod}Algae${a}` as keyof TeamData, a));
+    const columns = algaeActions.map(a => numericAccessor(`${gamePeriod}_algae_${a}` as keyof TeamData, a));
 
     return columnHelper.group({
         header: "Algae",
@@ -106,7 +108,7 @@ const columns: ColumnDef<TeamData>[] = [
         footer: (props) => props.column.id,
         enableHiding: false,
         columns: [
-            columnHelper.accessor("teamNumber", {
+            columnHelper.accessor("team_number", {
                 cell: (info) => info.getValue(),
                 header: ({ column }) => (
                     <SortableHeader label={"Team Number"} column={column} />
@@ -118,7 +120,7 @@ const columns: ColumnDef<TeamData>[] = [
                     );
                 },
             }),
-            columnHelper.accessor("teamName", {
+            columnHelper.accessor("team_name", {
                 cell: (info) => info.getValue(),
                 header: ({ column }) => (
                     <SortableHeader label={"Team Name"} column={column} />
@@ -131,7 +133,7 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Auto",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("initiationLine", {
+            columnHelper.accessor("initiation_line", {
                 cell: (info) => (<PercentDisplay value={info.getValue()} />),
                 header: ({ column }) => (
                     <SortableHeader label={"Auto Line"} column={column} />
@@ -154,21 +156,21 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Cage",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("shallowPercentage", {
+            columnHelper.accessor("shallow_percentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Shallow"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
-            columnHelper.accessor("deepPercentage", {
+            columnHelper.accessor("deep_percentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Deep"} column={column} />
                 ),
                 footer: (info) => info.column.id,
             }),
-            columnHelper.accessor("parkPercentage", {
+            columnHelper.accessor("park_percentage", {
                 cell: (info) => <PercentDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Park"} column={column} />
@@ -181,7 +183,7 @@ const columns: ColumnDef<TeamData>[] = [
         header: "Misc",
         footer: (props) => props.column.id,
         columns: [
-            columnHelper.accessor("defenseRating", {
+            columnHelper.accessor("defense_rating", {
                 cell: (info) => <NumberDisplay value={info.getValue()} />,
                 header: ({ column }) => (
                     <SortableHeader label={"Defense"} column={column} />
@@ -206,7 +208,7 @@ const columns: ColumnDef<TeamData>[] = [
     }),
 ];
 
-export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
+export function TeamDataTable({ teamData, tournaments }: { teamData: TeamData[], tournaments: TournamentData }) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnVisibility, setVisibility] = useState<VisibilityState>({});
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -230,20 +232,21 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
     return (
         <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-center space-x-4">
-                <div>
+                <div className="flex flex-row space-x-4">
                     <Input
                         placeholder="Find team number..."
                         value={
                             (table
-                                .getColumn("teamNumber")
+                                .getColumn("team_number")
                                 ?.getFilterValue() as string) ?? ""
                         }
                         onChange={(event) =>
                             table
-                                .getColumn("teamNumber")
+                                .getColumn("team_number")
                                 ?.setFilterValue(event.target.value)
                         }
                     />
+                    <TournamentPicker tournaments={tournaments} />
                 </div>
                 <div className="pr-4 md:pr-0">
                     <DropdownMenu>
