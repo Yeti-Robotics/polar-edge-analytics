@@ -1,6 +1,7 @@
-import { Skeleton } from "@repo/ui/components/skeleton";
 import { fetchTeams } from "../actions";
 import { TeamTable } from "./TeamTable";
+
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
 	Table,
 	TableHeader,

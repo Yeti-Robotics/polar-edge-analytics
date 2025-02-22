@@ -1,14 +1,15 @@
-import { Suspense } from "react";
+import { fetchEvents } from "./actions";
+import { AddTeamForm } from "./components/AddTeamForm";
 import { TeamSearch } from "./components/TeamSearch";
 import {
 	TeamTableWrapper,
 	TeamTableWrapperSkeleton,
 } from "./components/TeamTableWrapper";
-import { fetchEvents } from "./actions";
-import { AddTeamForm } from "./components/AddTeamForm";
+
 import { auth } from "@/lib/auth";
 import { UserRole } from "@/lib/database/schema";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 interface PageProps {
 	searchParams: Promise<{
