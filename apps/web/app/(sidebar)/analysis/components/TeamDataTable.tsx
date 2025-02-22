@@ -231,8 +231,8 @@ export function TeamDataTable({ teamData, tournaments }: { teamData: TeamData[],
 
     return (
         <div className="flex flex-col space-y-4">
-            <div className="flex justify-between items-center space-x-4">
-                <div className="flex flex-row space-x-4">
+            <div className="flex flex-col md:flex-row md:space-y-0 space-y-4 justify-between items-start md:items-center space-x-4">
+                <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                     <Input
                         placeholder="Find team number..."
                         value={
