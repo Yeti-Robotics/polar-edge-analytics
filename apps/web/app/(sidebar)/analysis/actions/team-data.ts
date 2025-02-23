@@ -30,7 +30,7 @@ WITH combinedStats AS (
         CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.SHALLOW} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
         CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.DEEP} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
     FROM ${standForm} tf
-    GROUP BY tf.team_number, tf.match_id
+    GROUP BY tf.team_number
 ),
 teamMatches AS (
     SELECT 
