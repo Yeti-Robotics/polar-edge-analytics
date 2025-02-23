@@ -1,10 +1,10 @@
 import {
-	createServerAction,
-	ServerActionError,
+    createServerAction,
+    ServerActionError,
 } from "@/lib/actions/actions-utils";
 import { db } from "@/lib/database";
-import { Cage, match, standForm, team, teamMatch } from "@/lib/database/schema"
-import { sql } from "drizzle-orm"
+import { Cage, match, standForm, team, teamMatch } from "@/lib/database/schema";
+import { avg, eq, sql } from "drizzle-orm";
 
 const getTeamDataQuery = (event_key: string) => sql<TeamData[]>`
 WITH combinedStats AS (
@@ -30,7 +30,7 @@ WITH combinedStats AS (
         CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.SHALLOW} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
         CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.DEEP} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
     FROM ${standForm} tf
-    GROUP BY tf.team_number
+    GROUP BY tf.team_number, tf.match_id
 ),
 teamMatches AS (
     SELECT 
@@ -74,34 +74,62 @@ ORDER BY
 `;
 
 export const scoutedTeamData = createServerAction(async (id: string) => {
-	try {
-		const queryResult = await db.execute(getTeamDataQuery(id));
-		return queryResult.rows as TeamData[];
-	} catch (error) {
-		console.error("Error fetching team data:", error);
-		throw new ServerActionError("Failed to fetch team data");
-	}
+    try {
+        const query = await db
+            .select({
+                team_number: standForm.teamNumber,
+                team_name: team.teamName,
+                auto_coral_level_1: avg(standForm.autoCoralLevel1),
+                auto_coral_level_2: avg(standForm.autoCoralLevel2),
+                auto_coral_level_3: avg(standForm.autoCoralLevel3),
+                auto_coral_level_4: avg(standForm.autoCoralLevel4),
+                auto_algae_processor: avg(standForm.autoAlgaeProcessor),
+                auto_algae_net: avg(standForm.autoAlgaeNet),
+                teleop_coral_level_1: avg(standForm.teleopCoralLevel1),
+                teleop_coral_level_2: avg(standForm.teleopCoralLevel2),
+                teleop_coral_level_3: avg(standForm.teleopCoralLevel3),
+                teleop_coral_level_4: avg(standForm.teleopCoralLevel4),
+                teleop_algae_processor: avg(standForm.teleopAlgaeProcessor),
+                teleop_algae_net: avg(standForm.teleopAlgaeNet),
+                teleop_algae_thrown: avg(standForm.teleopAlgaeThrown),
+                park_percentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'Parked' THEN 1 ELSE 0 END)`,
+                shallow_percentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'ShallowCage' THEN 1 ELSE 0 END)`,
+                deep_percentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'DeepCage' THEN 1 ELSE 0 END)`,
+                defense_rating: avg(standForm.defenseRating),
+                initiation_line: sql<number>`AVG(CAST(${standForm.leftBlackLine} AS INT))`
+            })
+            .from(standForm)
+            .innerJoin(match, eq(match.id, standForm.matchId))
+            .innerJoin(team, eq(team.teamNumber, standForm.teamNumber))
+            .where(eq(match.eventKey, id))
+            .groupBy(sql`${standForm.teamNumber}, ${team.teamName}`);
+            
+        return query;
+    } catch (error) {
+        console.error("Error fetching team data:", error);
+        throw new ServerActionError("Failed to fetch team data");
+    }
 });
 
 export type TeamData = {
-	team_number: number;
-	team_name: string;
-	auto_coral_level_1: number;
-	auto_coral_level_2: number;
-	auto_coral_level_3: number;
-	auto_coral_level_4: number;
-	auto_algae_processor: number;
-	auto_algae_net: number;
-	teleop_coral_level_1: number;
-	teleop_coral_level_2: number;
-	teleop_coral_level_3: number;
-	teleop_coral_level_4: number;
-	teleop_algae_processor: number;
-	teleop_algae_net: number;
-	teleop_algae_thrown: number;
-	park_percentage: number;
-	shallow_percentage: number;
-	deep_percentage: number;
-	initiation_line: number;
-	defense_rating: number;
+    team_number: number;
+    team_name: string;
+    auto_coral_level_1: number;
+    auto_coral_level_2: number;
+    auto_coral_level_3: number;
+    auto_coral_level_4: number;
+    auto_algae_processor: number;
+    auto_algae_net: number;
+    teleop_coral_level_1: number;
+    teleop_coral_level_2: number;
+    teleop_coral_level_3: number;
+    teleop_coral_level_4: number;
+    teleop_algae_processor: number;
+    teleop_algae_net: number;
+    teleop_algae_thrown: number;
+    park_percentage: number;
+    shallow_percentage: number;
+    deep_percentage: number;
+    initiation_line: number;
+    defense_rating: number;
 };
