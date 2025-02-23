@@ -3,107 +3,40 @@ import {
     ServerActionError,
 } from "@/lib/actions/actions-utils";
 import { db } from "@/lib/database";
-import { Cage, match, standForm, team, teamMatch } from "@/lib/database/schema";
+import { match, standForm, team } from "@/lib/database/schema";
 import { avg, eq, sql } from "drizzle-orm";
 
-const getTeamDataQuery = (event_key: string) => sql<TeamData[]>`
-WITH combinedStats AS (
-    SELECT 
-        tf.team_number, 
-        tf.match_id, 
-        AVG(tf.auto_coral_level1) AS auto_coral_level_1, 
-        AVG(tf.auto_coral_level2) AS auto_coral_level_2, 
-        AVG(tf.auto_coral_level3) AS auto_coral_level_3, 
-        AVG(tf.auto_coral_level4) AS auto_coral_level_4,
-        AVG(tf.auto_algae_processed) AS auto_algae_processor, 
-        AVG(tf.auto_algae_netted) AS auto_algae_net,
-        AVG(tf.teleop_coral_level1) AS teleop_coral_level_1, 
-        AVG(tf.teleop_coral_level2) AS teleop_coral_level_2, 
-        AVG(tf.teleop_coral_level3) AS teleop_coral_level_3, 
-        AVG(tf.teleop_coral_level4) AS teleop_coral_level_4,
-        AVG(tf.teleop_algae_processed) AS teleop_algae_processor, 
-        AVG(tf.teleop_algae_netted) AS teleop_algae_net,
-        AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, 
-        AVG(tf.defense_rating) AS defense_rating,
-        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,
-        CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.PARK} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,
-        CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.SHALLOW} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
-        CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.DEEP} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
-    FROM ${standForm} tf
-    GROUP BY tf.team_number, tf.match_id
-),
-teamMatches AS (
-    SELECT 
-        tm.team_number, 
-        t.team_name, 
-        tm.match_id,
-        m.event_key
-    FROM ${teamMatch} tm 
-    JOIN ${team} t ON tm.team_number = t.team_number
-    JOIN ${match} m ON tm.match_id = m.match_id
-)
-SELECT
-    cs.auto_coral_level_1,
-    cs.auto_coral_level_2,
-    cs.auto_coral_level_3,
-    cs.auto_coral_level_4,
-    cs.auto_algae_processor,
-    cs.auto_algae_net,
-    cs.teleop_coral_level_1,
-    cs.teleop_coral_level_2,
-    cs.teleop_coral_level_3,
-    cs.teleop_coral_level_4,
-    cs.teleop_algae_processor,
-    cs.teleop_algae_net,
-    cs.teleop_algae_thrown,
-    cs.defense_rating,
-    cs.initiation_line,
-    cs.park_percentage,
-    cs.deep_percentage,
-    cs.shallow_percentage,
-    tm.team_number,
-    tm.team_name
-FROM
-    combinedStats cs
-JOIN
-    teamMatches tm ON cs.team_number = tm.team_number AND cs.match_id = tm.match_id
-WHERE
-    tm.event_key = ${event_key ?? "''"}
-ORDER BY
-    tm.team_number
-`;
-
-export const scoutedTeamData = createServerAction(async (id: string) => {
+export const scoutedTeamData = createServerAction(async (id: string): Promise<TeamData[]> => {
     try {
         const query = await db
             .select({
                 team_number: standForm.teamNumber,
                 team_name: team.teamName,
-                auto_coral_level_1: avg(standForm.autoCoralLevel1),
-                auto_coral_level_2: avg(standForm.autoCoralLevel2),
-                auto_coral_level_3: avg(standForm.autoCoralLevel3),
-                auto_coral_level_4: avg(standForm.autoCoralLevel4),
-                auto_algae_processor: avg(standForm.autoAlgaeProcessor),
-                auto_algae_net: avg(standForm.autoAlgaeNet),
-                teleop_coral_level_1: avg(standForm.teleopCoralLevel1),
-                teleop_coral_level_2: avg(standForm.teleopCoralLevel2),
-                teleop_coral_level_3: avg(standForm.teleopCoralLevel3),
-                teleop_coral_level_4: avg(standForm.teleopCoralLevel4),
-                teleop_algae_processor: avg(standForm.teleopAlgaeProcessor),
-                teleop_algae_net: avg(standForm.teleopAlgaeNet),
-                teleop_algae_thrown: avg(standForm.teleopAlgaeThrown),
+                auto_coral_level_1: avg(standForm.autoCoralLevel1).mapWith(Number),
+                auto_coral_level_2: avg(standForm.autoCoralLevel2).mapWith(Number),
+                auto_coral_level_3: avg(standForm.autoCoralLevel3).mapWith(Number),
+                auto_coral_level_4: avg(standForm.autoCoralLevel4).mapWith(Number),
+                auto_algae_processor: avg(standForm.autoAlgaeProcessor).mapWith(Number),
+                auto_algae_net: avg(standForm.autoAlgaeNet).mapWith(Number),
+                teleop_coral_level_1: avg(standForm.teleopCoralLevel1).mapWith(Number),
+                teleop_coral_level_2: avg(standForm.teleopCoralLevel2).mapWith(Number),
+                teleop_coral_level_3: avg(standForm.teleopCoralLevel3).mapWith(Number),
+                teleop_coral_level_4: avg(standForm.teleopCoralLevel4).mapWith(Number),
+                teleop_algae_processor: avg(standForm.teleopAlgaeProcessor).mapWith(Number),
+                teleop_algae_net: avg(standForm.teleopAlgaeNet).mapWith(Number),
+                teleop_algae_thrown: avg(standForm.teleopAlgaeThrown).mapWith(Number),
                 park_percentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'Parked' THEN 1 ELSE 0 END)`,
                 shallow_percentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'ShallowCage' THEN 1 ELSE 0 END)`,
                 deep_percentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'DeepCage' THEN 1 ELSE 0 END)`,
-                defense_rating: avg(standForm.defenseRating),
-                initiation_line: sql<number>`AVG(CAST(${standForm.leftBlackLine} AS INT))`
+                defense_rating: avg(standForm.defenseRating).mapWith(Number),
+                initiation_line: sql<number>`AVG(CAST(${standForm.leftBlackLine} AS INT))`.mapWith(Number)
             })
             .from(standForm)
             .innerJoin(match, eq(match.id, standForm.matchId))
             .innerJoin(team, eq(team.teamNumber, standForm.teamNumber))
             .where(eq(match.eventKey, id))
             .groupBy(sql`${standForm.teamNumber}, ${team.teamName}`);
-            
+
         return query;
     } catch (error) {
         console.error("Error fetching team data:", error);

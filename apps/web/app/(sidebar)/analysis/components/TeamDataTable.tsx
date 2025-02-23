@@ -1,9 +1,9 @@
 "use client";
 
-import { DataTable } from "./DataTable";
-import { TournamentPicker } from "./TournamentPicker";
 import { TeamData } from "../actions/team-data";
 import { TournamentData } from "../actions/tournament-data";
+import { DataTable } from "./DataTable";
+import { TournamentPicker } from "./TournamentPicker";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -27,8 +27,8 @@ import {
     VisibilityState,
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 
 
 function NumberDisplay({ value }: { value: number }) {
