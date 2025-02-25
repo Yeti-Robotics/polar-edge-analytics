@@ -1,6 +1,7 @@
 "use client";
 
 import { AutoForm, FormAction } from "./AutoForm";
+import { pascalToSpace } from "./utils";
 import { StandFormData, standFormSchema } from "../data/schema";
 
 import { Cage } from "@/lib/database/schema";
@@ -15,7 +16,6 @@ import {
 import { Textarea } from "@repo/ui/components/textarea";
 import { KeyboardEvent } from "react";
 import { DefaultValues } from "react-hook-form";
-import { pascalToSpace } from "./utils";
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	if (e.code === "Minus") {

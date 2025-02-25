@@ -1,9 +1,9 @@
 "use client";
 
-import { TeamData } from "../actions/team-data";
-import { TournamentData } from "../actions/tournament-data";
 import { DataTable } from "./DataTable";
 import { TournamentPicker } from "./TournamentPicker";
+import { TeamData } from "../actions/team-data";
+import { TournamentData } from "../actions/tournament-data";
 
 import { Button } from "@repo/ui/components/button";
 import {

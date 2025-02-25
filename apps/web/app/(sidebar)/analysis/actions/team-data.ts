@@ -3,8 +3,8 @@ import {
     ServerActionError,
 } from "@/lib/actions/actions-utils";
 import { db } from "@/lib/database";
-import { match, standForm, team, teamMatchStats } from "@/lib/database/schema";
-import { avg, eq, getTableColumns, sql } from "drizzle-orm";
+import { match, team, teamMatchStats } from "@/lib/database/schema";
+import { avg, eq, sql } from "drizzle-orm";
 
 
 export const scoutedTeamData = createServerAction(async (id: string): Promise<TeamData[]> => {
