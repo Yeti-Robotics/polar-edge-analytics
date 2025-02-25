@@ -61,7 +61,6 @@ export const submitStandForm = createServerAction(
 		if (!matchInfo || !matchInfo.match) {
 			throw new ServerActionError("Team is not in this match");
 		}
-
 		try {
 			await db.insert(standForm).values({
 				teamNumber: data.team_number,
@@ -80,7 +79,6 @@ export const submitStandForm = createServerAction(
 				teleopCoralLevel4: data.teleop_coral_level_4,
 				teleopAlgaeProcessor: data.teleop_algae_processed,
 				teleopAlgaeNet: data.teleop_algae_netted,
-				teleopAlgaeThrown: data.teleop_algae_thrown,
 				cageClimb: data.cage_climb,
 				comments: data.comments,
 				defenseRating: data.defense,
