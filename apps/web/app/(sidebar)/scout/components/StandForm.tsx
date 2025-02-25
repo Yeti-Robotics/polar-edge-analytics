@@ -15,6 +15,7 @@ import {
 import { Textarea } from "@repo/ui/components/textarea";
 import { KeyboardEvent } from "react";
 import { DefaultValues } from "react-hook-form";
+import { pascalToSpace } from "./utils";
 
 const trimInput = (e: KeyboardEvent<HTMLInputElement>, maxLength: number) => {
 	if (e.code === "Minus") {
@@ -109,7 +110,7 @@ export function StandForm({
 											<SelectItem
 												key={i}
 												value={c}
-											>{`${c.charAt(0).toUpperCase()}${c.slice(1)}`}</SelectItem>
+											>{pascalToSpace(c)}</SelectItem>
 										))}
 									</SelectContent>
 								</Select>

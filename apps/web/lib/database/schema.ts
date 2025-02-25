@@ -1,24 +1,22 @@
 import { enumToPgEnum } from "./utils";
 
-import { sql } from "drizzle-orm";
+import { avg, sql } from "drizzle-orm";
 import {
   boolean,
-  timestamp,
-  pgTable,
-  text,
-  primaryKey,
-  integer,
-  uuid,
-  pgEnum,
-  varchar,
-  date,
-  serial,
-  smallint,
-  pgView,
   check,
-  doublePrecision,
+  date,
   foreignKey,
+  integer,
+  pgEnum,
+  pgTable,
+  pgView,
+  primaryKey,
+  smallint,
+  text,
+  timestamp,
   uniqueIndex,
+  uuid,
+  varchar
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -228,7 +226,6 @@ export const standForm = pgTable(
     teleopCoralLevel4: integer("teleop_coral_level4").notNull(),
     teleopAlgaeProcessor: integer("teleop_algae_processed").notNull(),
     teleopAlgaeNet: integer("teleop_algae_netted").notNull(),
-    teleopAlgaeThrown: integer("teleop_algae_thrown").notNull(),
     cageClimb: cageEnum("cage_climb").notNull(),
     defenseRating: integer("defense_rating").notNull(),
     comments: text("comments").notNull(),
@@ -258,90 +255,28 @@ export const tournament = pgTable(
 );
 
 export const team = pgTable("team", {
-  teamNumber: serial("team_number").notNull().primaryKey(),
+  teamNumber: integer("team_number").notNull().primaryKey(),
   teamName: varchar("team_name", { length: 256 }).notNull(),
 });
 
-export const teamStats = pgView("team_stats", {
-  teamNumber: integer("team_number").notNull(),
-  teamName: varchar("team_name", { length: 256 }).notNull(),
-  autoCoralLevel1: doublePrecision("auto_coral_level_1").notNull(),
-  autoCoralLevel2: doublePrecision("auto_coral_level_2").notNull(),
-  autoCoralLevel3: doublePrecision("auto_coral_level_3").notNull(),
-  autoCoralLevel4: doublePrecision("auto_coral_level_4").notNull(),
-  autoAlgaeProcessor: doublePrecision("auto_algae_processor").notNull(),
-  autoAlgaeNet: doublePrecision("auto_algae_net").notNull(),
-  teleopCoralLevel1: doublePrecision("teleop_coral_level_1").notNull(),
-  teleopCoralLevel2: doublePrecision("teleop_coral_level_2").notNull(),
-  teleopCoralLevel3: doublePrecision("teleop_coral_level_3").notNull(),
-  teleopCoralLevel4: doublePrecision("teleop_coral_level_4").notNull(),
-  teleopAlgaeProcessor: doublePrecision("teleop_algae_processor").notNull(),
-  teleopAlgaeNet: doublePrecision("teleop_algae_net").notNull(),
-  teleopAlgaeThrown: doublePrecision("teleop_algae_thrown").notNull(),
-  parkPercentage: doublePrecision("park_percentage").notNull(),
-  shallowPercentage: doublePrecision("shallow_percentage").notNull(),
-  deepPercentage: doublePrecision("deep_percentage").notNull(),
-  initiationLine: doublePrecision("initiation_line").notNull(),
-  defenseRating: doublePrecision("defense_rating").notNull(),
-}).as(sql`
-WITH combinedStats AS (
-    SELECT 
-        tf.team_number, 
-        tf.match_id, 
-        AVG(tf.auto_coral_level1) AS auto_coral_level_1, 
-        AVG(tf.auto_coral_level2) AS auto_coral_level_2, 
-        AVG(tf.auto_coral_level3) AS auto_coral_level_3, 
-        AVG(tf.auto_coral_level4) AS auto_coral_level_4,
-        AVG(tf.auto_algae_processed) AS auto_algae_processor, 
-        AVG(tf.auto_algae_netted) AS auto_algae_net,
-        AVG(tf.teleop_coral_level1) AS teleop_coral_level_1, 
-        AVG(tf.teleop_coral_level2) AS teleop_coral_level_2, 
-        AVG(tf.teleop_coral_level3) AS teleop_coral_level_3, 
-        AVG(tf.teleop_coral_level4) AS teleop_coral_level_4,
-        AVG(tf.teleop_algae_processed) AS teleop_algae_processor, 
-        AVG(tf.teleop_algae_netted) AS teleop_algae_net,
-        AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, 
-        AVG(tf.defense_rating) AS defense_rating,
-        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,
-        CAST(SUM(CASE WHEN tf.cage_climb = 'Parked' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,
-        CAST(SUM(CASE WHEN tf.cage_climb = 'DeepCage' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
-        CAST(SUM(CASE WHEN tf.cage_climb = 'ShallowCage' THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
-    FROM stand_form tf
-    GROUP BY tf.team_number, tf.match_id
-),
-teamMatches AS (
-    SELECT 
-        tm.team_number, 
-        t.team_name, 
-        tm.match_id
-    FROM team_match tm 
-    JOIN team t ON tm.team_number = t.team_number
-)
-SELECT
-    cs.auto_coral_level_1,
-    cs.auto_coral_level_2,
-    cs.auto_coral_level_3,
-    cs.auto_coral_level_4,
-    cs.auto_algae_processor,
-    cs.auto_algae_net,
-    cs.teleop_coral_level_1,
-    cs.teleop_coral_level_2,
-    cs.teleop_coral_level_3,
-    cs.teleop_coral_level_4,
-    cs.teleop_algae_processor,
-    cs.teleop_algae_net,
-    cs.teleop_algae_thrown,
-    cs.defense_rating,
-    cs.initiation_line,
-    cs.park_percentage,
-    cs.deep_percentage,
-    cs.shallow_percentage,
-    tm.team_number,
-    tm.team_name
-FROM
-    combinedStats cs
-JOIN
-    teamMatches tm ON cs.team_number = tm.team_number AND cs.match_id = tm.match_id
-ORDER BY
-    tm.team_number
-`);
+export const teamMatchStats = pgView("team_match_stats").as((qb) => qb.select({
+  teamNumber: standForm.teamNumber,
+  matchId: standForm.matchId,
+  autoCoralLevel1: avg(standForm.autoCoralLevel1).mapWith(Number).as("auto_coral_level_1"),
+  autoCoralLevel2: avg(standForm.autoCoralLevel2).mapWith(Number).as("auto_coral_level_2"),
+  autoCoralLevel3: avg(standForm.autoCoralLevel3).mapWith(Number).as("auto_coral_level_3"),
+  autoCoralLevel4: avg(standForm.autoCoralLevel4).mapWith(Number).as("auto_coral_level_4"),
+  autoAlgaeProcessor: avg(standForm.autoAlgaeProcessor).mapWith(Number).as("auto_algae_processor"),
+  autoAlgaeNet: avg(standForm.autoAlgaeNet).mapWith(Number).as("auto_algae_net"),
+  teleopCoralLevel1: avg(standForm.teleopCoralLevel1).mapWith(Number).as("teleop_coral_level_1"),
+  teleopCoralLevel2: avg(standForm.teleopCoralLevel2).mapWith(Number).as("teleop_coral_level_2"),
+  teleopCoralLevel3: avg(standForm.teleopCoralLevel3).mapWith(Number).as("teleop_coral_level_3"),
+  teleopCoralLevel4: avg(standForm.teleopCoralLevel4).mapWith(Number).as("teleop_coral_level_4"),
+  teleopAlgaeProcessor: avg(standForm.teleopAlgaeProcessor).mapWith(Number).as("teleop_algae_processor"),
+  teleopAlgaeNet: avg(standForm.teleopAlgaeNet).mapWith(Number).as("teleop_algae_net"),
+  parkPercentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'Parked' THEN 1 ELSE 0 END)`.as("park_percentage"),
+  shallowPercentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'ShallowCage' THEN 1 ELSE 0 END)`.as("shallow_percentage"),
+  deepPercentage: sql<number>`AVG(CASE WHEN ${standForm.cageClimb} = 'DeepCage' THEN 1 ELSE 0 END)`.as("deep_percentage"),
+  defenseRating: avg(standForm.defenseRating).mapWith(Number).as("defense_rating"),
+  initiationLine: sql<number>`AVG(CAST(${standForm.leftBlackLine} AS INT))`.mapWith(Number).as("initiation_line")
+}).from(standForm).groupBy(sql`${standForm.teamNumber}, ${standForm.matchId}`));

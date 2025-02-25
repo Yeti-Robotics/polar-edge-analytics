@@ -90,10 +90,6 @@ const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
 const generateAlgaeColumns = (gamePeriod: "auto" | "teleop") => {
     const algaeActions = ["net", "processor"];
 
-    if (gamePeriod === "teleop") {
-        algaeActions.push("thrown")
-    }
-
     const columns = algaeActions.map(a => numericAccessor(`${gamePeriod}_algae_${a}` as keyof TeamData, a));
 
     return columnHelper.group({
