@@ -148,7 +148,70 @@ export async function seedMatches(eventKey: string) {
 		if (m.score_breakdown) {
 			await db
 				.insert(matchScoreBreakdown)
-				.values(parseMatchScoreBreakdown(m.score_breakdown, m.key));
+				.values(parseMatchScoreBreakdown(m.score_breakdown, m.key))
+				.onConflictDoUpdate({
+					target: [
+						matchScoreBreakdown.matchId,
+						matchScoreBreakdown.alliance,
+					],
+					set: {
+						autoLineRobot1: sql.raw(`excluded.auto_line_robot1`),
+						autoLineRobot2: sql.raw(`excluded.auto_line_robot2`),
+						autoLineRobot3: sql.raw(`excluded.auto_line_robot3`),
+						autoMobilityPoints: sql.raw(
+							`excluded.auto_mobility_points`
+						),
+						autoPoints: sql.raw(`excluded.auto_points`),
+						autoReefTopRow: sql.raw(`excluded.auto_reef_top_row`),
+						autoReefMidRow: sql.raw(`excluded.auto_reef_mid_row`),
+						autoReefBotRow: sql.raw(`excluded.auto_reef_bot_row`),
+						autoReefTrough: sql.raw(`excluded.auto_reef_trough`),
+						bargeBonusAchieved: sql.raw(
+							`excluded.barge_bonus_achieved`
+						),
+						coopertitionCriteriaMet: sql.raw(
+							`excluded.coopertition_criteria_met`
+						),
+						coralBonusAchieved: sql.raw(
+							`excluded.coral_bonus_achieved`
+						),
+						endGameBargePoints: sql.raw(
+							`excluded.end_game_barge_points`
+						),
+						endGameRobot1: sql.raw(`excluded.end_game_robot1`),
+						endGameRobot2: sql.raw(`excluded.end_game_robot2`),
+						endGameRobot3: sql.raw(`excluded.end_game_robot3`),
+						foulCount: sql.raw(`excluded.foul_count`),
+						foulPoints: sql.raw(`excluded.foul_points`),
+						g206Penalty: sql.raw(`excluded.g206_penalty`),
+						g408Penalty: sql.raw(`excluded.g408_penalty`),
+						g424Penalty: sql.raw(`excluded.g424_penalty`),
+						netAlgaeCount: sql.raw(`excluded.net_algae_count`),
+						rp: sql.raw(`excluded.rp`),
+						techFoulCount: sql.raw(`excluded.tech_foul_count`),
+						teleopCoralCount: sql.raw(
+							`excluded.teleop_coral_count`
+						),
+						teleopCoralPoints: sql.raw(
+							`excluded.teleop_coral_points`
+						),
+						teleopPoints: sql.raw(`excluded.teleop_points`),
+						teleopReefTopRow: sql.raw(
+							`excluded.teleop_reef_top_row`
+						),
+						teleopReefMidRow: sql.raw(
+							`excluded.teleop_reef_mid_row`
+						),
+						teleopReefBotRow: sql.raw(
+							`excluded.teleop_reef_bot_row`
+						),
+						teleopReefTrough: sql.raw(
+							`excluded.teleop_reef_trough`
+						),
+						totalPoints: sql.raw(`excluded.total_points`),
+						wallAlgaeCount: sql.raw(`excluded.wall_algae_count`),
+					},
+				});
 		}
 	}
 
