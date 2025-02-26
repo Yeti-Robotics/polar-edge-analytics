@@ -94,12 +94,6 @@ export const standFormSchema = z.object({
 		.nonnegative({ message: "Teleop Algae Netted must be positive" })
 		.default(0)
 		.describe("Algae netted by a robot"),
-	teleop_algae_thrown: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Teleop Algae Thrown must be positive" })
-		.default(0)
-		.describe("Algae thrown into net by human player"),
 	cage_climb: zCageEnum.describe("What does the robot do in the cage area?"),
 	defense: z.coerce
 		.number({ message: "Defense rating must be a number" })

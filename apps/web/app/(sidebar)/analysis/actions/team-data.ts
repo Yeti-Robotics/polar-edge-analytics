@@ -3,85 +3,119 @@ import {
 	ServerActionError,
 } from "@/lib/actions/actions-utils";
 import { db } from "@/lib/database";
-import { Cage, match, standForm, team, teamMatch } from "@/lib/database/schema"
-import { sql } from "drizzle-orm"
+import { match, team, teamMatchStats } from "@/lib/database/schema";
+import { avg, eq, sql } from "drizzle-orm";
 
-const getTeamDataQuery = (event_key: string) => sql<TeamData[]>`
-WITH combinedStats AS (
-    SELECT 
-        tf.team_number, 
-        tf.match_id, 
-        AVG(tf.auto_coral_level1) AS auto_coral_level_1, 
-        AVG(tf.auto_coral_level2) AS auto_coral_level_2, 
-        AVG(tf.auto_coral_level3) AS auto_coral_level_3, 
-        AVG(tf.auto_coral_level4) AS auto_coral_level_4,
-        AVG(tf.auto_algae_processed) AS auto_algae_processor, 
-        AVG(tf.auto_algae_netted) AS auto_algae_net,
-        AVG(tf.teleop_coral_level1) AS teleop_coral_level_1, 
-        AVG(tf.teleop_coral_level2) AS teleop_coral_level_2, 
-        AVG(tf.teleop_coral_level3) AS teleop_coral_level_3, 
-        AVG(tf.teleop_coral_level4) AS teleop_coral_level_4,
-        AVG(tf.teleop_algae_processed) AS teleop_algae_processor, 
-        AVG(tf.teleop_algae_netted) AS teleop_algae_net,
-        AVG(tf.teleop_algae_thrown) AS teleop_algae_thrown, 
-        AVG(tf.defense_rating) AS defense_rating,
-        CAST(SUM(CASE WHEN tf.left_black_line THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS initiation_line,
-        CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.PARK} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS park_percentage,
-        CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.SHALLOW} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS deep_percentage,
-        CAST(SUM(CASE WHEN tf.cage_climb = ${Cage.DEEP} THEN 1 ELSE 0 END) AS REAL) / COUNT(*) AS shallow_percentage
-    FROM ${standForm} tf
-    GROUP BY tf.team_number
-),
-teamMatches AS (
-    SELECT 
-        tm.team_number, 
-        t.team_name, 
-        tm.match_id,
-        m.event_key
-    FROM ${teamMatch} tm 
-    JOIN ${team} t ON tm.team_number = t.team_number
-    JOIN ${match} m ON tm.match_id = m.match_id
-)
-SELECT
-    cs.auto_coral_level_1,
-    cs.auto_coral_level_2,
-    cs.auto_coral_level_3,
-    cs.auto_coral_level_4,
-    cs.auto_algae_processor,
-    cs.auto_algae_net,
-    cs.teleop_coral_level_1,
-    cs.teleop_coral_level_2,
-    cs.teleop_coral_level_3,
-    cs.teleop_coral_level_4,
-    cs.teleop_algae_processor,
-    cs.teleop_algae_net,
-    cs.teleop_algae_thrown,
-    cs.defense_rating,
-    cs.initiation_line,
-    cs.park_percentage,
-    cs.deep_percentage,
-    cs.shallow_percentage,
-    tm.team_number,
-    tm.team_name
-FROM
-    combinedStats cs
-JOIN
-    teamMatches tm ON cs.team_number = tm.team_number AND cs.match_id = tm.match_id
-WHERE
-    tm.event_key = ${event_key ?? "''"}
-ORDER BY
-    tm.team_number
-`;
+export const scoutedTeamData = createServerAction(
+	async (id: string): Promise<TeamData[]> => {
+		try {
+			const stats = db.$with("stats").as(
+				db
+					.select({
+						team_number: teamMatchStats.teamNumber,
+						auto_coral_level_1: avg(teamMatchStats.autoCoralLevel1)
+							.mapWith(Number)
+							.as("auto_coral_level_1"),
+						auto_coral_level_2: avg(teamMatchStats.autoCoralLevel2)
+							.mapWith(Number)
+							.as("auto_coral_level_2"),
+						auto_coral_level_3: avg(teamMatchStats.autoCoralLevel3)
+							.mapWith(Number)
+							.as("auto_coral_level_3"),
+						auto_coral_level_4: avg(teamMatchStats.autoCoralLevel4)
+							.mapWith(Number)
+							.as("auto_coral_level_4"),
+						auto_algae_processor: avg(
+							teamMatchStats.autoAlgaeProcessor
+						)
+							.mapWith(Number)
+							.as("auto_algae_processor"),
+						auto_algae_net: avg(teamMatchStats.autoAlgaeNet)
+							.mapWith(Number)
+							.as("auto_algae_net"),
+						teleop_coral_level_1: avg(
+							teamMatchStats.teleopCoralLevel1
+						)
+							.mapWith(Number)
+							.as("teleop_coral_level_1"),
+						teleop_coral_level_2: avg(
+							teamMatchStats.teleopCoralLevel2
+						)
+							.mapWith(Number)
+							.as("teleop_coral_level_2"),
+						teleop_coral_level_3: avg(
+							teamMatchStats.teleopCoralLevel3
+						)
+							.mapWith(Number)
+							.as("teleop_coral_level_3"),
+						teleop_coral_level_4: avg(
+							teamMatchStats.teleopCoralLevel4
+						)
+							.mapWith(Number)
+							.as("teleop_coral_level_4"),
+						teleop_algae_processor: avg(
+							teamMatchStats.teleopAlgaeProcessor
+						)
+							.mapWith(Number)
+							.as("teleop_algae_processor"),
+						teleop_algae_net: avg(teamMatchStats.teleopAlgaeNet)
+							.mapWith(Number)
+							.as("teleop_algae_net"),
+						park_percentage: avg(teamMatchStats.parkPercentage)
+							.mapWith(Number)
+							.as("park_percentage"),
+						shallow_percentage: avg(
+							teamMatchStats.shallowPercentage
+						)
+							.mapWith(Number)
+							.as("shallow_percentage"),
+						deep_percentage: avg(teamMatchStats.deepPercentage)
+							.mapWith(Number)
+							.as("deep_percentage"),
+						defense_rating: avg(teamMatchStats.defenseRating)
+							.mapWith(Number)
+							.as("defense_rating"),
+						initiation_line: avg(teamMatchStats.initiationLine)
+							.mapWith(Number)
+							.as("initiation_line"),
+					})
+					.from(teamMatchStats)
+					.innerJoin(match, eq(match.id, teamMatchStats.matchId))
+					.where(eq(match.eventKey, id))
+					.groupBy(teamMatchStats.teamNumber)
+			);
 
-export const scoutedTeamData = createServerAction(async (id: string) => {
-	try {
-		const queryResult = await db.execute(getTeamDataQuery(id));
-		return queryResult.rows as TeamData[];
-	} catch (error) {
-		console.error("Error fetching team data:", error);
-		throw new ServerActionError("Failed to fetch team data");
+			return db
+				.with(stats)
+				.select({
+					team_number: stats.team_number,
+					team_name: team.teamName,
+					auto_coral_level_1: stats.auto_coral_level_1,
+					auto_coral_level_2: stats.auto_coral_level_2,
+					auto_coral_level_3: stats.auto_coral_level_3,
+					auto_coral_level_4: stats.auto_coral_level_4,
+					auto_algae_processor: stats.auto_algae_processor,
+					auto_algae_net: stats.auto_algae_net,
+					teleop_coral_level_1: stats.teleop_coral_level_1,
+					teleop_coral_level_2: stats.teleop_coral_level_2,
+					teleop_coral_level_3: stats.teleop_coral_level_3,
+					teleop_coral_level_4: stats.teleop_coral_level_4,
+					teleop_algae_processor: stats.teleop_algae_processor,
+					teleop_algae_net: stats.teleop_algae_net,
+					park_percentage: stats.park_percentage,
+					shallow_percentage: stats.shallow_percentage,
+					deep_percentage: stats.deep_percentage,
+					defense_rating: stats.defense_rating,
+					initiation_line: stats.initiation_line,
+				})
+				.from(stats)
+				.innerJoin(team, eq(team.teamNumber, stats.team_number));
+		} catch (error) {
+			console.error("Error fetching team data:", error);
+			throw new ServerActionError("Failed to fetch team data");
+		}
 	}
-});
+);
 
 export type TeamData = {
 	team_number: number;
@@ -98,7 +132,6 @@ export type TeamData = {
 	teleop_coral_level_4: number;
 	teleop_algae_processor: number;
 	teleop_algae_net: number;
-	teleop_algae_thrown: number;
 	park_percentage: number;
 	shallow_percentage: number;
 	deep_percentage: number;

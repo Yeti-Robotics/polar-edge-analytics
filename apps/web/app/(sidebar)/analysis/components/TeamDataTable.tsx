@@ -27,8 +27,8 @@ import {
     VisibilityState,
 } from "@tanstack/react-table";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 
 
 function NumberDisplay({ value }: { value: number }) {
@@ -89,10 +89,6 @@ const generateCoralColumns = (gamePeriod: "auto" | "teleop") => {
 
 const generateAlgaeColumns = (gamePeriod: "auto" | "teleop") => {
     const algaeActions = ["net", "processor"];
-
-    if (gamePeriod === "teleop") {
-        algaeActions.push("thrown")
-    }
 
     const columns = algaeActions.map(a => numericAccessor(`${gamePeriod}_algae_${a}` as keyof TeamData, a));
 

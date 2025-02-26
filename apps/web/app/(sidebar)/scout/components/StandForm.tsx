@@ -1,6 +1,7 @@
 "use client";
 
 import { AutoForm, FormAction } from "./AutoForm";
+import { pascalToSpace } from "./utils";
 import { StandFormData, standFormSchema } from "../data/schema";
 
 import { Cage } from "@/lib/database/schema";
@@ -109,7 +110,7 @@ export function StandForm({
 											<SelectItem
 												key={i}
 												value={c}
-											>{`${c.charAt(0).toUpperCase()}${c.slice(1)}`}</SelectItem>
+											>{pascalToSpace(c)}</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
