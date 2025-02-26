@@ -107,10 +107,9 @@ export function StandForm({
 									</SelectTrigger>
 									<SelectContent>
 										{Object.values(Cage).map((c, i) => (
-											<SelectItem
-												key={i}
-												value={c}
-											>{pascalToSpace(c)}</SelectItem>
+											<SelectItem key={i} value={c}>
+												{pascalToSpace(c)}
+											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
@@ -146,7 +145,6 @@ export function StandForm({
 						teleop_coral_level_4: 0,
 						teleop_algae_processed: 0,
 						teleop_algae_netted: 0,
-						teleop_algae_thrown: 0,
 						cage_climb: "",
 						defense: "",
 						comments: "",
