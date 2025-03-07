@@ -1,9 +1,32 @@
 import { Cage } from "@/lib/database/schema";
 import { z } from "zod";
 
-const zCageEnum = z.nativeEnum(Cage);
+const cageEnum = z.nativeEnum(Cage);
 
-export const standFormSchema = z.object({
+/**
+ * Generate a Zod schema for the coral data, given the period of the match and row
+ * @param period - The period of the data
+ * @param level - The level of the data
+ * @returns A schema for the coral data
+ */
+function generateCoralSchema(
+	period: "auto" | "teleop",
+	row: "trough" | "low" | "mid" | "high"
+) {
+	const messagePrefix = `Coral in ${period} period, ${row} row`;
+	return z.coerce
+		.number({ message: `${messagePrefix} must be a number` })
+		.int({ message: `${messagePrefix} must be an integer` })
+		.nonnegative({
+			message: `${messagePrefix} must be positive`,
+		})
+		.describe(messagePrefix);
+}
+
+/**
+ * Schema for the match details
+ */
+const matchDetailSchema = z.object({
 	team_number: z.coerce
 		.number({ message: "Team number must be a number" })
 		.int({ message: "Team number cannot be blank" })
@@ -16,40 +39,28 @@ export const standFormSchema = z.object({
 		.positive({ message: "Match number must be greater than zero" })
 		.max(200, { message: "Match number is too large" })
 		.describe("Match number"),
+});
+
+/**
+ * Schema for the autonomous period
+ */
+const autoSchema = z.object({
 	auto_initiation_line: z.coerce
 		.boolean()
 		.nullish()
 		.default(false)
 		.transform((value) => value ?? false)
 		.describe("Crossed black line?"),
-	auto_coral_level_1: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Auto Coral L1 must be positive" })
-		.default(0)
-		.describe("Coral in trough"),
-	auto_coral_level_2: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Auto Coral L2 must be positive" })
-		.default(0)
-		.describe("Coral on level 2"),
-	auto_coral_level_3: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Auto Coral L3 must be positive" })
-		.default(0)
-		.describe("Coral on level 3"),
-	auto_coral_level_4: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Auto Coral L4 must be positive" })
-		.default(0)
-		.describe("Coral on level 4"),
+	auto_coral_level_1: generateCoralSchema("auto", "trough"),
+	auto_coral_level_2: generateCoralSchema("auto", "low"),
+	auto_coral_level_3: generateCoralSchema("auto", "mid"),
+	auto_coral_level_4: generateCoralSchema("auto", "high"),
 	auto_algae_processed: z.coerce
 		.number()
 		.int()
-		.nonnegative({ message: "Auto Algae Processed must be positive" })
+		.nonnegative({
+			message: "Auto Algae Processed must be positive",
+		})
 		.default(0)
 		.describe("Algae in processor"),
 	auto_algae_netted: z.coerce
@@ -58,47 +69,51 @@ export const standFormSchema = z.object({
 		.nonnegative({ message: "Auto Algae Netted must be positive" })
 		.default(0)
 		.describe("Algae netted by a robot"),
-	teleop_coral_level_1: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Teleop Coral L1 must be positive" })
-		.default(0)
-		.describe("Coral in trough"),
-	teleop_coral_level_2: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Teleop Coral L2 must be positive" })
-		.default(0)
-		.describe("Coral on level 2"),
-	teleop_coral_level_3: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Teleop Coral L3 must be positive" })
-		.default(0)
-		.describe("Coral on level 3"),
-	teleop_coral_level_4: z.coerce
-		.number()
-		.int()
-		.nonnegative({ message: "Teleop Coral L4 must be positive" })
-		.default(0)
-		.describe("Coral on level 4"),
+});
+
+/**
+ * Schema for the teleop period
+ */
+const teleopSchema = z.object({
+	teleop_coral_level_1: generateCoralSchema("teleop", "trough"),
+	teleop_coral_level_2: generateCoralSchema("teleop", "low"),
+	teleop_coral_level_3: generateCoralSchema("teleop", "mid"),
+	teleop_coral_level_4: generateCoralSchema("teleop", "high"),
 	teleop_algae_processed: z.coerce
 		.number()
 		.int()
-		.nonnegative({ message: "Teleop Algae Processed must be positive" })
+		.nonnegative({
+			message: "Teleop Algae Processed must be positive",
+		})
 		.default(0)
 		.describe("Algae processed"),
 	teleop_algae_netted: z.coerce
 		.number()
 		.int()
-		.nonnegative({ message: "Teleop Algae Netted must be positive" })
+		.nonnegative({
+			message: "Teleop Algae Netted must be positive",
+		})
 		.default(0)
 		.describe("Algae netted by a robot"),
-	cage_climb: zCageEnum.describe("What does the robot do in the cage area?"),
+});
+
+/**
+ * Schema for the endgame "period"
+ */
+const endgameSchema = z.object({
+	cage_climb: cageEnum
+		.describe("What does the robot do in the cage area?")
+		.default(Cage.NONE),
+});
+
+/**
+ * Schema for miscellaneous data, not necessarily related to a period
+ */
+const miscSchema = z.object({
 	defense: z.coerce
 		.number({ message: "Defense rating must be a number" })
 		.int()
-		.min(1, { message: "Defense rating must be valid" })
+		.min(0, { message: "Defense rating must be valid" })
 		.max(5)
 		.describe("Defense rating"),
 	comments: z
@@ -106,5 +121,60 @@ export const standFormSchema = z.object({
 		.min(32, { message: "Comments must be at least 32 characters" })
 		.describe("Comments about robot performance"),
 });
+
+export const standFormSchema = z.object({
+	match_detail: matchDetailSchema.describe("Match details"),
+	auto: autoSchema.describe("Autonomous"),
+	teleop: teleopSchema.describe("Teleop"),
+	endgame: endgameSchema.describe("Endgame"),
+	misc: miscSchema.describe("Miscellaneous"),
+});
+
+export type StageMetadata = {
+	id: string;
+	title: string;
+	description: string;
+	schema:
+		| typeof matchDetailSchema
+		| typeof autoSchema
+		| typeof teleopSchema
+		| typeof endgameSchema
+		| typeof miscSchema;
+};
+
+export const formMetadata = {
+	steps: [
+		{
+			id: "match-detail",
+			title: "Match Details",
+			description: "Enter the match details",
+			schema: matchDetailSchema,
+		},
+		{
+			id: "auto",
+			title: "Autonomous",
+			description: "Enter the autonomous data",
+			schema: autoSchema,
+		},
+		{
+			id: "teleop",
+			title: "Teleop",
+			description: "Enter the teleop data",
+			schema: teleopSchema,
+		},
+		{
+			id: "endgame",
+			title: "Endgame",
+			description: "Enter the endgame data",
+			schema: endgameSchema,
+		},
+		{
+			id: "misc",
+			title: "Miscellaneous",
+			description: "Enter any miscellaneous data",
+			schema: miscSchema,
+		},
+	] satisfies StageMetadata[],
+};
 
 export type StandFormData = z.infer<typeof standFormSchema>;
