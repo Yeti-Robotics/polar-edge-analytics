@@ -1,11 +1,202 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { Form } from "@repo/ui/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formMetadata, StandFormData, standFormSchema } from "../data/schema";
+import { Cage } from "@/lib/database/schema";
+import { createContext, useContext, useState, useTransition } from "react";
+import { FieldErrors } from "react-hook-form";
+import { submitStandForm } from "../actions/submitForm";
 
-export function FormProvider() {
+type ScoutFormContextType = {
+	currentStepIndex: number;
+	currentStep: (typeof formMetadata.steps)[number] | undefined;
+	goToNextStep: () => void;
+	goToPreviousStep: () => void;
+	canGoNext: boolean;
+	canGoPrevious: boolean;
+	isLastStep: boolean;
+	isFirstStep: boolean;
+	progress: number;
+	submitForm: (data: StandFormData) => Promise<void>;
+	isSubmitting: boolean;
+	formState: {
+		errors: FieldErrors<StandFormData>;
+		isDirty: boolean;
+		isValid: boolean;
+	};
+};
+
+const ScoutFormContext = createContext<ScoutFormContextType | null>(null);
+
+const defaultValues: StandFormData = {
+	match_detail: {
+		// This is a bit of a hack to get the form to work with the zod schema
+		// The zod schema expects a number, but value needs to be a string to be empty by default
+		team_number: "" as unknown as number,
+		match_number: "" as unknown as number,
+	},
+	auto: {
+		auto_initiation_line: false,
+		auto_coral_level_1: 0,
+		auto_coral_level_2: 0,
+		auto_coral_level_3: 0,
+		auto_coral_level_4: 0,
+		auto_algae_processed: 0,
+		auto_algae_netted: 0,
+	},
+	teleop: {
+		teleop_coral_level_1: 0,
+		teleop_coral_level_2: 0,
+		teleop_coral_level_3: 0,
+		teleop_coral_level_4: 0,
+		teleop_algae_processed: 0,
+		teleop_algae_netted: 0,
+	},
+	endgame: {
+		cage_climb: Cage.NONE,
+	},
+	misc: {
+		comments: "",
+		defense_rating: "1" as unknown as number,
+	},
+};
+
+/**
+ * Provider component for the stand form
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <StandFormProvider>
+ *  <StandForm />
+ * </StandFormProvider>
+ * ```
+ */
+export function StandFormProvider({ children }: { children: React.ReactNode }) {
+	const [currentStepIndex, setCurrentStepIndex] = useState(0);
+	const [isSubmitting, startTransition] = useTransition();
+
 	const form = useForm<StandFormData>({
 		resolver: zodResolver(standFormSchema),
+		mode: "onBlur",
+		defaultValues,
 	});
+
+	const currentStep = formMetadata.steps[currentStepIndex];
+
+	// Determine if the current step is the first or last step
+	const isFirstStep = currentStepIndex === 0;
+	const isLastStep = currentStepIndex === formMetadata.steps.length - 1;
+
+	// Validate the current step against the schema for the current step
+	// This is used to determine if the user can go back or forward
+	const validateCurrentStep = () => {
+		console.log("Validating current step", currentStep);
+		const currentStepId = currentStep?.id;
+
+		if (!currentStepId) {
+			console.warn("No step id found for current step");
+			return false;
+		}
+
+		const currentSchema = currentStep?.schema;
+
+		if (!currentSchema) {
+			console.warn("No schema found for current step");
+			return false;
+		}
+
+		const currentValues = form.getValues();
+
+		if (currentStepId === "match_detail") {
+			const matchDetails = currentValues.match_detail;
+			if (
+				matchDetails.team_number === ("" as unknown as number) ||
+				matchDetails.match_number === ("" as unknown as number)
+			) {
+				return false;
+			}
+		}
+
+		try {
+			currentSchema.parse(
+				currentValues[currentStepId as keyof StandFormData]
+			);
+			return true;
+		} catch (error) {
+			console.error(error);
+			return false;
+		}
+	};
+
+	// Determine if the user can go back or forward
+	const canGoPrevious = !isFirstStep;
+	const canGoNext = !isLastStep && validateCurrentStep();
+
+	const progress = ((currentStepIndex + 1) / formMetadata.steps.length) * 100;
+
+	const goToNextStep = () => {
+		if (canGoNext) {
+			setCurrentStepIndex((curr) => curr + 1);
+		}
+	};
+
+	const goToPreviousStep = () => {
+		if (canGoPrevious) {
+			setCurrentStepIndex((curr) => curr - 1);
+		}
+	};
+
+	const onSubmit = async (data: StandFormData) => {
+		console.log("onSubmit called with data:", data);
+		startTransition(async () => {
+			try {
+				await submitStandForm(data);
+				form.reset(); // Wipe the form data
+				setCurrentStepIndex(0); // Go back to the starting state
+				console.log("Form submitted successfully");
+			} catch (error) {
+				console.error("Form submission failed:", error);
+			}
+		});
+	};
+
+	const contextValue = {
+		currentStepIndex,
+		currentStep,
+		goToNextStep,
+		goToPreviousStep,
+		canGoNext,
+		canGoPrevious,
+		isLastStep,
+		isFirstStep,
+		progress,
+		submitForm: onSubmit,
+		isSubmitting,
+		formState: {
+			errors: form.formState.errors,
+			isDirty: form.formState.isDirty,
+			isValid: form.formState.isValid,
+		},
+	};
+
+	return (
+		<ScoutFormContext.Provider value={contextValue}>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)}>{children}</form>
+			</Form>
+		</ScoutFormContext.Provider>
+	);
 }
+
+export const useStandForm = () => {
+	const context = useContext(ScoutFormContext);
+
+	if (!context) {
+		throw new Error("useStandForm must be used within a StandFormProvider");
+	}
+
+	return context;
+};

@@ -5,6 +5,14 @@ import { match, teamMatch, team, tournament } from "@/lib/database/schema";
 import { createServerAction } from "@/lib/actions/actions-utils";
 import { eq, and } from "drizzle-orm";
 
+export type TeamInMatch = {
+	matchId: string | null;
+	teamNumber: number;
+	alliance: string;
+	alliancePosition: number;
+	teamName: string | null;
+};
+
 /**
  * Get information about teams in a match
  * @param matchNumber The match number to get the teams for
@@ -12,7 +20,7 @@ import { eq, and } from "drizzle-orm";
  * - matchId: The id of the match
  * - teamNumber: The number of the team
  */
-async function _getTeamsInMatch(matchNumber: string) {
+async function _getTeamsInMatch(matchNumber: string): Promise<TeamInMatch[]> {
 	return db
 		.select({
 			matchId: match.id,

@@ -110,11 +110,11 @@ const endgameSchema = z.object({
  * Schema for miscellaneous data, not necessarily related to a period
  */
 const miscSchema = z.object({
-	defense: z.coerce
+	defense_rating: z.coerce
 		.number({ message: "Defense rating must be a number" })
 		.int()
-		.min(0, { message: "Defense rating must be valid" })
-		.max(5)
+		.min(1, { message: "Defense rating must be valid" })
+		.max(5, { message: "Defense rating must be valid" })
 		.describe("Defense rating"),
 	comments: z
 		.string({ message: "Comments must be at least 32 characters" })
@@ -145,7 +145,7 @@ export type StageMetadata = {
 export const formMetadata = {
 	steps: [
 		{
-			id: "match-detail",
+			id: "match_detail",
 			title: "Match Details",
 			description: "Enter the match details",
 			schema: matchDetailSchema,

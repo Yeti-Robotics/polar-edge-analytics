@@ -1,6 +1,6 @@
 "use server";
 
-import { StandFormData } from "../data/schema";
+import { StandFormData, standFormSchema } from "../data/schema";
 
 import {
 	createServerAction,
@@ -82,7 +82,7 @@ async function insertStandForm(
 		teleopAlgaeNet: data.teleop.teleop_algae_netted,
 		cageClimb: data.endgame.cage_climb,
 		comments: data.misc.comments,
-		defenseRating: data.misc.defense,
+		defenseRating: data.misc.defense_rating,
 	});
 }
 
@@ -99,6 +99,12 @@ async function insertStandForm(
  */
 async function _submitStandForm(data: StandFormData) {
 	const session = await auth();
+
+	const { success, data: validatedData } = standFormSchema.safeParse(data);
+
+	if (!success) {
+		throw new ServerActionError("Invalid form data");
+	}
 
 	if (
 		!authorized({
@@ -127,12 +133,14 @@ async function _submitStandForm(data: StandFormData) {
 		throw new ServerActionError("Team is not in this match");
 	}
 
-	await insertStandForm(session.user.id, matchInfo.match.id, data).catch(
-		(err) => {
-			console.error(err);
-			throw new ServerActionError("Failed to insert stand form.");
-		}
-	);
+	await insertStandForm(
+		session.user.id,
+		matchInfo.match.id,
+		validatedData
+	).catch((err) => {
+		console.error(err);
+		throw new ServerActionError("Failed to insert stand form.");
+	});
 }
 
 /**

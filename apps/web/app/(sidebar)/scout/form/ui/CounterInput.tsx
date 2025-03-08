@@ -3,7 +3,7 @@
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Minus, Plus } from "lucide-react";
-import { ComponentProps, useState } from "react";
+import { ComponentProps } from "react";
 import { useFormContext } from "react-hook-form";
 
 /**
@@ -29,33 +29,55 @@ export function CounterInput({
 	max?: number;
 	defaultValue?: number;
 } & ComponentProps<typeof Input>) {
-	const { register } = useFormContext();
-	const [count, setCount] = useState(defaultValue ?? 0);
+	const { setValue, watch } = useFormContext();
+	const count = Number(watch(name) ?? defaultValue ?? 0);
 
 	const handleIncrement = () => {
-		setCount((curr) => curr + (step ?? 1));
+		if (!!max && count >= max) return;
+		setValue(name, count + (step ?? 1), { shouldValidate: true });
 	};
 
 	const handleDecrement = () => {
-		setCount((curr) => curr - (step ?? 1));
+		if (min !== undefined && count <= min) return;
+		console.log("decrementing", !!min, count, min);
+		setValue(name, count - (step ?? 1), { shouldValidate: true });
+	};
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = Number(e.target.value);
+		if (!isNaN(value)) {
+			setValue(name, value, { shouldValidate: true });
+		}
 	};
 
 	return (
-		<div className="flex items-center gap-2">
+		<div className="grid grid-cols-[1fr_auto_1fr] gap-1">
 			<Button
+				className="aspect-square h-9"
 				disabled={!!min && count <= min}
 				onClick={handleDecrement}
 				variant="outline"
 				size="icon"
+				type="button"
 			>
 				<Minus />
 			</Button>
-			<Input value={count} readOnly type="number" {...register(name)} />
+			<Input
+				className="text-center h-9 p-0 w-full select-none"
+				value={count}
+				onChange={handleChange}
+				readOnly
+				min={min}
+				max={max}
+				step={step}
+			/>
 			<Button
-				disabled={!!max && count >= max}
+				disabled={max !== undefined && count >= max}
 				onClick={handleIncrement}
 				variant="outline"
 				size="icon"
+				type="button"
+				className="aspect-square h-9"
 			>
 				<Plus />
 			</Button>
