@@ -39,7 +39,6 @@ export function CounterInput({
 
 	const handleDecrement = () => {
 		if (min !== undefined && count <= min) return;
-		console.log("decrementing", !!min, count, min);
 		setValue(name, count - (step ?? 1), { shouldValidate: true });
 	};
 

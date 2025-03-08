@@ -38,7 +38,6 @@ export async function seedEvent(eventForm: FormData) {
 
 	if (eventParsed.success) {
 		const eventData = parseEvent(eventParsed.data);
-		console.log(eventData);
 		await db
 			.insert(tournament)
 			.values({
