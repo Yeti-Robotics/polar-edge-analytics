@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { DiscordProfile } from "next-auth/providers/discord";
 
 const YETI_GUILD_ID = "408711970305474560";
+const AVALANCHE_GUILD_ID = "1241008226598649886";
 
 export const getImgFromProfile = (profile: DiscordProfile): string => {
 	if (profile.avatar === null) {
@@ -17,20 +18,44 @@ export const getImgFromProfile = (profile: DiscordProfile): string => {
 	}
 };
 
-export async function getGuildNickname(accessToken: string) {
-	const member = await fetch(
-		`https://discord.com/api/users/@me/guilds/${YETI_GUILD_ID}/member`,
-		{
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		}
-	).then((res) => res.json());
+async function getMemberInfo(guildId: string, accessToken: string) {
+	try {
+		const response = await fetch(
+			`https://discord.com/api/users/@me/guilds/${guildId}/member`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
+		);
 
-	if (member && member.nick) {
-		return member.nick;
+		if (!response.ok) {
+			return null;
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.error(
+			`Failed to fetch member info for guild ${guildId}:`,
+			error
+		);
+		return null;
+	}
+}
+
+export async function getGuildNickname(accessToken: string) {
+	const yetiMember = await getMemberInfo(YETI_GUILD_ID, accessToken);
+	if (yetiMember?.nick) {
+		return yetiMember.nick;
 	}
 
+	const avalancheMember = await getMemberInfo(
+		AVALANCHE_GUILD_ID,
+		accessToken
+	);
+	if (avalancheMember?.nick) {
+		return avalancheMember.nick;
+	}
 	return null;
 }
 
