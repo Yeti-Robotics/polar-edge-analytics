@@ -22,13 +22,13 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useEffect, useState, useTransition } from "react";
 import { useFormContext } from "react-hook-form";
-
-
+import { useIsOnline } from "@/lib/hooks/use-online-status";
 export function MatchDetail() {
 	const form = useFormContext();
 	const [teams, setTeams] = useState<TeamInMatch[]>([]);
 	const [isPending, startTransition] = useTransition();
 
+	const isOnline = useIsOnline();
 	const matchNumber = form.watch("match_detail.match_number");
 
 	useEffect(() => {
@@ -64,7 +64,7 @@ export function MatchDetail() {
 					</FormItem>
 				)}
 			/>
-			{matchNumber && (
+			{matchNumber && isOnline && (
 				<FormField
 					control={form.control}
 					name="match_detail.team_number"
@@ -98,6 +98,26 @@ export function MatchDetail() {
 						</FormItem>
 					)}
 				/>
+			)}
+			{!isOnline && matchNumber && (
+				<div>
+					<div className="text-xs text-red-500">
+						You are not connected to the internet. Cannot fetch
+						match details. Please input manually.
+					</div>
+					<FormField
+						control={form.control}
+						name="match_detail.team_number"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Team Number</FormLabel>
+								<FormControl>
+									<Input {...field} />
+								</FormControl>
+							</FormItem>
+						)}
+					/>
+				</div>
 			)}
 		</CardContent>
 	);
