@@ -77,7 +77,6 @@ const defaultValues: StandFormData = {
 export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
 	const [isSubmitting, startTransition] = useTransition();
-
 	const form = useForm<StandFormData>({
 		resolver: zodResolver(standFormSchema),
 		mode: "onBlur",
@@ -149,13 +148,11 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	};
 
 	const onSubmit = async (data: StandFormData) => {
-		console.log("onSubmit called with data:", data);
 		startTransition(async () => {
 			try {
 				await submitStandForm(data);
 				form.reset(); // Wipe the form data
 				setCurrentStepIndex(0); // Go back to the starting state
-				console.log("Form submitted successfully");
 			} catch (error) {
 				console.error("Form submission failed:", error);
 			}
