@@ -16,6 +16,17 @@ import { Adapter } from "next-auth/adapters";
 import Discord from "next-auth/providers/discord";
 
 const scopes = ["identify", "email", "guilds.members.read"];
+const errorPage = "/error";
+
+export const redirectToErrorPage = (error: AuthErrors) => {
+	return `${errorPage}?error=${error}`
+}
+
+class AuthErrorsCustomError extends Error {
+	constructor(error: AuthErrors) {
+		super(error);
+	}
+}
 
 export const discordProvider = Discord({
 	authorization: `https://discord.com/api/oauth2/authorize?scope=${scopes.join("+")}`,
@@ -72,11 +83,11 @@ const authenticationProvider = NextAuth({
 	callbacks: {
 		async session({ session, user }) {
 			if (user.role === UserRole.BANISHED) {
-				throw new Error(AuthErrors.BANISHED);
+				throw new AuthErrorsCustomError(AuthErrors.BANISHED);
 			}
 
 			if (!user.guildNickname) {
-				throw new AuthError(AuthErrors.NO_GUILD_NICKNAME);
+				throw new AuthErrorsCustomError(AuthErrors.NO_GUILD_NICKNAME);
 			}
 
 			if (session.user) {
@@ -92,38 +103,47 @@ const authenticationProvider = NextAuth({
 			if (account?.provider === "discord") {
 				const guildNickname = profile?.guildNickname;
 
-				if (!account?.access_token)
-					throw new AuthError(AuthErrors.LOGIN_FAILED);
-				if (!user.id || user.role === UserRole.BANISHED)
-					throw new AuthError(AuthErrors.BANISHED);
-				if (!guildNickname)
-					throw new AuthError(AuthErrors.NO_GUILD_NICKNAME);
-
-				if (
-					process.env.ADMIN_USERS?.split(",").includes(
-						profile.username as string
-					)
-				) {
-					profile.role = UserRole.ADMIN;
-				}
-
 				try {
-					await db
-						.update(users)
-						.set({
-							guildNickname: profile?.guildNickname,
-							role: profile?.role ?? UserRole.USER,
-							image: profile?.image_url as string,
-							emailVerified: profile?.verified
-								? new Date()
-								: null,
-						})
-						.where(eq(users.id, user.id));
-				} catch (error) {
-					console.error(error);
-					throw new AuthError(AuthErrors.LOGIN_FAILED);
+					if (!account?.access_token)
+						throw new AuthErrorsCustomError(AuthErrors.LOGIN_FAILED);
+					if (!user.id || user.role === UserRole.BANISHED)
+						throw new AuthErrorsCustomError(AuthErrors.BANISHED);
+					if (!guildNickname)
+						throw new AuthErrorsCustomError(AuthErrors.NO_GUILD_NICKNAME);
+
+					if (
+						process.env.ADMIN_USERS?.split(",").includes(
+							profile.username as string
+						)
+					) {
+						profile.role = UserRole.ADMIN;
+					}
+
+					try {
+						await db
+							.update(users)
+							.set({
+								guildNickname: profile?.guildNickname,
+								role: profile?.role ?? UserRole.USER,
+								image: profile?.image_url as string,
+								emailVerified: profile?.verified
+									? new Date()
+									: null,
+							})
+							.where(eq(users.id, user.id));
+					} catch (error) {
+						console.error(error);
+						throw new AuthErrorsCustomError(AuthErrors.LOGIN_FAILED);
+					}
+				} catch (err) {
+					if (err instanceof AuthErrorsCustomError) {
+						return redirectToErrorPage(err.message as AuthErrors);
+					}
+
+					throw err;
 				}
 			}
+
 			return true;
 		},
 	},

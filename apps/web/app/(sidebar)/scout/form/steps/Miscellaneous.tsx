@@ -1,5 +1,6 @@
 "use client";
 
+import { CardContent } from "@repo/ui/components/card";
 import { FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import {
 	Select,
@@ -8,10 +9,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
-import { CardContent } from "@repo/ui/components/card";
-
-import { useFormContext } from "react-hook-form";
 import { Textarea } from "@repo/ui/components/textarea";
+import { useFormContext } from "react-hook-form";
 
 export function Miscellaneous() {
 	const form = useFormContext();

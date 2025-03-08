@@ -1,13 +1,13 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { Form } from "@repo/ui/components/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { formMetadata, StandFormData, standFormSchema } from "../data/schema";
-import { Cage } from "@/lib/database/schema";
-import { createContext, useContext, useState, useTransition } from "react";
-import { FieldErrors } from "react-hook-form";
 import { submitStandForm } from "../actions/submitForm";
+import { formMetadata, StandFormData, standFormSchema } from "../data/schema";
+
+import { Cage } from "@/lib/database/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@repo/ui/components/form";
+import { createContext, useContext, useState, useTransition } from "react";
+import { FieldErrors, useForm } from "react-hook-form";
 
 type ScoutFormContextType = {
 	currentStepIndex: number;
@@ -93,7 +93,6 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	// Validate the current step against the schema for the current step
 	// This is used to determine if the user can go back or forward
 	const validateCurrentStep = () => {
-		console.log("Validating current step", currentStep);
 		const currentStepId = currentStep?.id;
 
 		if (!currentStepId) {

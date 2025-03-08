@@ -1,11 +1,13 @@
 "use client";
 
-import { CardContent } from "@repo/ui/components/card";
+import { CoralInput } from "../ui/CoralInput";
 import { CounterInput } from "../ui/CounterInput";
+
+import { CardContent } from "@repo/ui/components/card";
+import { Checkbox } from "@repo/ui/components/checkbox";
 import { FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { useFormContext } from "react-hook-form";
-import { Checkbox } from "@repo/ui/components/checkbox";
-import { CoralInput } from "../ui/CoralInput";
+
 
 export function AutoPeriod() {
 	const form = useFormContext();

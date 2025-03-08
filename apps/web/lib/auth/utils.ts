@@ -67,6 +67,12 @@ export enum AuthErrors {
 	UNAUTHORIZED = "UNAUTHORIZED",
 }
 
+export const errorExplanations: Record<string, string> = {
+	[AuthErrors.BANISHED]: "You have been banned. Take this time to reflect on your actions and/or life choices.",
+	[AuthErrors.DISCORD_UNVERIFIED]: "Your Discord account is unverified. Please verify your email and try again.",
+	[AuthErrors.NO_GUILD_NICKNAME]: "You must have a guild nickname. Update your nickname in the Discord server to your full name and try again."
+};
+
 export function redirectError(error: AuthErrors) {
 	redirect(`/error?error=${error}`);
 }

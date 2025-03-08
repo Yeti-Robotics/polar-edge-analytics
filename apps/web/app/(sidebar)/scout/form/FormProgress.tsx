@@ -1,6 +1,7 @@
 "use client";
-import { Progress } from "@repo/ui/components/progress";
 import { useStandForm } from "./FormProvider";
+
+import { Progress } from "@repo/ui/components/progress";
 
 /**
  * Progress component for the stand form

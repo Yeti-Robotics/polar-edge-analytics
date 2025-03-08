@@ -1,5 +1,5 @@
-import { StandForm } from "./form/StandForm";
 import { FormLayout } from "./form/FormLayout";
+import { StandForm } from "./form/StandForm";
 
 export default async function ScoutingPage() {
 	return (
