@@ -1,8 +1,10 @@
-import { StandForm } from "./components/StandForm";
-import { submitStandForm } from "./data/action";
+import { StandForm } from "./form/StandForm";
+import { FormLayout } from "./form/FormLayout";
 
 export default async function ScoutingPage() {
 	return (
-		<StandForm onSubmit={submitStandForm} />
+		<FormLayout>
+			<StandForm />
+		</FormLayout>
 	);
 }
