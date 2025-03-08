@@ -1,8 +1,10 @@
 "use client";
 
+import { useFormContext } from "react-hook-form";
 import { useStandForm } from "./FormProvider";
 
 import { Button } from "@repo/ui/components/button";
+import { StandFormData } from "../data/schema";
 
 /**
  * Navigation component for the stand form
@@ -21,7 +23,9 @@ export function FormNavigation() {
 		canGoPrevious,
 		isLastStep,
 		isSubmitting,
+		submitForm,
 	} = useStandForm();
+	const form = useFormContext<StandFormData>();
 
 	return (
 		<div className="flex justify-between p-4 border-t">
@@ -35,7 +39,11 @@ export function FormNavigation() {
 			</Button>
 
 			{isLastStep ? (
-				<Button type="submit" disabled={isSubmitting}>
+				<Button
+					type="button"
+					onClick={form.handleSubmit(submitForm)}
+					disabled={isSubmitting}
+				>
 					{isSubmitting ? "Submitting..." : "Submit"}
 				</Button>
 			) : (
