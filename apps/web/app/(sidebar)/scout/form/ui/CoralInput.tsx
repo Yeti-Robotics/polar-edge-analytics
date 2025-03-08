@@ -1,3 +1,6 @@
+import { CounterInput } from "./CounterInput";
+import { ReefDiagram } from "./Reef";
+
 import { Button } from "@repo/ui/components/button";
 import {
 	Dialog,
@@ -7,13 +10,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@repo/ui/components/dialog";
-import { Cylinder, PlusIcon } from "lucide-react";
-import { ReefDiagram } from "./Reef";
-import { useFormContext } from "react-hook-form";
 import { FormField } from "@repo/ui/components/form";
 import { FormItem } from "@repo/ui/components/form";
 import { FormLabel } from "@repo/ui/components/form";
-import { CounterInput } from "./CounterInput";
+import { Cylinder } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+
 
 /**
  * CoralInput component provides a dialog interface for inputting coral-related data

@@ -1,5 +1,8 @@
 "use client";
 
+import { getTeamsInMatch } from "../../actions/teamsInMatch";
+import { TeamInMatch } from "../../actions/teamsInMatch";
+
 import { CardContent } from "@repo/ui/components/card";
 import {
 	FormField,
@@ -16,11 +19,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { useEffect, useState, useTransition } from "react";
 import { useFormContext } from "react-hook-form";
-import { getTeamsInMatch } from "../../actions/teamsInMatch";
-import { TeamInMatch } from "../../actions/teamsInMatch";
-import { Skeleton } from "@repo/ui/components/skeleton";
+
 
 export function MatchDetail() {
 	const form = useFormContext();

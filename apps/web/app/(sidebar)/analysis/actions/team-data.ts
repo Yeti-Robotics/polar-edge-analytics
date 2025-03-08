@@ -4,7 +4,7 @@ import {
 } from "@/lib/actions/actions-utils";
 import { db } from "@/lib/database";
 import { match, team, teamMatchStats } from "@/lib/database/schema";
-import { avg, eq, sql } from "drizzle-orm";
+import { avg, eq } from "drizzle-orm";
 
 export const scoutedTeamData = createServerAction(
 	async (id: string): Promise<TeamData[]> => {

@@ -1,5 +1,6 @@
 "use client";
-import { useFormContext } from "react-hook-form";
+import { Cage } from "@/lib/database/schema";
+import { CardContent } from "@repo/ui/components/card";
 import { FormField } from "@repo/ui/components/form";
 import { FormItem } from "@repo/ui/components/form";
 import { FormLabel } from "@repo/ui/components/form";
@@ -10,8 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
-import { Cage } from "@/lib/database/schema";
-import { CardContent } from "@repo/ui/components/card";
+import { useFormContext } from "react-hook-form";
 
 export function Endgame() {
 	const form = useFormContext();

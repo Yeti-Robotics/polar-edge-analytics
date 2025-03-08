@@ -1,8 +1,9 @@
 "use client";
 
-import { CardContent } from "@repo/ui/components/card";
-import { CounterInput } from "../ui/CounterInput";
 import { CoralInput } from "../ui/CoralInput";
+import { CounterInput } from "../ui/CounterInput";
+
+import { CardContent } from "@repo/ui/components/card";
 import { FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { useFormContext } from "react-hook-form";
 
