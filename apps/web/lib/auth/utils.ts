@@ -1,6 +1,6 @@
 import { UserRole } from "@/lib/database/schema";
-import { DiscordProfile } from "next-auth/providers/discord";
 import { redirect } from "next/navigation";
+import { DiscordProfile } from "next-auth/providers/discord";
 
 const YETI_GUILD_ID = "408711970305474560";
 const AVALANCHE_GUILD_ID = "1241008226598649886";

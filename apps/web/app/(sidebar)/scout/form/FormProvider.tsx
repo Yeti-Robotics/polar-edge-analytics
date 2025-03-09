@@ -1,5 +1,8 @@
 "use client";
 
+import { submitStandForm } from "../actions/submitForm";
+import { TeamInMatch } from "../actions/teamsInMatch";
+import { StandFormSubmissionErrors } from "../actions/utils";
 import { formMetadata, StandFormData, standFormSchema } from "../data/schema";
 
 import { Cage } from "@/lib/database/schema";
@@ -8,9 +11,6 @@ import { Form } from "@repo/ui/components/form";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { createContext, Dispatch, SetStateAction, useContext, useState, useTransition } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { submitStandForm } from "../actions/submitForm";
-import { TeamInMatch } from "../actions/teamsInMatch";
-import { StandFormSubmissionErrors } from "../actions/utils";
 
 type ScoutFormContextType = {
 	currentStepIndex: number;

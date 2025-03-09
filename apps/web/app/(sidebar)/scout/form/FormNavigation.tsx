@@ -1,10 +1,10 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
 import { useStandForm } from "./FormProvider";
+import { StandFormData } from "../data/schema";
 
 import { Button } from "@repo/ui/components/button";
-import { StandFormData } from "../data/schema";
+import { useFormContext } from "react-hook-form";
 
 /**
  * Navigation component for the stand form

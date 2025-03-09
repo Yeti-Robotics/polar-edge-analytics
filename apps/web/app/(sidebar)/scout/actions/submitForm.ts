@@ -1,5 +1,7 @@
 "use server";
 
+import { _getTeamsInMatch, TeamInMatch } from "./teamsInMatch";
+import { StandFormSubmissionErrors } from "./utils";
 import { StandFormData, standFormSchema } from "../data/schema";
 
 import {
@@ -18,8 +20,6 @@ import {
 	UserRole,
 } from "@/lib/database/schema";
 import { and, eq } from "drizzle-orm";
-import { _getTeamsInMatch, TeamInMatch } from "./teamsInMatch";
-import { StandFormSubmissionErrors } from "./utils";
 
 /**
  * Get the current tournament
