@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 
 function onlineChange(callback: () => void) {
 	window.addEventListener("online", callback);

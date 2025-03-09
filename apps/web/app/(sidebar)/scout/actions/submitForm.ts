@@ -1,10 +1,13 @@
 "use server";
 
+import { _getTeamsInMatch, TeamInMatch } from "./teamsInMatch";
+import { StandFormSubmissionErrors } from "./utils";
 import { StandFormData, standFormSchema } from "../data/schema";
 
 import {
 	createServerAction,
 	ServerActionError,
+	ServerActionErrorWithCustomData
 } from "@/lib/actions/actions-utils";
 import { auth } from "@/lib/auth";
 import { AuthErrors, authorized } from "@/lib/auth/utils";
@@ -16,7 +19,7 @@ import {
 	tournament,
 	UserRole,
 } from "@/lib/database/schema";
-import { eq, and } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 /**
  * Get the current tournament
@@ -116,30 +119,21 @@ async function _submitStandForm(data: StandFormData) {
 		throw new ServerActionError(AuthErrors.UNAUTHORIZED);
 	}
 
-	const currentTournament = await getCurrentTournament();
+	const teamMatches = await _getTeamsInMatch(data.match_detail.match_number);
 
-	if (!currentTournament) {
-		throw new ServerActionError("No current tournament set!");
-	}
+	const teamMatchInfo = teamMatches.find(t => t.teamNumber === data.match_detail.team_number);
 
-	const teamMatches = await getTeamMatches(
-		data.match_detail.team_number,
-		data.match_detail.match_number
-	);
-
-	const matchInfo = teamMatches[0];
-
-	if (!matchInfo || !matchInfo.match) {
-		throw new ServerActionError("Team is not in this match");
+	if (!teamMatchInfo || !teamMatchInfo.matchId) {
+		throw new ServerActionErrorWithCustomData(StandFormSubmissionErrors.TEAM_MATCH, teamMatches)
 	}
 
 	await insertStandForm(
 		session.user.id,
-		matchInfo.match.id,
+		teamMatchInfo.matchId,
 		validatedData
 	).catch((err) => {
 		console.error(err);
-		throw new ServerActionError("Failed to insert stand form.");
+		throw new ServerActionError(StandFormSubmissionErrors.FAILURE);
 	});
 }
 
@@ -154,4 +148,4 @@ async function _submitStandForm(data: StandFormData) {
  *
  * @param data The data to submit
  */
-export const submitStandForm = createServerAction(_submitStandForm);
+export const submitStandForm = createServerAction<void, TeamInMatch[], Parameters<typeof _submitStandForm>>(_submitStandForm);
