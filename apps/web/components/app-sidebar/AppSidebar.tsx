@@ -1,9 +1,9 @@
-import { getInitials } from "./utils";
+import { isSessionAuthorized } from "@/lib/auth/utils";
 import Logo from "../logo";
 import { ActiveLink } from "./ActiveLink";
+import { getInitials } from "./utils";
 
 import { auth, signIn, signOut } from "@/lib/auth";
-import { authorized } from "@/lib/auth/utils";
 import { UserRole } from "@/lib/database/schema";
 import {
 	Avatar,
@@ -13,24 +13,25 @@ import {
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
+	SidebarHeader,
+	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-	SidebarMenu,
-	SidebarFooter,
 	SidebarRail,
-	SidebarHeader,
 } from "@repo/ui/components/sidebar";
 import {
-	NotepadText,
 	Grid2X2,
 	LogIn,
 	LogOut,
-	Wrench,
+	NotepadText,
 	Users,
+	Wrench,
 } from "lucide-react";
+import { Session } from "next-auth";
 import Link from "next/link";
 import React from "react";
 
@@ -38,7 +39,7 @@ const navbarData = [
 	{
 		title: "Scout",
 		role: UserRole.USER,
-		items: [{ name: "Stand Form", icon: NotepadText, href: "/scout" }],
+		items: [{ name: "Stand Form", icon: NotepadText, href: "/scout" }, { name: "Saves", icon: NotepadText, href: "/scout/save" }],
 	},
 	{
 		title: "Analysis",
@@ -66,15 +67,11 @@ type RoleMapFunction<T extends RoleObject> = (
 
 const roleMap = <T extends RoleObject>(
 	navData: T[],
-	userRole: UserRole | undefined,
+	session: Session | null,
 	mapFn: RoleMapFunction<T>
 ) => {
 	return navData.map((o, i, a) =>
-		!o.role ||
-		authorized({
-			requiredRole: o.role,
-			currentUserRole: userRole,
-		})
+		!o.role || (session && isSessionAuthorized(o.role, session))
 			? mapFn(o, i, a)
 			: null
 	);
@@ -116,14 +113,14 @@ export async function AppSidebar() {
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				{roleMap(navbarData, session?.user.role, (nav) => (
+				{roleMap(navbarData, session, (nav) => (
 					<SidebarGroup key={nav.title}>
 						<SidebarGroupLabel>{nav.title}</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
 								{roleMap(
 									nav.items,
-									session?.user.role,
+									session,
 									(item) => (
 										<SidebarMenuItem key={item.name}>
 											<SidebarMenuButton asChild>

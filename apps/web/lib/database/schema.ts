@@ -20,9 +20,12 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
+
+// the order of this enum is important and is used
+// to check permissions for a user to access resources
 export enum UserRole {
-	USER = "user",
 	ADMIN = "admin",
+	USER = "user",
 	GUEST = "guest",
 	BANISHED = "banished",
 }
