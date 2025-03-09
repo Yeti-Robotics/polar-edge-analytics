@@ -1,13 +1,16 @@
 "use client";
 
-import { submitStandForm } from "../actions/submitForm";
 import { formMetadata, StandFormData, standFormSchema } from "../data/schema";
 
 import { Cage } from "@/lib/database/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@repo/ui/components/form";
-import { createContext, useContext, useState, useTransition } from "react";
+import { useToast } from "@repo/ui/hooks/use-toast";
+import { createContext, Dispatch, SetStateAction, useContext, useState, useTransition } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
+import { submitStandForm } from "../actions/submitForm";
+import { TeamInMatch } from "../actions/teamsInMatch";
+import { StandFormSubmissionErrors } from "../actions/utils";
 
 type ScoutFormContextType = {
 	currentStepIndex: number;
@@ -26,6 +29,10 @@ type ScoutFormContextType = {
 		isDirty: boolean;
 		isValid: boolean;
 	};
+	standForm: {
+		teams: TeamInMatch[],
+		setTeams: Dispatch<SetStateAction<TeamInMatch[]>>
+	}
 };
 
 const ScoutFormContext = createContext<ScoutFormContextType | null>(null);
@@ -75,6 +82,7 @@ const defaultValues: StandFormData = {
  * ```
  */
 export function StandFormProvider({ children }: { children: React.ReactNode }) {
+	const { toast } = useToast();
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
 	const [isSubmitting, startTransition] = useTransition();
 	const form = useForm<StandFormData>({
@@ -82,6 +90,8 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 		mode: "onBlur",
 		defaultValues,
 	});
+
+	const [teams, setTeams] = useState<TeamInMatch[]>([]);
 
 	const currentStep = formMetadata.steps[currentStepIndex];
 
@@ -150,11 +160,28 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	const onSubmit = async (data: StandFormData) => {
 		startTransition(async () => {
 			try {
-				await submitStandForm(data);
-				form.reset(); // Wipe the form data
-				setCurrentStepIndex(0); // Go back to the starting state
+				const formSubmission = await submitStandForm(data);
+
+				if (formSubmission.success) {
+					form.reset(); // Wipe the form data
+					setCurrentStepIndex(0); // Go back to the starting state
+					toast({
+						title: "Stand form submitted!"
+					});
+				} else if (formSubmission.error === StandFormSubmissionErrors.TEAM_MATCH) {
+					const teamMatches = formSubmission.errorData!;
+					form.setError("match_detail.team_number", { message: "Invalid team number, please re-enter" });
+					setTeams(teamMatches)
+					setCurrentStepIndex(0);
+				} else {
+					throw new Error(formSubmission.error);
+				}
 			} catch (error) {
 				console.error("Form submission failed:", error);
+				toast({
+					title: "Stand form submission failed!",
+					variant: "destructive"
+				});
 			}
 		});
 	};
@@ -170,12 +197,16 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 		isFirstStep,
 		progress,
 		submitForm: onSubmit,
-		isSubmitting,
+		isSubmitting: false,
 		formState: {
 			errors: form.formState.errors,
 			isDirty: form.formState.isDirty,
 			isValid: form.formState.isValid,
 		},
+		standForm: {
+			teams,
+			setTeams
+		}
 	};
 
 	return (

@@ -9,13 +9,14 @@ type Details = string | string[] | undefined;
 /**
  * Represents the result of a server action.
  */
-export type ServerActionResult<T> =
+export type ServerActionResult<T, Z> =
 	| { success: true; value: T }
 	| {
-			success: false;
-			error: string;
-			details?: Record<string, Details>;
-	  };
+		success: false;
+		error: string;
+		details?: Record<string, Details>;
+		errorData?: Z
+	}
 
 /**
  * Represents an error that can be thrown within a server action.
@@ -49,6 +50,17 @@ export class ServerActionErrorWithDetails extends Error {
 	}
 }
 
+
+export class ServerActionErrorWithCustomData<T> extends Error {
+	errorData: T;
+
+	constructor(message: string, errorData: T) {
+		super(message);
+		this.name = "ServerActionErrorDetailed";
+		this.errorData = errorData;
+	}
+}
+
 /**
  * Wraps a server action with standard error handling.
  * React blocks throwing errors in server actions due to the potential
@@ -67,10 +79,10 @@ export class ServerActionErrorWithDetails extends Error {
  * @param environments Environments the server actions should exist in
  * @returns The wrapped version of the server action.
  */
-export function createServerAction<Return, Args extends unknown[] = []>(
+export function createServerAction<Return, Z, Args extends unknown[] = []>(
 	callback: (...args: Args) => Promise<Return>,
 	environment: "all" | "production" | "development" = "all"
-): (...args: Args) => Promise<ServerActionResult<Return>> {
+): (...args: Args) => Promise<ServerActionResult<Return, Z>> {
 	const nodeEnv = getNodeEnv();
 	if (
 		environment !== "all" &&
@@ -96,6 +108,12 @@ export function createServerAction<Return, Args extends unknown[] = []>(
 					error: error.message,
 					details: error.details,
 				};
+			} if (error instanceof ServerActionErrorWithCustomData) {
+				return {
+					success: false,
+					error: error.message,
+					errorData: error.errorData
+				}
 			}
 			throw error;
 		}

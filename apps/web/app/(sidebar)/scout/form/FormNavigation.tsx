@@ -37,24 +37,13 @@ export function FormNavigation() {
 			>
 				Previous
 			</Button>
-
-			{isLastStep ? (
-				<Button
-					type="button"
-					onClick={form.handleSubmit(submitForm)}
-					disabled={isSubmitting}
-				>
-					{isSubmitting ? "Submitting..." : "Submit"}
-				</Button>
-			) : (
-				<Button
-					type="button"
-					onClick={goToNextStep}
-					disabled={!canGoNext}
-				>
-					Next
-				</Button>
-			)}
+			<Button
+				type="button"
+				onClick={isLastStep ? form.handleSubmit(submitForm) : goToNextStep}
+				disabled={isLastStep ? isSubmitting : !canGoNext}
+			>
+				{isLastStep ? isSubmitting ? "Submitting..." : "Submit" : "Next"}
+			</Button>
 		</div>
 	);
 }

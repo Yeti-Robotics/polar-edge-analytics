@@ -2,8 +2,8 @@
 
 import { createServerAction } from "@/lib/actions/actions-utils";
 import { db } from "@/lib/database";
-import { match, teamMatch, team, tournament } from "@/lib/database/schema";
-import { eq, and } from "drizzle-orm";
+import { match, team, teamMatch, tournament } from "@/lib/database/schema";
+import { and, eq } from "drizzle-orm";
 
 export type TeamInMatch = {
 	matchId: string | null;
@@ -20,7 +20,7 @@ export type TeamInMatch = {
  * - matchId: The id of the match
  * - teamNumber: The number of the team
  */
-async function _getTeamsInMatch(matchNumber: string): Promise<TeamInMatch[]> {
+export async function _getTeamsInMatch(matchNumber: number): Promise<TeamInMatch[]> {
 	return db
 		.select({
 			matchId: match.id,
@@ -39,7 +39,7 @@ async function _getTeamsInMatch(matchNumber: string): Promise<TeamInMatch[]> {
 		.where(
 			and(
 				eq(tournament.isCurrent, true),
-				eq(match.matchNumber, matchNumber ? parseInt(matchNumber) : 0)
+				eq(match.matchNumber, matchNumber < 0 || isNaN(matchNumber) ? 0 : matchNumber)
 			)
 		);
 }

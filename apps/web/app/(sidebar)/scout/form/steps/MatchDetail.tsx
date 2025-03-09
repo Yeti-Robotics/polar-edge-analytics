@@ -1,14 +1,17 @@
 "use client";
 
+import { useLoadingTime } from "@/lib/hooks/use-loading-time";
 import { getTeamsInMatch } from "../../actions/teamsInMatch";
-import { TeamInMatch } from "../../actions/teamsInMatch";
 
+import { useIsOnline } from "@/lib/hooks/use-online-status";
+import { toTitleCase } from "@/lib/utils";
+import { Button } from "@repo/ui/components/button";
 import { CardContent } from "@repo/ui/components/card";
 import {
+	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
-	FormControl,
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
@@ -20,30 +23,52 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useEffect, useState, useTransition } from "react";
+import { RefreshCcw } from "lucide-react";
+import { useEffect, useTransition } from "react";
 import { useFormContext } from "react-hook-form";
-import { useIsOnline } from "@/lib/hooks/use-online-status";
+import { useStandForm } from "../FormProvider";
+
+const DEFAULT_MATCH_LOAD_WAIT_TIME = 5000;
+function wait(seconds: number): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+}
 export function MatchDetail() {
 	const form = useFormContext();
-	const [teams, setTeams] = useState<TeamInMatch[]>([]);
+	const { standForm: { teams, setTeams } } = useStandForm();
 	const [isPending, startTransition] = useTransition();
 
 	const isOnline = useIsOnline();
+	const { timedOut, startLoading, stopLoading } = useLoadingTime(DEFAULT_MATCH_LOAD_WAIT_TIME);
+
+	const hasGoodInternet = isOnline && !timedOut;
+	const hasTeams = !!teams.length;
+
+	const teamNumber = form.watch("match_detail.team_number");
 	const matchNumber = form.watch("match_detail.match_number");
+	const isValidMatchNumber = !form.getFieldState("match_detail.match_number", form.formState).invalid && parseInt(matchNumber) > 0;
 
 	useEffect(() => {
-		if (matchNumber) {
-			handleMatchNumberChange(matchNumber);
+		handleMatchNumberChange(matchNumber);
+	}, [matchNumber, isValidMatchNumber]);
+
+	useEffect(() => {
+		if (hasGoodInternet && hasTeams && !teams.some(t => t.teamNumber == teamNumber)) {
+			form.setValue("match_detail.team_number", "");
 		}
-	}, [matchNumber]);
+	}, [teamNumber, teams, hasGoodInternet])
 
 	const handleMatchNumberChange = (value: string) => {
-		startTransition(async () => {
-			const res = await getTeamsInMatch(value);
-			if (res.success) {
-				setTeams(res.value);
-			}
-		});
+		if (isValidMatchNumber) {
+			startLoading();
+
+			startTransition(async () => {
+				const res = await getTeamsInMatch(parseInt(value));
+				stopLoading();
+				if (res.success) {
+					setTeams(res.value);
+				}
+			});
+		}
 	};
 
 	return (
@@ -51,31 +76,41 @@ export function MatchDetail() {
 			<FormField
 				control={form.control}
 				name="match_detail.match_number"
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>Match Number</FormLabel>
-						<FormControl>
-							<Input
-								placeholder="Number of match being played"
-								{...field}
-							/>
-						</FormControl>
-						<FormMessage className="text-xs" />
-					</FormItem>
-				)}
+				render={({ field }) => {
+					const { onChange, ...fieldParams } = field;
+
+					return (
+						<FormItem>
+							<FormLabel>Match Number</FormLabel>
+							<FormControl>
+								<Input
+									autoComplete={"off"}
+									placeholder="Number of match being played"
+									onChange={(e) => {
+										onChange(e);
+										form.trigger("match_detail.match_number");
+									}}
+									{...fieldParams}
+								/>
+							</FormControl>
+							<FormMessage className="text-xs" />
+						</FormItem>
+					)
+				}}
 			/>
-			{matchNumber && isOnline && (
+			{isValidMatchNumber && (
 				<FormField
 					control={form.control}
 					name="match_detail.team_number"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Team Number</FormLabel>
-							{isPending && <Skeleton className="w-full h-10" />}
-							{!isPending && teams.length > 0 && (
+							{isPending && hasGoodInternet && !hasTeams && <Skeleton className="w-full h-10" />}
+							{hasTeams && (
 								<Select
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									defaultValue={""}
+									value={field.value}
 								>
 									<FormControl>
 										<SelectTrigger>
@@ -88,22 +123,23 @@ export function MatchDetail() {
 												key={team.teamNumber}
 												value={team.teamNumber.toString()}
 											>
-												{`${team.teamNumber} - ${team.teamName} (${team.alliance.charAt(0).toUpperCase() + team.alliance.slice(1)} ${team.alliancePosition})`}
+												{`${team.teamNumber} - ${team.teamName} (${toTitleCase(team.alliance)} ${team.alliancePosition})`}
 											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
 							)}
+							{!isPending && !hasTeams && <p className="text-muted-foreground text-sm mt-4">No teams found for this match</p>}
 							<FormMessage className="text-xs" />
 						</FormItem>
 					)}
 				/>
 			)}
-			{!isOnline && matchNumber && (
-				<div>
-					<div className="text-xs text-red-500">
-						You are not connected to the internet. Cannot fetch
-						match details. Please input manually.
+			{!hasGoodInternet && !hasTeams && isValidMatchNumber && (
+				<div className="space-y-4">
+					<div className="text-xs text-red-500 mb-4">
+						{!isOnline ? "No internet." : "Slow connection detected."}{" "}
+						Cannot fetch match details. Please input manually.
 					</div>
 					<FormField
 						control={form.control}
@@ -114,9 +150,13 @@ export function MatchDetail() {
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
+								<FormMessage className="text-xs" />
 							</FormItem>
 						)}
 					/>
+					<Button type="button" variant="secondary" onClick={() => handleMatchNumberChange(matchNumber)}>
+						Refetch match details <RefreshCcw />
+					</Button>
 				</div>
 			)}
 		</CardContent>
