@@ -1,9 +1,9 @@
-import { isSessionAuthorized } from "@/lib/auth/utils";
 import Logo from "../logo";
 import { ActiveLink } from "./ActiveLink";
 import { getInitials } from "./utils";
 
 import { auth, signIn, signOut } from "@/lib/auth";
+import { isSessionAuthorized } from "@/lib/auth/utils";
 import { UserRole } from "@/lib/database/schema";
 import {
 	Avatar,
@@ -31,15 +31,15 @@ import {
 	Users,
 	Wrench,
 } from "lucide-react";
-import { Session } from "next-auth";
 import Link from "next/link";
+import { Session } from "next-auth";
 import React from "react";
 
 const navbarData = [
 	{
 		title: "Scout",
 		role: UserRole.USER,
-		items: [{ name: "Stand Form", icon: NotepadText, href: "/scout" }, { name: "Saves", icon: NotepadText, href: "/scout/save" }],
+		items: [{ name: "Stand Form", icon: NotepadText, href: "/scout" }],
 	},
 	{
 		title: "Analysis",

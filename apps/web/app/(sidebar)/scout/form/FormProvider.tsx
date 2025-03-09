@@ -197,7 +197,7 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 		isFirstStep,
 		progress,
 		submitForm: onSubmit,
-		isSubmitting: false,
+		isSubmitting: form.formState.isSubmitting,
 		formState: {
 			errors: form.formState.errors,
 			isDirty: form.formState.isDirty,

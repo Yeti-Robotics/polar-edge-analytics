@@ -1,4 +1,3 @@
-import { checkSession } from "@/lib/auth/utils";
 import { fetchEvents } from "./actions";
 import { AddTeamForm } from "./components/AddTeamForm";
 import { TeamSearch } from "./components/TeamSearch";
@@ -7,6 +6,7 @@ import {
 	TeamTableWrapperSkeleton,
 } from "./components/TeamTableWrapper";
 
+import { checkSession } from "@/lib/auth/utils";
 import { UserRole } from "@/lib/database/schema";
 import { Suspense } from "react";
 

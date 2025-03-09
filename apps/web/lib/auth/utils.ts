@@ -1,8 +1,9 @@
+import { auth } from "./auth";
+
 import { UserRole } from "@/lib/database/schema";
+import { redirect } from "next/navigation";
 import { Session } from "next-auth";
 import { DiscordProfile } from "next-auth/providers/discord";
-import { redirect } from "next/navigation";
-import { auth } from "./auth";
 
 const YETI_GUILD_ID = "408711970305474560";
 const AVALANCHE_GUILD_ID = "1241008226598649886";
