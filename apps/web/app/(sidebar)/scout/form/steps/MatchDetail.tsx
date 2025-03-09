@@ -29,9 +29,7 @@ import { useFormContext } from "react-hook-form";
 import { useStandForm } from "../FormProvider";
 
 const DEFAULT_MATCH_LOAD_WAIT_TIME = 5000;
-function wait(seconds: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-}
+
 export function MatchDetail() {
 	const form = useFormContext();
 	const { standForm: { teams, setTeams } } = useStandForm();
@@ -78,7 +76,7 @@ export function MatchDetail() {
 				name="match_detail.match_number"
 				render={({ field }) => {
 					const { onChange, ...fieldParams } = field;
-
+					
 					return (
 						<FormItem>
 							<FormLabel>Match Number</FormLabel>
