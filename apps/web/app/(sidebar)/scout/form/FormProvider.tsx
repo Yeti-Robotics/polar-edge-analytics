@@ -5,12 +5,13 @@ import { TeamInMatch } from "../actions/teamsInMatch";
 import { StandFormSubmissionErrors } from "../actions/utils";
 import { formMetadata, StandFormData, standFormSchema } from "../data/schema";
 
-import { Cage } from "@/lib/database/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@repo/ui/components/form";
+import { ToastAction } from "@repo/ui/components/toast";
 import { useToast } from "@repo/ui/hooks/use-toast";
-import { createContext, Dispatch, SetStateAction, useContext, useState, useTransition } from "react";
+import { createContext, Dispatch, SetStateAction, startTransition, useContext, useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
+import { deleteLocalSave, getLocalSave, SaveInformation, standFormDefaultValues, updateLocalSave } from "../saves/hooks/save";
 
 type ScoutFormContextType = {
 	currentStepIndex: number;
@@ -37,38 +38,6 @@ type ScoutFormContextType = {
 
 const ScoutFormContext = createContext<ScoutFormContextType | null>(null);
 
-const defaultValues: StandFormData = {
-	match_detail: {
-		// This is a bit of a hack to get the form to work with the zod schema
-		// The zod schema expects a number, but value needs to be a string to be empty by default
-		team_number: "" as unknown as number,
-		match_number: "" as unknown as number,
-	},
-	auto: {
-		auto_initiation_line: false,
-		auto_coral_level_1: 0,
-		auto_coral_level_2: 0,
-		auto_coral_level_3: 0,
-		auto_coral_level_4: 0,
-		auto_algae_processed: 0,
-		auto_algae_netted: 0,
-	},
-	teleop: {
-		teleop_coral_level_1: 0,
-		teleop_coral_level_2: 0,
-		teleop_coral_level_3: 0,
-		teleop_coral_level_4: 0,
-		teleop_algae_processed: 0,
-		teleop_algae_netted: 0,
-	},
-	endgame: {
-		cage_climb: Cage.NONE,
-	},
-	misc: {
-		comments: "",
-		defense_rating: "1" as unknown as number,
-	},
-};
 
 /**
  * Provider component for the stand form
@@ -84,20 +53,63 @@ const defaultValues: StandFormData = {
 export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	const { toast } = useToast();
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
-	const [isSubmitting, startTransition] = useTransition();
 	const form = useForm<StandFormData>({
 		resolver: zodResolver(standFormSchema),
 		mode: "onBlur",
-		defaultValues,
+		defaultValues: standFormDefaultValues,
 	});
 
-	const [teams, setTeams] = useState<TeamInMatch[]>([]);
+	const formData = form.watch();
 
+	const [teams, setTeams] = useState<TeamInMatch[]>([]);
+	const [matchDetail, setMatchDetail] = useState<SaveInformation>();
 	const currentStep = formMetadata.steps[currentStepIndex];
 
 	// Determine if the current step is the first or last step
 	const isFirstStep = currentStepIndex === 0;
 	const isLastStep = currentStepIndex === formMetadata.steps.length - 1;
+
+	useEffect(() => {
+		const matchNumber = formData.match_detail.match_number;
+		const teamNumber = formData.match_detail.team_number;
+
+		if (matchNumber && teamNumber && !isFirstStep) {
+			const isNewMatch = !matchDetail || matchNumber !== matchDetail.matchNumber || teamNumber !== matchDetail.teamNumber;
+
+			if (isNewMatch) {
+
+				if (matchDetail) {
+					deleteLocalSave(matchDetail.matchNumber, matchDetail.teamNumber);
+				} else {
+					const possibleSave = getLocalSave(matchNumber, teamNumber);
+
+					if (possibleSave.match_detail.match_number === matchNumber && possibleSave.match_detail.team_number === teamNumber) {
+						const teamMatchInfo = `Match ${matchNumber} - Team ${teamNumber}`;
+						toast({
+							title: "Save found",
+							description: `Found a save for ${teamMatchInfo}`,
+							action: (<ToastAction onClick={() => {
+								form.reset(possibleSave)
+
+								startTransition(async () => {
+									toast({
+										title: "Save loaded",
+										description: teamMatchInfo
+									})
+								})
+							}} altText="Load Saved Form">
+								Load
+							</ToastAction>)
+						})
+					}
+				}
+
+				setMatchDetail({ matchNumber, teamNumber });
+			}
+
+			updateLocalSave(matchNumber, teamNumber, formData);
+		}
+	}, [formData, currentStepIndex])
 
 	// Validate the current step against the schema for the current step
 	// This is used to determine if the user can go back or forward
@@ -164,6 +176,9 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 
 				if (formSubmission.success) {
 					form.reset(); // Wipe the form data
+					deleteLocalSave(data.match_detail.match_number, data.match_detail.team_number);
+					setTeams([]);
+					setMatchDetail(undefined);
 					setCurrentStepIndex(0); // Go back to the starting state
 					toast({
 						title: "Stand form submitted!"
