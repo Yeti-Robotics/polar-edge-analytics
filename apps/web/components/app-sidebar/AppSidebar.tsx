@@ -28,11 +28,12 @@ import {
 	LogIn,
 	LogOut,
 	NotepadText,
+	Sparkles,
 	Users,
 	Wrench,
 } from "lucide-react";
-import Link from "next/link";
 import { Session } from "next-auth";
+import Link from "next/link";
 import React from "react";
 
 const navbarData = [
@@ -43,7 +44,10 @@ const navbarData = [
 	},
 	{
 		title: "Analysis",
-		items: [{ name: "Team Data Table", icon: Grid2X2, href: "/analysis" }],
+		items: [
+			{ name: "Basic", icon: Grid2X2, href: "/analysis" },
+			{ name: "Advanced", icon: Sparkles, href: "/analysis/advanced" },
+		],
 	},
 	{
 		title: "Admin",
