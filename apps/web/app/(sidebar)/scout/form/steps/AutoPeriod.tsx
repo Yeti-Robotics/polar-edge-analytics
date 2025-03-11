@@ -8,7 +8,6 @@ import { Checkbox } from "@repo/ui/components/checkbox";
 import { FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { useFormContext } from "react-hook-form";
 
-
 export function AutoPeriod() {
 	const form = useFormContext();
 
@@ -19,7 +18,11 @@ export function AutoPeriod() {
 				name="auto.auto_initiation_line"
 				render={({ field }) => (
 					<FormItem className="flex items-center gap-x-2 mb-2">
-						<Checkbox className="size-6 mb-0" {...field} />
+						<Checkbox
+							className="size-6 mb-0"
+							checked={field.value}
+							onCheckedChange={field.onChange}
+						/>
 						<FormLabel className="text-sm flex items-center gap-2">
 							Moved off black line?
 						</FormLabel>
