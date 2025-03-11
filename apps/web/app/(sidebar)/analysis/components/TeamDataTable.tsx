@@ -1,7 +1,7 @@
 "use client";
 
-import { DataTable } from "./DataTable";
 import { TeamData } from "../actions/team-data";
+import { DataTable } from "./DataTable";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -11,6 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import { Input } from "@repo/ui/components/input";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import {
 	CellContext,
 	Column,
@@ -281,7 +282,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 				</div>
 			</div>
 			<div className="border-2">
-				<DataTable table={table} />
+				{teamData?.length ? <DataTable table={table} /> : <Skeleton className="h-16" />}
 			</div>
 		</div>
 	);
