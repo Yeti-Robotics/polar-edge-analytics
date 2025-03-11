@@ -1,6 +1,5 @@
 import { db } from "@/lib/database";
-import { team, teamMatchStats } from "@/lib/database/schema";
-import { match } from "@/lib/database/schema";
+import { match, team, teamMatchStats } from "@/lib/database/schema";
 import { avg, eq, sql } from "drizzle-orm";
 import AdvancedDataTableClient from "./AdvancedDataTableClient";
 
@@ -10,6 +9,8 @@ export type AdvancedTeamData = {
 	auto_total: number;
 	teleop_total: number;
 	endgame_total: number;
+	coral_total: number;
+	algae_total: number;
 	total_score: number;
 };
 
@@ -100,6 +101,24 @@ export async function AdvancedDataTable({ id }: { id: string }) {
                          ${pointValues.shallow_percentage} + 
                          ${pointValues.deep_percentage}`,
 			},
+			coral_total: {
+				value: sql`${pointValues.auto_coral_level_1} + 
+				${pointValues.auto_coral_level_2} + 
+				${pointValues.auto_coral_level_3} + 
+				${pointValues.auto_coral_level_4} + 
+				${pointValues.teleop_coral_level_1} + 
+				${pointValues.teleop_coral_level_2} + 
+				${pointValues.teleop_coral_level_3} + 
+				${pointValues.teleop_coral_level_4}`
+			},
+			algae_total: {
+				value: sql`
+				${pointValues.auto_algae_net} +
+				${pointValues.auto_algae_processor} +
+				${pointValues.teleop_algae_net} +
+				${pointValues.teleop_algae_processor}
+				`,
+			}
 		})
 		.from(pointValues)
 		.innerJoin(team, eq(team.teamNumber, pointValues.team_number));
@@ -111,6 +130,8 @@ export async function AdvancedDataTable({ id }: { id: string }) {
 		auto_total: Number(team.auto_total.value),
 		teleop_total: Number(team.teleop_total.value),
 		endgame_total: Number(team.endgame_total.value),
+		coral_total: Number(team.coral_total.value),
+		algae_total: Number(team.algae_total.value),
 		total_score:
 			Number(team.auto_total.value) +
 			Number(team.teleop_total.value) +
