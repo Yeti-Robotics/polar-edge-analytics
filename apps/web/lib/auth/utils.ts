@@ -1,9 +1,9 @@
 import { auth } from "./auth";
 
-import { UserRole } from "@/lib/database/schema";
-import { redirect } from "next/navigation";
+import { UserRole, userRoleOrdering } from "@/lib/database/schema";
 import { Session } from "next-auth";
 import { DiscordProfile } from "next-auth/providers/discord";
+import { redirect } from "next/navigation";
 
 const YETI_GUILD_ID = "408711970305474560";
 const AVALANCHE_GUILD_ID = "1241008226598649886";
@@ -81,7 +81,7 @@ export function redirectError(error: AuthErrors) {
 }
 
 function roleIndex(userRole: UserRole) {
-	return Object.values(UserRole).indexOf(userRole);
+	return userRoleOrdering.indexOf(userRole);
 }
 
 export function isSessionAuthorized(requiredRole: UserRole, session: Session) {

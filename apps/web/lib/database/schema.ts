@@ -20,15 +20,15 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
-
-// the order of this enum is important and is used
-// to check permissions for a user to access resources
 export enum UserRole {
 	ADMIN = "admin",
 	USER = "user",
 	GUEST = "guest",
 	BANISHED = "banished",
 }
+
+// ordering of user roles from most to least permissive
+export const userRoleOrdering: UserRole[] = [UserRole.ADMIN, UserRole.USER, UserRole.GUEST, UserRole.BANISHED];
 
 export const userRoleEnum = pgEnum("user_role", enumToPgEnum(UserRole));
 
