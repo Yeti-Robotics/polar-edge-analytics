@@ -1,9 +1,7 @@
 "use client";
 
 import { DataTable } from "./DataTable";
-import { TournamentPicker } from "./TournamentPicker";
 import { TeamData } from "../actions/team-data";
-import { TournamentData } from "../actions/tournament-data";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -210,13 +208,7 @@ const columns: ColumnDef<TeamData>[] = [
 	}),
 ];
 
-export function TeamDataTable({
-	teamData,
-	tournaments,
-}: {
-	teamData: TeamData[];
-	tournaments: TournamentData;
-}) {
+export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnVisibility, setVisibility] = useState<VisibilityState>({});
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -254,7 +246,6 @@ export function TeamDataTable({
 								?.setFilterValue(event.target.value)
 						}
 					/>
-					<TournamentPicker tournaments={tournaments} />
 				</div>
 				<div className="pr-4 md:pr-0">
 					<DropdownMenu>

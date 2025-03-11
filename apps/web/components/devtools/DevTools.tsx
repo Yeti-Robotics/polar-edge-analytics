@@ -10,11 +10,12 @@ import {
 } from "@repo/ui/components/drawer";
 import {
 	Tabs,
+	TabsContent,
 	TabsList,
 	TabsTrigger,
-	TabsContent,
 } from "@repo/ui/components/tabs";
 import { WrenchIcon } from "lucide-react";
+import { Session } from "next-auth";
 
 function SessionStatus({ isActive }: { isActive: boolean }) {
 	return (
@@ -29,7 +30,7 @@ function SessionStatus({ isActive }: { isActive: boolean }) {
 function UserInfoCard({
 	user,
 }: {
-	user: NonNullable<Awaited<ReturnType<typeof auth>>>["user"];
+	user: Session["user"];
 }) {
 	return (
 		<div className="space-y-2">

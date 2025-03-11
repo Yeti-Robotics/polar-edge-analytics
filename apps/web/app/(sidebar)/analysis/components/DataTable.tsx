@@ -16,7 +16,7 @@ type DataTableProps<T> = {
 
 export function DataTable<T>({ table }: DataTableProps<T>) {
 	return (
-		<Table>
+		<Table className="w-fit">
 			<TableHeader>
 				{table.getHeaderGroups().map((headerGroup) => (
 					<TableRow key={headerGroup.id} className="border">
