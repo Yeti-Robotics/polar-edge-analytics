@@ -1,7 +1,6 @@
 import { CurrentEvent } from "./current-event";
 
-import { auth } from "@/lib/auth";
-import { authorized } from "@/lib/auth/utils";
+import { checkSession } from "@/lib/auth/utils";
 import { seedEvent } from "@/lib/data/thebluealliance/event";
 import { seedMatches } from "@/lib/data/thebluealliance/match";
 import { db } from "@/lib/database";
@@ -11,21 +10,11 @@ import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { desc, eq } from "drizzle-orm";
 import { Plus } from "lucide-react";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function AdminTools() {
-	const session = await auth();
-
-	if (
-		!authorized({
-			requiredRole: UserRole.ADMIN,
-			currentUserRole: session?.user.role,
-		})
-	) {
-		redirect("/");
-	}
-
+	await checkSession(UserRole.ADMIN);
+	
 	return (
 		<div className="flex flex-col gap-6">
 			<section className="flex flex-col">

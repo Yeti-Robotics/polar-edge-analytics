@@ -1,7 +1,20 @@
-import { signIn } from "@/lib/auth";
+import { auth, signIn } from "@/lib/auth";
+import { UserRole } from "@/lib/database/schema";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+async function enterScoutingSite() {
+	"use server";
+	const authInfo = await auth();
+
+	if (authInfo?.user && authInfo.user.role !== UserRole.BANISHED) {
+		redirect("/scout");
+	}
+
+	await signIn("discord", { redirectTo: "/scout" });
+}
 
 export default function Home() {
 
@@ -27,10 +40,7 @@ export default function Home() {
 							))}
 						</div>
 						<form
-							action={async () => {
-								"use server";
-								await signIn("discord", { redirectTo: "/scout" });
-							}}
+							action={enterScoutingSite}
 						>
 							<Button
 								type="submit"
@@ -69,10 +79,7 @@ export default function Home() {
 					</p>
 
 					<div className="flex flex-col sm:flex-row justify-center gap-4">
-						<form action={async () => {
-							"use server";
-							await signIn("discord", { redirectTo: "/scout" });
-						}}>
+						<form action={enterScoutingSite}>
 							<Button
 								type="submit"
 								variant="ghost"

@@ -1,6 +1,9 @@
-import { UserRole } from "@/lib/database/schema";
-import { redirect } from "next/navigation";
+import { auth } from "./auth";
+
+import { UserRole, userRoleOrdering } from "@/lib/database/schema";
+import { Session } from "next-auth";
 import { DiscordProfile } from "next-auth/providers/discord";
+import { redirect } from "next/navigation";
 
 const YETI_GUILD_ID = "408711970305474560";
 const AVALANCHE_GUILD_ID = "1241008226598649886";
@@ -78,17 +81,23 @@ export function redirectError(error: AuthErrors) {
 }
 
 function roleIndex(userRole: UserRole) {
-	return Object.values(UserRole).indexOf(userRole);
+	return userRoleOrdering.indexOf(userRole);
 }
 
-export function authorized({
-	requiredRole,
-	currentUserRole,
-}: {
-	requiredRole: UserRole;
-	currentUserRole?: UserRole;
-}) {
-	return (
-		currentUserRole && roleIndex(currentUserRole) >= roleIndex(requiredRole)
-	);
+export function isSessionAuthorized(requiredRole: UserRole, session: Session) {
+	return session.user.role && session.user.role !== UserRole.BANISHED && roleIndex(session.user.role) <= roleIndex(requiredRole);
+}
+
+export async function checkSession(requiredRole: UserRole, session?: Session | undefined | null) {
+	if (!session) {
+		session = await auth();
+	}
+
+	if (session?.user.role === UserRole.BANISHED) {
+		redirectError(AuthErrors.BANISHED);
+	}
+
+	if (!session?.user.role || !isSessionAuthorized(requiredRole, session)) {
+		redirectError(session?.user.role === UserRole.BANISHED ? AuthErrors.BANISHED : AuthErrors.UNAUTHORIZED)
+	}
 }

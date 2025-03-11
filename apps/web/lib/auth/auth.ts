@@ -82,14 +82,6 @@ const authenticationProvider = NextAuth({
 	}) as Adapter,
 	callbacks: {
 		async session({ session, user }) {
-			if (user.role === UserRole.BANISHED) {
-				throw new AuthErrorsCustomError(AuthErrors.BANISHED);
-			}
-
-			if (!user.guildNickname) {
-				throw new AuthErrorsCustomError(AuthErrors.NO_GUILD_NICKNAME);
-			}
-
 			if (session.user) {
 				session.user.emailVerified = user.emailVerified;
 				session.user.id = user.id;
@@ -149,18 +141,7 @@ const authenticationProvider = NextAuth({
 	},
 });
 
-export const { handlers, signIn, signOut } = authenticationProvider;
-
-export const auth = async () => {
-	try {
-		return await authenticationProvider.auth();
-	} catch (err) {
-		return await signOut({
-			redirectTo: `/error?error=${err instanceof Error ? err.message : "SERVER_ERROR"}`,
-			redirect: true,
-		});
-	}
-};
+export const { handlers, signIn, signOut, auth } = authenticationProvider;
 
 declare module "next-auth" {
 	interface User {

@@ -6,9 +6,8 @@ import {
 	TeamTableWrapperSkeleton,
 } from "./components/TeamTableWrapper";
 
-import { auth } from "@/lib/auth";
+import { checkSession } from "@/lib/auth/utils";
 import { UserRole } from "@/lib/database/schema";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 interface PageProps {
@@ -24,11 +23,7 @@ interface PageProps {
 export default async function TeamsPage({
 	searchParams: searchParamsPromise,
 }: PageProps) {
-	const session = await auth();
-
-	if (session?.user.role !== UserRole.ADMIN) {
-		return notFound();
-	}
+	await checkSession(UserRole.ADMIN);
 
 	const searchParams = await searchParamsPromise;
 	const page = Number(searchParams.page) || 1;

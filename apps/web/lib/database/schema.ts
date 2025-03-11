@@ -21,11 +21,14 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 
 export enum UserRole {
-	USER = "user",
 	ADMIN = "admin",
+	USER = "user",
 	GUEST = "guest",
 	BANISHED = "banished",
 }
+
+// ordering of user roles from most to least permissive
+export const userRoleOrdering: UserRole[] = [UserRole.ADMIN, UserRole.USER, UserRole.GUEST, UserRole.BANISHED];
 
 export const userRoleEnum = pgEnum("user_role", enumToPgEnum(UserRole));
 

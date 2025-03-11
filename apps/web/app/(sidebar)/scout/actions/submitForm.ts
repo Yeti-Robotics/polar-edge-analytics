@@ -1,8 +1,8 @@
 "use server";
 
+import { StandFormData, standFormSchema } from "../data/schema";
 import { _getTeamsInMatch, TeamInMatch } from "./teamsInMatch";
 import { StandFormSubmissionErrors } from "./utils";
-import { StandFormData, standFormSchema } from "../data/schema";
 
 import {
 	createServerAction,
@@ -10,7 +10,7 @@ import {
 	ServerActionErrorWithCustomData
 } from "@/lib/actions/actions-utils";
 import { auth } from "@/lib/auth";
-import { AuthErrors, authorized } from "@/lib/auth/utils";
+import { AuthErrors, checkSession } from "@/lib/auth/utils";
 import { db } from "@/lib/database";
 import {
 	match,
@@ -103,21 +103,15 @@ async function insertStandForm(
 async function _submitStandForm(data: StandFormData) {
 	const session = await auth();
 
+	if (!session) throw new ServerActionError(AuthErrors.UNAUTHORIZED);
+
 	const { success, data: validatedData } = standFormSchema.safeParse(data);
 
 	if (!success) {
 		throw new ServerActionError("Invalid form data");
 	}
 
-	if (
-		!authorized({
-			requiredRole: UserRole.USER,
-			currentUserRole: session?.user.role,
-		}) ||
-		!session?.user.id
-	) {
-		throw new ServerActionError(AuthErrors.UNAUTHORIZED);
-	}
+	await checkSession(UserRole.USER, session);
 
 	const teamMatches = await _getTeamsInMatch(data.match_detail.match_number);
 
