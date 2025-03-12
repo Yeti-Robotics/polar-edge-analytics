@@ -102,23 +102,23 @@ export async function AdvancedDataTable({ id }: { id: string }) {
                         12 * ${pointValues.deep_percentage}`,
 			},
 			coral_total: {
-				value: sql`${pointValues.auto_coral_level_1} + 
-				${pointValues.auto_coral_level_2} + 
-				${pointValues.auto_coral_level_3} + 
-				${pointValues.auto_coral_level_4} + 
-				${pointValues.teleop_coral_level_1} + 
-				${pointValues.teleop_coral_level_2} + 
-				${pointValues.teleop_coral_level_3} + 
-				${pointValues.teleop_coral_level_4}`
+				value: sql`3 *${pointValues.auto_coral_level_1} + 
+				4 * ${pointValues.auto_coral_level_2} + 
+				6 * ${pointValues.auto_coral_level_3} + 
+				7 * ${pointValues.auto_coral_level_4} + 
+				2 * ${pointValues.teleop_coral_level_1} + 
+				3 * ${pointValues.teleop_coral_level_2} + 
+				4 * ${pointValues.teleop_coral_level_3} + 
+				5 * ${pointValues.teleop_coral_level_4}`,
 			},
 			algae_total: {
 				value: sql`
-				${pointValues.auto_algae_net} +
-				${pointValues.auto_algae_processor} +
-				${pointValues.teleop_algae_net} +
-				${pointValues.teleop_algae_processor}
+				4 * ${pointValues.auto_algae_net} +
+				6 * ${pointValues.auto_algae_processor} +
+				4 * ${pointValues.teleop_algae_net} +
+				6 * ${pointValues.teleop_algae_processor}
 				`,
-			}
+			},
 		})
 		.from(pointValues)
 		.innerJoin(team, eq(team.teamNumber, pointValues.team_number));
