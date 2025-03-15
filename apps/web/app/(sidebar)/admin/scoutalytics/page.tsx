@@ -14,12 +14,14 @@ import {
 } from "@repo/ui/components/table";
 
 export default async function ScoutalyticsPage({
-	searchParams,
+	searchParams: searchParamsPromise,
 }: {
-	searchParams: { eventKey?: string };
+	searchParams: Promise<{ eventKey?: string }>;
 }) {
 	// Check if user has admin privileges
 	await checkSession(UserRole.ADMIN);
+
+	const searchParams = await searchParamsPromise;
 
 	// Query to count forms submitted by each scout
 	const scoutFormCounts = await db
