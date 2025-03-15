@@ -24,6 +24,7 @@ import {
 	SidebarRail,
 } from "@repo/ui/components/sidebar";
 import {
+	ChartBar,
 	Grid2X2,
 	LogIn,
 	LogOut,
@@ -55,6 +56,11 @@ const navbarData = [
 		items: [
 			{ name: "Tools", icon: Wrench, href: "/admin/tools" },
 			{ name: "Teams", icon: Users, href: "/admin/teams" },
+			{
+				name: "Scoutalytics",
+				icon: ChartBar,
+				href: "/admin/scoutalytics",
+			},
 		],
 	},
 ];
@@ -122,20 +128,16 @@ export async function AppSidebar() {
 						<SidebarGroupLabel>{nav.title}</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
-								{roleMap(
-									nav.items,
-									session,
-									(item) => (
-										<SidebarMenuItem key={item.name}>
-											<SidebarMenuButton asChild>
-												<ActiveLink href={item.href}>
-													<item.icon className="size-4" />
-													<span>{item.name}</span>
-												</ActiveLink>
-											</SidebarMenuButton>
-										</SidebarMenuItem>
-									)
-								)}
+								{roleMap(nav.items, session, (item) => (
+									<SidebarMenuItem key={item.name}>
+										<SidebarMenuButton asChild>
+											<ActiveLink href={item.href}>
+												<item.icon className="size-4" />
+												<span>{item.name}</span>
+											</ActiveLink>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								))}
 							</SidebarMenu>
 						</SidebarGroupContent>
 					</SidebarGroup>
