@@ -1,5 +1,5 @@
 import { db } from "@/lib/database";
-import { standForm, users } from "@/lib/database/schema";
+import { match, standForm, tournament, users } from "@/lib/database/schema";
 import { UserRole } from "@/lib/database/schema";
 import { checkSession } from "@/lib/auth/utils";
 import { count, desc, eq } from "drizzle-orm";
@@ -13,9 +13,15 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 
-export default async function ScoutalyticsPage() {
+export default async function ScoutalyticsPage({
+	searchParams: searchParamsPromise,
+}: {
+	searchParams: Promise<{ eventKey?: string }>;
+}) {
 	// Check if user has admin privileges
 	await checkSession(UserRole.ADMIN);
+
+	const searchParams = await searchParamsPromise;
 
 	// Query to count forms submitted by each scout
 	const scoutFormCounts = await db
@@ -27,6 +33,13 @@ export default async function ScoutalyticsPage() {
 		})
 		.from(standForm)
 		.leftJoin(users, eq(standForm.userId, users.id))
+		.leftJoin(match, eq(standForm.matchId, match.id))
+		.leftJoin(tournament, eq(match.eventKey, tournament.id))
+		.where(
+			searchParams.eventKey
+				? eq(match.eventKey, searchParams.eventKey)
+				: undefined
+		)
 		.groupBy(standForm.userId, users.name, users.guildNickname)
 		.orderBy(desc(count(standForm.id)));
 
