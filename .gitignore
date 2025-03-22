@@ -12,6 +12,10 @@
 # turbo
 .turbo
 
+# build
+**/dist
+**/build
+
 # next.js
 **/.next/
 **/out/
