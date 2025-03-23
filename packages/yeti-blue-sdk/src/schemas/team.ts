@@ -13,7 +13,7 @@ export const TeamSimpleSchema = z.object({
 export type TeamSimple = z.infer<typeof TeamSimpleSchema>;
 
 export const TeamSchema = TeamSimpleSchema.extend({
-  address: z.string(),
+  address: z.string().nullable(),
   postal_code: z.string(),
   gmaps_place_id: z.string().nullable(),
   gmaps_url: z.string().nullable(),
@@ -22,6 +22,7 @@ export const TeamSchema = TeamSimpleSchema.extend({
   location_name: z.string().nullable(),
   motto: z.string().nullable().optional(),
   rookie_year: z.number(),
+  school_name: z.string().nullable(),
   website: z.string(),
 });
 

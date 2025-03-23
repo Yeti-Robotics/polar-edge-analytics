@@ -74,6 +74,7 @@ export class Fetcher<T> {
         }
         throw error;
       }
+      throw error;
     }
   }
 

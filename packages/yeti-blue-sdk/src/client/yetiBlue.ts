@@ -1,48 +1,30 @@
-import { Team, TeamSchema, TeamSimpleSchema } from "../schemas";
-import { BaseClient, BaseClientConfig } from "./base";
-import { FetcherOptions } from "../fetcher/types";
+import { Cache, MemoryCache } from "../cache";
+import { ModuleBaseConfig } from "./modules/base";
+import { TeamsResource } from "./modules/team";
 
-type TBAResponse = Team; // Add more types here as needed: | Match | Event | etc.
-
-type YetiBlueBaseOptions = {
-  shouldCache?: boolean;
-};
-
-interface YetiBlueConfig extends BaseClientConfig<TBAResponse> {
+interface YetiBlueClientConfig {
+  apiKey: string;
+  baseUrl: string;
+  cache?: Cache<unknown>;
   defaultCache?: boolean;
 }
 
-export class YetiBlueClient extends BaseClient<TBAResponse> {
-  private defaultCache: boolean;
+export class YetiBlueClient {
+  // Cache stores values of any type.
+  // Resources should perform validation of the data they get back from the cache.
+  private readonly cache: Cache<any>;
+  private readonly defaultCache: boolean;
+  teams: TeamsResource;
 
-  constructor({ apiKey, baseUrl, cache, defaultCache }: YetiBlueConfig) {
-    super({ apiKey, baseUrl, cache });
-    this.defaultCache = defaultCache ?? false;
-  }
+  constructor(config: YetiBlueClientConfig) {
+    this.cache = config.cache || new MemoryCache();
+    this.defaultCache = config.defaultCache || false;
+    const resourceConfig = {
+      ...config,
+      defaultCache: this.defaultCache,
+      cache: this.cache,
+    } satisfies ModuleBaseConfig<any>;
 
-  private getRequestOptions(shouldCache?: boolean): FetcherOptions {
-    return {
-      cache: shouldCache ?? this.defaultCache,
-    };
-  }
-
-  private async handleFetch(path: string, shouldCache?: boolean) {
-    const options = this.getRequestOptions(shouldCache);
-    const response = await this.fetcher.fetch(path, options);
-    return response;
-  }
-
-  async getTeam(
-    teamNumber: number,
-    { simple = true, shouldCache }: { simple: boolean } & YetiBlueBaseOptions
-  ) {
-    const response = await this.handleFetch(
-      `/team/frc${teamNumber}${simple ? "/simple" : ""}`,
-      shouldCache
-    );
-
-    return simple
-      ? TeamSimpleSchema.parseAsync(response)
-      : TeamSchema.parseAsync(response);
+    this.teams = new TeamsResource(resourceConfig);
   }
 }
