@@ -1,7 +1,7 @@
-import { YetiBlueClient } from "../yetiBlue";
-import { MemoryCache } from "../../cache/memoryCache";
+import { YetiBlueClient } from "../../yetiBlue";
+import { MemoryCache } from "../../../cache/memoryCache";
 import axios, { AxiosInstance } from "axios";
-import { Team, TeamSimple } from "../../schemas";
+import { Team, TeamSimple } from "../../../schemas";
 
 const teamSimple = {
   city: "Charlotte",
@@ -17,7 +17,7 @@ const teamSimple = {
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe("YetiBlueClient - Teams", () => {
+describe("Modules - Teams", () => {
   let client: YetiBlueClient;
   let cache: MemoryCache<any>;
   let mockAxiosInstance: jest.Mocked<AxiosInstance>;
