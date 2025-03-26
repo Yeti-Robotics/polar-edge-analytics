@@ -87,7 +87,7 @@ export const forms = {
 				))`,
 			})
 			.from(standForm)
-			.groupBy(standForm.teamNumber, standForm.matchId)
+			.groupBy(standForm.teamNumber, standForm.matchId, standForm.userId)
 			.having(sql`count(*) > 1`)
 			.orderBy(sql`count(*) desc`);
 
