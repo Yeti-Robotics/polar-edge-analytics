@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: All tests pass
         if: success()
-        run: echo "Both storybook and jest tests passed successfully!"
+        run: echo "All tests passed successfully!"
       - name: Test failed
         if: failure()
         run: echo "A test failed!"

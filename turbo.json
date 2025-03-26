@@ -6,7 +6,7 @@
     "tasks": {
       "build": {
         "dependsOn": ["^build"],
-        "outputs": [".next/**", "!.next/cache/**", "storybook-static/**"]
+        "outputs": [".next/**", "!.next/cache/**"]
       },
       "lint": {},
       "lint:fix": {},
