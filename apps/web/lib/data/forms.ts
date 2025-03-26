@@ -1,5 +1,5 @@
 import { db } from "@/lib/database";
-import { standForm } from "@/lib/database/schema";
+import { standForm, UserRole } from "@/lib/database/schema";
 import { eq, sql } from "drizzle-orm";
 import {
 	type StandForm,
@@ -36,6 +36,10 @@ export const forms = {
 	 * Get all forms for a specific user
 	 */
 	getByUserId: async (userId: string): Promise<StandForm[]> => {
+		const currentUser = await verifySession();
+		if (currentUser.role !== UserRole.ADMIN && currentUser.id !== userId) {
+			throw new Error("Unauthorized");
+		}
 		return db
 			.select()
 			.from(standForm)
@@ -47,6 +51,10 @@ export const forms = {
 	 * Get duplicate forms (forms submitted for the same team and match)
 	 */
 	getDuplicates: async (): Promise<DuplicateFormGroup[]> => {
+		const currentUser = await verifySession();
+		if (currentUser.role !== UserRole.ADMIN) {
+			throw new Error("Unauthorized");
+		}
 		const duplicates = await db
 			.select({
 				teamNumber: standForm.teamNumber,
@@ -79,6 +87,7 @@ export const forms = {
 			})
 			.from(standForm)
 			.groupBy(standForm.teamNumber, standForm.matchId)
+			.having(sql`count(*) > 1`)
 			.orderBy(sql`count(*) desc`);
 
 		return duplicates;
@@ -88,6 +97,10 @@ export const forms = {
 	 * Delete a specific form by ID
 	 */
 	deleteById: async (id: string): Promise<StandForm[]> => {
+		const currentUser = await verifySession();
+		if (currentUser.role !== UserRole.ADMIN) {
+			throw new Error("Unauthorized");
+		}
 		return db.delete(standForm).where(eq(standForm.id, id)).returning();
 	},
 
@@ -95,12 +108,12 @@ export const forms = {
 	 * Create a new form
 	 */
 	create: async (data: NewStandForm): Promise<StandForm[]> => {
-		const user = await verifySession();
+		const currentUser = await verifySession();
 		return db
 			.insert(standForm)
 			.values({
 				...data,
-				userId: user.id,
+				userId: currentUser.id,
 			})
 			.returning();
 	},
@@ -109,6 +122,13 @@ export const forms = {
 	 * Update an existing form
 	 */
 	update: async (id: string, data: StandFormUpdate): Promise<StandForm[]> => {
+		const currentUser = await verifySession();
+		if (
+			currentUser.role !== UserRole.ADMIN &&
+			currentUser.id !== data.userId
+		) {
+			throw new Error("Unauthorized");
+		}
 		return db
 			.update(standForm)
 			.set(data)
