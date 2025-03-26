@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @source "../components";
-@source "../../../../../apps/storybook";
 @source "../../../../../apps/web";
 
 @theme {
