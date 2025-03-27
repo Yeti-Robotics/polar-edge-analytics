@@ -21,14 +21,19 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 
 export enum UserRole {
-	ADMIN = "admin",
 	USER = "user",
+	ADMIN = "admin",
 	GUEST = "guest",
 	BANISHED = "banished",
 }
 
 // ordering of user roles from most to least permissive
-export const userRoleOrdering: UserRole[] = [UserRole.ADMIN, UserRole.USER, UserRole.GUEST, UserRole.BANISHED];
+export const userRoleOrdering: UserRole[] = [
+	UserRole.ADMIN,
+	UserRole.USER,
+	UserRole.GUEST,
+	UserRole.BANISHED,
+];
 
 export const userRoleEnum = pgEnum("user_role", enumToPgEnum(UserRole));
 
@@ -241,6 +246,11 @@ export const standForm = pgTable(
 			columns: [table.teamNumber, table.matchId],
 			foreignColumns: [teamMatch.teamNumber, teamMatch.matchId],
 		}),
+		uniqueIndex("stand_form_unique_idx").on(
+			table.teamNumber,
+			table.matchId,
+			table.userId
+		),
 	]
 );
 

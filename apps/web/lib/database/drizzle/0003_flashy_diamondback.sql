@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "stand_form_unique_idx" ON "stand_form" USING btree ("team_number","match_id","user_id");

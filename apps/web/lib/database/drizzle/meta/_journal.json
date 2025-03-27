@@ -22,6 +22,13 @@
       "when": 1740528772266,
       "tag": "0002_flimsy_miracleman",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1743034027717,
+      "tag": "0003_flashy_diamondback",
+      "breakpoints": true
     }
   ]
 }
