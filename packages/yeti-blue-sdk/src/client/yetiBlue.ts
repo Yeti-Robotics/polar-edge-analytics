@@ -1,5 +1,6 @@
 import { Cache, MemoryCache } from "../cache";
 import { ModuleBaseConfig } from "./modules/base";
+import { MatchesResource } from "./modules/matches";
 import { TeamsResource } from "./modules/team";
 
 interface YetiBlueClientConfig {
@@ -15,6 +16,7 @@ export class YetiBlueClient {
   private readonly cache: Cache<any>;
   private readonly defaultCache: boolean;
   teams: TeamsResource;
+  matches: MatchesResource;
 
   constructor(config: YetiBlueClientConfig) {
     this.cache = config.cache || new MemoryCache();
@@ -26,5 +28,6 @@ export class YetiBlueClient {
     } satisfies ModuleBaseConfig<any>;
 
     this.teams = new TeamsResource(resourceConfig);
+    this.matches = new MatchesResource(resourceConfig);
   }
 }
