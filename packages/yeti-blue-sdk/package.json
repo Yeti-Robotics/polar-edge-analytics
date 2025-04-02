@@ -1,6 +1,7 @@
 {
     "name": "yeti-blue-sdk",
     "version": "0.0.1",
+    "private": false, 
     "description": "A TypeScript SDK for The Blue Alliance API",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

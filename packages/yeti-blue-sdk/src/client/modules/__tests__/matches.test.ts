@@ -1,4 +1,4 @@
-import { YetiBlueClient } from "../../yetiBlue";
+import { YETIBlueClient } from "../../yetiBlue";
 import { MemoryCache } from "../../../cache/memoryCache";
 import axios, { AxiosInstance } from "axios";
 import { Match, Alliance, Cage } from "../../../schemas/match";
@@ -8,7 +8,7 @@ jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Modules - Matches", () => {
-  let client: YetiBlueClient;
+  let client: YETIBlueClient;
   let cache: MemoryCache<any>;
   let mockAxiosInstance: jest.Mocked<AxiosInstance>;
 
@@ -292,7 +292,7 @@ describe("Modules - Matches", () => {
       get: jest.fn(),
     } as unknown as jest.Mocked<AxiosInstance>;
     mockedAxios.create.mockReturnValue(mockAxiosInstance);
-    client = new YetiBlueClient({
+    client = new YETIBlueClient({
       apiKey: "test",
       baseUrl: "",
       cache,
