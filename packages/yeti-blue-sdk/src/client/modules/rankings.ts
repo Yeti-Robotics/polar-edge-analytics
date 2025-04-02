@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DistrictRanking, DistrictRankingSchema } from "../../schemas/rankings";
+import { DistrictRanking, DistrictRankingSchema, RegionalPoolRanking, RegionalPoolRankingSchema } from "../../schemas/rankings";
 import { FetcherOptions } from "../../fetcher/types";
 import { Fetcher } from "../../fetcher";
 import { ModuleBase, ModuleBaseConfig } from "./base";
@@ -9,7 +9,7 @@ import { ModuleBase, ModuleBaseConfig } from "./base";
  *
  * @see https://www.thebluealliance.com/apidocs/v3
  */
-export class RankingResource extends ModuleBase<DistrictRanking[]> {
+export class RankingResource extends ModuleBase<DistrictRanking[] | RegionalPoolRanking[]> {
     private fetcher: Fetcher<DistrictRanking[]>;
 
     constructor(config: ModuleBaseConfig<DistrictRanking[]>) {
@@ -18,10 +18,18 @@ export class RankingResource extends ModuleBase<DistrictRanking[]> {
     }
 
     async getDistrictRanking(districtKey: string, options?: FetcherOptions) {
-    const res = await this.fetcher.fetch(
+    const res = await this.fetcher.fetch( 
             `/district/${districtKey}/rankings`,
             this.getFetcherOptions(options)
             );
             return z.array(DistrictRankingSchema).nullable().parseAsync(res.data);
+    }
+
+    async getRegionalPoolRanking(year: number, options?: FetcherOptions) {
+        const res = await this.fetcher.fetch( 
+            `/regional_advancements/${year}/rankings`,
+            this.getFetcherOptions(options)
+            );
+            return z.array(RegionalPoolRankingSchema).nullable().parseAsync(res.data);
     }
 }
