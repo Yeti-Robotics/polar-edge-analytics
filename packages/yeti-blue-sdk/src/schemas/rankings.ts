@@ -18,4 +18,14 @@ export const DistrictRankingSchema = z.object({
     event_points: z.array(DistrictEventPointsSchema).optional()
 })
 
+export const RegionalPoolRankingSchema = z.object({
+    team_key: z.string().regex(/^frc\d+$/),
+    rank: z.number().positive(),
+    rookie_bonus: z.number().min(0).optional(),
+    point_total: z.number().min(0),
+    single_event_bonus: z.number().min(0).optional(),
+    event_points: z.array(DistrictEventPointsSchema).optional()
+})
+
 export type DistrictRanking = z.infer<typeof DistrictRankingSchema>
+export type RegionalPoolRanking = z.infer<typeof RegionalPoolRankingSchema>
