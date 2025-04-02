@@ -10,10 +10,10 @@ import { ModuleBase, ModuleBaseConfig } from "./base";
  *
  * @see https://www.thebluealliance.com/apidocs/v3
  */
-export class MatchesResource extends ModuleBase<Match[]> {
-  private fetcher: Fetcher<Match[]>;
+export class MatchesResource extends ModuleBase<Match | Match[]> {
+  private fetcher: Fetcher<Match | Match[]>;
 
-  constructor(config: ModuleBaseConfig<Match[]>) {
+  constructor(config: ModuleBaseConfig<Match | Match[]>) {
     super(config);
     this.fetcher = this.createFetcher(config.baseUrl, config.apiKey);
   }
@@ -24,5 +24,12 @@ export class MatchesResource extends ModuleBase<Match[]> {
             this.getFetcherOptions(options)
           );
           return z.array(MatchSchema).parseAsync(res.data);
+  }
+  async getMatchByKey(matchKey: string, options?: FetcherOptions) {
+    const res = await this.fetcher.fetch(
+            `/match/${matchKey}`,
+            this.getFetcherOptions(options)
+          );
+          return MatchSchema.parseAsync(res.data);
   }
 }
