@@ -82,7 +82,7 @@ describe("Modules - Teams", () => {
   it("checks cache before making API call for simple team", async () => {
     // Setup cache spy
     const cacheSpy = jest.spyOn(cache, "get");
-    cache.set("/teams/frc3506/simple", {
+    cache.set("/team/frc3506/simple", {
       value: teamSimple,
       metadata: {
         etag: "1234567890",
@@ -102,7 +102,7 @@ describe("Modules - Teams", () => {
 
     const result = await client.teams.getSimple(3506, { cache: true });
 
-    expect(cacheSpy).toHaveBeenCalledWith("/teams/frc3506/simple");
+    expect(cacheSpy).toHaveBeenCalledWith("/team/frc3506/simple");
     expect(result).toEqual(teamSimple);
   });
 
@@ -120,7 +120,7 @@ describe("Modules - Teams", () => {
 
     await client.teams.getSimple(3506, { cache: true });
 
-    expect(cacheSpy).toHaveBeenCalledWith("/teams/frc3506/simple", {
+    expect(cacheSpy).toHaveBeenCalledWith("/team/frc3506/simple", {
       value: teamSimple,
       metadata: {
         etag: "1234567890",
