@@ -1,4 +1,4 @@
-import { YetiBlueClient } from "../../yetiBlue";
+import { YETIBlueClient } from "../../yetiBlue";
 import { MemoryCache } from "../../../cache/memoryCache";
 import axios, { AxiosInstance } from "axios";
 import { Team, TeamSimple } from "../../../schemas";
@@ -18,7 +18,7 @@ jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Modules - Teams", () => {
-  let client: YetiBlueClient;
+  let client: YETIBlueClient;
   let cache: MemoryCache<any>;
   let mockAxiosInstance: jest.Mocked<AxiosInstance>;
 
@@ -28,7 +28,7 @@ describe("Modules - Teams", () => {
       get: jest.fn(),
     } as unknown as jest.Mocked<AxiosInstance>;
     mockedAxios.create.mockReturnValue(mockAxiosInstance);
-    client = new YetiBlueClient({
+    client = new YETIBlueClient({
       apiKey: "test",
       baseUrl: "",
       cache,
@@ -82,7 +82,7 @@ describe("Modules - Teams", () => {
   it("checks cache before making API call for simple team", async () => {
     // Setup cache spy
     const cacheSpy = jest.spyOn(cache, "get");
-    cache.set("/teams/frc3506/simple", {
+    cache.set("/team/frc3506/simple", {
       value: teamSimple,
       metadata: {
         etag: "1234567890",
@@ -102,7 +102,7 @@ describe("Modules - Teams", () => {
 
     const result = await client.teams.getSimple(3506, { cache: true });
 
-    expect(cacheSpy).toHaveBeenCalledWith("/teams/frc3506/simple");
+    expect(cacheSpy).toHaveBeenCalledWith("/team/frc3506/simple");
     expect(result).toEqual(teamSimple);
   });
 
@@ -120,7 +120,7 @@ describe("Modules - Teams", () => {
 
     await client.teams.getSimple(3506, { cache: true });
 
-    expect(cacheSpy).toHaveBeenCalledWith("/teams/frc3506/simple", {
+    expect(cacheSpy).toHaveBeenCalledWith("/team/frc3506/simple", {
       value: teamSimple,
       metadata: {
         etag: "1234567890",

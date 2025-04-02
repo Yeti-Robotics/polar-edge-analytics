@@ -19,7 +19,7 @@ export class TeamsResource extends ModuleBase<Team> {
 
   async getSimple(teamNumber: number, options?: FetcherOptions) {
     const res = await this.fetcher.fetch(
-      `/teams/frc${teamNumber}/simple`,
+      `/team/frc${teamNumber}/simple`,
       this.getFetcherOptions(options)
     );
     return TeamSimpleSchema.parseAsync(res.data);

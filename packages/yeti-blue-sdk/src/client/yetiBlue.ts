@@ -11,7 +11,7 @@ interface YetiBlueClientConfig {
   defaultCache?: boolean;
 }
 
-export class YetiBlueClient {
+export class YETIBlueClient {
   // Cache stores values of any type.
   // Resources should perform validation of the data they get back from the cache.
   private readonly cache: Cache<any>;
