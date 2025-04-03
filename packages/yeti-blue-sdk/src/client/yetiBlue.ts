@@ -4,7 +4,7 @@ import { MatchesResource } from "./modules/matches";
 import { RankingResource } from "./modules/rankings";
 import { TeamsResource } from "./modules/team";
 
-interface YetiBlueClientConfig {
+export interface YETIBlueClientConfig {
   apiKey: string;
   baseUrl: string;
   cache?: Cache<unknown>;
@@ -20,7 +20,7 @@ export class YETIBlueClient {
   matches: MatchesResource;
   rankings: RankingResource;
 
-  constructor(config: YetiBlueClientConfig) {
+  constructor(config: YETIBlueClientConfig) {
     this.cache = config.cache || new MemoryCache();
     this.defaultCache = config.defaultCache || false;
     const resourceConfig = {

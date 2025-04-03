@@ -1,0 +1,8 @@
+src/
+.DS_Store
+.git
+.gitignore
+.idea/
+.vscode/
+node_modules/
+jest.config.js

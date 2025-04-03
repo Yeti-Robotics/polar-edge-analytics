@@ -1,5 +1,5 @@
 {
-  "name": "yeti-blue-sandbox",
+  "name": "@app/yeti-blue-sandbox",
   "version": "0.1.0",
   "private": true,
   "scripts": {
