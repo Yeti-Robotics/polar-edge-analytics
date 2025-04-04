@@ -1,6 +1,6 @@
 {
     "name": "@yeti-robotics/yeti-blue-sdk",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "private": false,
     "description": "A TypeScript SDK for The Blue Alliance API",
     "type": "module",
@@ -43,5 +43,9 @@
         "zod": "^3.24.2"
     },
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Yeti-Robotics/polar-edge-analytics.git"
+    }
 }
