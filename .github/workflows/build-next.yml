@@ -12,5 +12,5 @@ jobs:
         uses: ./.github/actions/site-setup
 
       - name: Run Next.js Build
-        run: pnpm run build --filter=web
+        run: pnpm run build --filter @app/web
         shell: bash
