@@ -1,5 +1,5 @@
-import { MemoryCache } from "./memoryCache";
-import { CachedResponse } from "../fetcher/types";
+import { MemoryCache } from "../memoryCache";
+import { CachedResponse } from "../../fetcher/types";
 
 const delay = (callback: () => unknown | Promise<unknown>, ms: number) =>
   new Promise((resolve) =>

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { FetcherOptions, FetcherResponse } from "./types";
-import { Cache } from "../cache/types";
+import { FetcherOptions, FetcherResponse } from "@/fetcher/types";
+import { Cache } from "@/cache";
 
 export class Fetcher<T> {
   private client: AxiosInstance;

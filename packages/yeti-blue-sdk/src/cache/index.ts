@@ -1,2 +1,2 @@
-export * from "./memoryCache";
-export * from "./types";
+export * from "@/cache/memoryCache";
+export * from "@/cache/types";

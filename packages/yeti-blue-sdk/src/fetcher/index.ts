@@ -1,1 +1,1 @@
-export { Fetcher } from "./fetcher";
+export { Fetcher } from "@/fetcher/fetcher";
