@@ -6,7 +6,7 @@
         "dev": "turbo run dev",
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix",
-        "release": "pnpm build && changeset publish"
+        "release": "pnpm build --filter=./packages/* && changeset publish"
     },
     "devDependencies": {
         "prettier": "^3.4.2",
