@@ -1,3 +1,3 @@
-export type { TeamSimple, Team } from "./team";
-export type { Match } from "./match";
-export type { DistrictRanking, RegionalPoolRanking } from "./rankings";
+export type { TeamSimple, Team } from "@/schemas/team";
+export type { Match } from "@/schemas/match";
+export type { DistrictRanking, RegionalPoolRanking } from "@/schemas/rankings";

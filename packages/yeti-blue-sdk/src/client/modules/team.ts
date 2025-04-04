@@ -1,8 +1,8 @@
-import { Fetcher } from "../../fetcher";
-import { FetcherOptions } from "../../fetcher/types";
-import { Team, TeamSchema, TeamSimpleSchema } from "../../schemas/team";
+import { Fetcher } from "@/fetcher";
+import { FetcherOptions } from "@/fetcher/types";
+import { Team, TeamSchema, TeamSimpleSchema } from "@/schemas/team";
 
-import { ModuleBase, ModuleBaseConfig } from "./base";
+import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 
 /**
  * @description A module for interacting with The Blue Alliance Team API

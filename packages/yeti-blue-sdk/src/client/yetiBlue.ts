@@ -1,8 +1,8 @@
-import { Cache, MemoryCache } from "../cache";
-import { ModuleBaseConfig } from "./modules/base";
-import { MatchesResource } from "./modules/matches";
-import { RankingResource } from "./modules/rankings";
-import { TeamsResource } from "./modules/team";
+import { Cache, MemoryCache } from "@/cache";
+import { ModuleBaseConfig } from "@/client/modules/base";
+import { MatchesResource } from "@/client/modules/matches";
+import { RankingResource } from "@/client/modules/rankings";
+import { TeamsResource } from "@/client/modules/team";
 
 export interface YETIBlueClientConfig {
   apiKey: string;

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { Fetcher } from "../../fetcher";
-import { FetcherOptions } from "../../fetcher/types";
-import { Match, MatchSchema } from "../../schemas/match";
+import { Fetcher } from "@/fetcher";
+import { FetcherOptions } from "@/fetcher/types";
+import { Match, MatchSchema } from "@/schemas/match";
 
-import { ModuleBase, ModuleBaseConfig } from "./base";
+import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 
 /**
  * @description A module for interacting with The Blue Alliance Team API
@@ -20,16 +20,16 @@ export class MatchesResource extends ModuleBase<Match | Match[]> {
 
   async getEventMatchesSimple(eventKey: string, options?: FetcherOptions) {
     const res = await this.fetcher.fetch(
-            `/event/${eventKey}/matches`,
-            this.getFetcherOptions(options)
-          );
-          return z.array(MatchSchema).parseAsync(res.data);
+      `/event/${eventKey}/matches`,
+      this.getFetcherOptions(options)
+    );
+    return z.array(MatchSchema).parseAsync(res.data);
   }
   async getMatchByKey(matchKey: string, options?: FetcherOptions) {
     const res = await this.fetcher.fetch(
-            `/match/${matchKey}`,
-            this.getFetcherOptions(options)
-          );
-          return MatchSchema.parseAsync(res.data);
+      `/match/${matchKey}`,
+      this.getFetcherOptions(options)
+    );
+    return MatchSchema.parseAsync(res.data);
   }
 }

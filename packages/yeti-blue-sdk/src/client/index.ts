@@ -1,1 +1,1 @@
-export * from "./yetiBlue";
+export * from "@/client/yetiBlue";
