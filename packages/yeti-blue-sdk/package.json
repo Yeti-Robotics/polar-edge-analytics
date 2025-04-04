@@ -1,12 +1,25 @@
 {
-    "name": "yeti-blue-sdk",
-    "version": "0.0.1",
-    "private": false, 
+    "name": "@yeti-robotics/yeti-blue-sdk",
+    "version": "0.0.3",
+    "private": false,
     "description": "A TypeScript SDK for The Blue Alliance API",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "scripts": {
-        "build": "tsc",
+        "build": "tsup",
+        "dev": "tsup --watch",
         "test": "jest",
         "test:watch": "jest --watch",
         "lint": "eslint src --ext .ts",
@@ -28,5 +41,11 @@
     "dependencies": {
         "axios": "^1.8.4",
         "zod": "^3.24.2"
+    },
+    "author": "",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Yeti-Robotics/polar-edge-analytics.git"
     }
 }
