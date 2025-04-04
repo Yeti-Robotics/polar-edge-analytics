@@ -26,7 +26,7 @@ RUN pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=builder /app/out/full/ .
-RUN pnpm dlx turbo run build --filter=web
+RUN pnpm dlx turbo run build --filter=@app/web
 
 FROM base AS runner
 WORKDIR /app
