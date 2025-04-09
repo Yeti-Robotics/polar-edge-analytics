@@ -22,7 +22,7 @@ if (!globalForCache.cache) {
 }
 
 export const client = new YETIBlueClient({
-  apiKey: process.env.NEXT_PUBLIC_TBA_API_KEY || "your-api-key-here",
+  apiKey: process.env.TBA_API_KEY || "your-api-key-here",
   baseUrl: "https://www.thebluealliance.com/api/v3",
   cache: myCache,
   defaultCache: true,
