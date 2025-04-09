@@ -1,4 +1,4 @@
-import { YETIBlueClient, MemoryCache } from "yeti-blue-sdk";
+import { YETIBlueClient, MemoryCache } from "@yeti-robotics/yeti-blue-sdk";
 
 /**
  * This is a global cache for the app.

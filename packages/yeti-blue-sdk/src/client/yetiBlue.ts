@@ -3,6 +3,7 @@ import { ModuleBaseConfig } from "@/client/modules/base";
 import { MatchesResource } from "@/client/modules/matches";
 import { RankingResource } from "@/client/modules/rankings";
 import { TeamsResource } from "@/client/modules/team";
+import { MediaResource } from "./modules/media";
 
 export interface YETIBlueClientConfig {
   apiKey: string;
@@ -20,6 +21,8 @@ export class YETIBlueClient {
   matches: MatchesResource;
   rankings: RankingResource;
 
+  media: MediaResource
+
   constructor(config: YETIBlueClientConfig) {
     this.cache = config.cache || new MemoryCache();
     this.defaultCache = config.defaultCache || false;
@@ -32,5 +35,7 @@ export class YETIBlueClient {
     this.teams = new TeamsResource(resourceConfig);
     this.matches = new MatchesResource(resourceConfig);
     this.rankings = new RankingResource(resourceConfig);
+    this.media = new MediaResource(resourceConfig);
+
   }
 }
