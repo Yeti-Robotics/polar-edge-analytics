@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "dev:yeti-blue": "pnpm dev --filter=@yeti-robotics/yeti-blue-sdk --filter=@app/yeti-blue-sandbox",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
