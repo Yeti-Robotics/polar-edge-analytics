@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:yeti-blue": "pnpm dev --filter=@yeti-robotics/yeti-blue-sdk --filter=@app/yeti-blue-sandbox",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -12,7 +13,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "next": "15.2.4",
-    "yeti-blue-sdk": "workspace:*"
+    "@yeti-robotics/yeti-blue-sdk": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5",
