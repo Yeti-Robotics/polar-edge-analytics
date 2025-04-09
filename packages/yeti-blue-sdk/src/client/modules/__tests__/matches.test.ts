@@ -1,7 +1,8 @@
 import { YETIBlueClient } from "../../yetiBlue";
 import { MemoryCache } from "../../../cache/memoryCache";
 import axios, { AxiosInstance } from "axios";
-import { Match, Alliance, Cage } from "../../../schemas/match";
+import { Match, Alliance } from "../../../schemas/match";
+import { Cage } from "../../../schemas/match-breakdowns/reefscape-2025";
 
 // Mock axios
 jest.mock("axios");
@@ -12,7 +13,7 @@ describe("Modules - Matches", () => {
   let cache: MemoryCache<any>;
   let mockAxiosInstance: jest.Mocked<AxiosInstance>;
 
-  const mockMatch: Match = {
+  const mockMatch: Omit<Match, "year"> = {
     key: "2025test_qm1",
     comp_level: "qm",
     set_number: 1,
@@ -312,7 +313,7 @@ describe("Modules - Matches", () => {
     const result = await client.matches.getEventMatchesSimple("2025test");
     expect(result).toBeDefined();
     expect(result).toHaveLength(1);
-    expect(result[0]).toEqual(mockMatch);
+    expect(result[0]).toEqual({ ...mockMatch, year: 2025 });
   });
 
   it("checks cache before making API call for event matches", async () => {
@@ -341,7 +342,7 @@ describe("Modules - Matches", () => {
     });
 
     expect(cacheSpy).toHaveBeenCalledWith("/event/2025test/matches");
-    expect(result).toEqual([mockMatch]);
+    expect(result).toEqual([{ ...mockMatch, year: 2025 }]);
   });
 
   it("stores event matches response in cache", async () => {
@@ -386,5 +387,19 @@ describe("Modules - Matches", () => {
     await expect(
       client.matches.getEventMatchesSimple("2025test")
     ).rejects.toThrow();
+  });
+
+  it("gets match by key", async () => {
+    mockAxiosInstance.get.mockResolvedValue({
+      data: mockMatch,
+      status: 200,
+      headers: {
+        "Cache-Control": "max-age=3600",
+        etag: "1234567890",
+      },
+    });
+
+    const result = await client.matches.getMatchByKey("2025test_qm1");
+    expect(result).toEqual({ ...mockMatch, year: 2025 });
   });
 });
