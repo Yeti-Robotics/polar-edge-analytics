@@ -2,7 +2,7 @@ import { AppSidebarTrigger, AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/app-sidebar/ThemeToggle";
 import { ThemeProvider } from "@/components/theme";
 import { auth } from "@/lib/auth";
-import { SidebarProvider } from "@repo/ui/components/sidebar";
+import { SidebarProvider, SidebarInset } from "@repo/ui/components/sidebar";
 import { SessionProvider } from "next-auth/react";
 
 export default async function SidebarLayout({
@@ -22,13 +22,15 @@ export default async function SidebarLayout({
 			<SessionProvider session={session}>
 				<SidebarProvider>
 					<AppSidebar />
-					<main className="overflow-hidden w-full">
-						<nav className="flex items-center z-40 sticky top-0 bg-background justify-between border-b mb-2 px-4 py-2">
+					<SidebarInset className="contain-inline-size">
+						<header className="p-1 sticky top-0 z-10 flex justify-between h-16 shrink-0 items-center gap-2 border-b bg-background">
 							<AppSidebarTrigger />
 							<ThemeToggle />
-						</nav>
-						<div className="flex-1 flex flex-col mx-auto p-6 w-full">{children}</div>
-					</main>
+						</header>
+						<div className="flex flex-1 flex-col gap-4 p-4 overflow-auto">
+							{children}
+						</div>
+					</SidebarInset>
 				</SidebarProvider>
 			</SessionProvider>
 		</ThemeProvider>
