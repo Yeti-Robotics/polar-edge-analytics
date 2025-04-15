@@ -42,7 +42,8 @@ export default async function CoveragePage({
 	const totalTeamCount = 6 * (totalMatches ?? 0);
 	const percentCovered =
 		totalTeamCount > 0
-			? (totalTeamCount - (coverage?.length ?? 0)) / totalTeamCount
+			? (100 * (totalTeamCount - (coverage?.length ?? 0))) /
+				totalTeamCount
 			: null;
 
 	return (
