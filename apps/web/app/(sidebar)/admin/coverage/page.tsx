@@ -39,9 +39,10 @@ export default async function CoveragePage({
 		where: (tournament, { eq }) => eq(tournament.id, eventKey),
 	});
 
+	const totalTeamCount = 6 * (totalMatches ?? 0);
 	const percentCovered =
-		totalMatches && totalMatches > 0
-			? (coverage?.length ?? 0) / (6 * totalMatches)
+		totalTeamCount > 0
+			? (totalTeamCount - (coverage?.length ?? 0)) / totalTeamCount
 			: null;
 
 	return (
