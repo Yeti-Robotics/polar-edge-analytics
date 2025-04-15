@@ -41,7 +41,7 @@ export default async function CoveragePage({
 
 	const percentCovered =
 		totalMatches && totalMatches > 0
-			? (6 * totalMatches - (coverage?.length ?? 0)) / (6 * totalMatches)
+			? (coverage?.length ?? 0) / (6 * totalMatches)
 			: null;
 
 	return (
