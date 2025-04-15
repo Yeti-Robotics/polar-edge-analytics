@@ -16,50 +16,53 @@ type DataTableProps<T> = {
 
 export function DataTable<T>({ table }: DataTableProps<T>) {
 	return (
-		<Table className="w-fit">
-			<TableHeader>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<TableRow key={headerGroup.id} className="border">
-						{headerGroup.headers.map((header) => {
-							return (
-								<TableHead
-									key={header.id}
-									colSpan={header.colSpan}
-									className="h-1 border p-1 text-center"
+		<div className="w-full relative overflow-x-auto">
+			<Table>
+				<TableHeader>
+					{table.getHeaderGroups().map((headerGroup) => (
+						<TableRow key={headerGroup.id} className="border">
+							{headerGroup.headers.map((header) => {
+								return (
+									<TableHead
+										key={header.id}
+										colSpan={header.colSpan}
+										className="h-1 border p-1 text-center"
+									>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+													header.column.columnDef
+														.header,
+													header.getContext()
+												)}
+									</TableHead>
+								);
+							})}
+						</TableRow>
+					))}
+				</TableHeader>
+				<TableBody>
+					{table.getRowModel().rows.map((row) => (
+						<TableRow
+							key={row.id}
+							data-state={row.getIsSelected() && "selected"}
+							className="border"
+						>
+							{row.getVisibleCells().map((cell) => (
+								<TableCell
+									key={cell.id}
+									className="border p-2 text-center"
 								>
-									{header.isPlaceholder
-										? null
-										: flexRender(
-												header.column.columnDef.header,
-												header.getContext()
-											)}
-								</TableHead>
-							);
-						})}
-					</TableRow>
-				))}
-			</TableHeader>
-			<TableBody>
-				{table.getRowModel().rows.map((row) => (
-					<TableRow
-						key={row.id}
-						data-state={row.getIsSelected() && "selected"}
-						className="border"
-					>
-						{row.getVisibleCells().map((cell) => (
-							<TableCell
-								key={cell.id}
-								className="border p-2 text-center"
-							>
-								{flexRender(
-									cell.column.columnDef.cell,
-									cell.getContext()
-								)}
-							</TableCell>
-						))}
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+									{flexRender(
+										cell.column.columnDef.cell,
+										cell.getContext()
+									)}
+								</TableCell>
+							))}
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</div>
 	);
 }
