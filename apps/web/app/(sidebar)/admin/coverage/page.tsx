@@ -1,6 +1,9 @@
 import { isAdmin } from "@/lib/data/auth";
 import { redirect } from "next/navigation";
-import { getMatchesMissingCoverage } from "@/lib/data/admin/coverage";
+import {
+	getMatchesMissingCoverage,
+	getTotalMatches,
+} from "@/lib/data/admin/coverage";
 import { Card, CardDescription } from "@repo/ui/components/card";
 import { CardContent, CardHeader } from "@repo/ui/components/card";
 import {
@@ -12,8 +15,6 @@ import {
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
 import { db } from "@/lib/database";
-import { match } from "@/lib/database/schema";
-import { count, eq } from "drizzle-orm";
 
 interface CoveragePageProps {
 	searchParams: Promise<{ eventKey: string; minMatches?: number }>;
@@ -29,25 +30,19 @@ export default async function CoveragePage({
 
 	const { eventKey, minMatches = 1 } = await searchParams;
 
-	const coverage = await getMatchesMissingCoverage(eventKey, minMatches);
+	const [coverage, totalMatches] = await Promise.all([
+		getMatchesMissingCoverage(eventKey, minMatches),
+		getTotalMatches(eventKey),
+	]);
 
 	const event = await db.query.tournament.findFirst({
 		where: (tournament, { eq }) => eq(tournament.id, eventKey),
 	});
 
-	const [totalMatches] = await db
-		.select({
-			count: count(),
-		})
-		.from(match)
-		.where(eq(match.eventKey, eventKey));
-
-	if (!totalMatches) {
-		return <div>No matches found for {eventKey}</div>;
-	}
-	const totalCoverage =
-		(6 * totalMatches?.count - (coverage?.length ?? 0)) /
-		(6 * totalMatches?.count);
+	const percentCovered =
+		totalMatches && totalMatches > 0
+			? (6 * totalMatches - (coverage?.length ?? 0)) / (6 * totalMatches)
+			: null;
 
 	return (
 		<div className="space-y-6">
@@ -76,7 +71,9 @@ export default async function CoveragePage({
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="pt-0 text-3xl font-black">
-						{totalCoverage.toFixed(2)}%
+						{percentCovered
+							? `${percentCovered.toFixed(2)}%`
+							: "N/A"}
 					</CardContent>
 				</Card>
 			</section>

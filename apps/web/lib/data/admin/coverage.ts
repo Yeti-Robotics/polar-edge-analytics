@@ -3,7 +3,7 @@
 import { db } from "@/lib/database";
 import { isAdmin } from "@/lib/data/auth";
 import { match, teamMatch, standForm } from "@/lib/database/schema";
-import { and, eq, gte, notExists, sql } from "drizzle-orm";
+import { and, count, eq, gte, notExists, sql } from "drizzle-orm";
 import { cache } from "react";
 
 export const getMatchesMissingCoverage = cache(
@@ -57,3 +57,18 @@ export const getMatchesMissingCoverage = cache(
 		return missingCoverage;
 	}
 );
+
+export const getTotalMatches = cache(async (eventKey: string) => {
+	const authorized = await isAdmin();
+	if (!authorized) return null;
+
+	const totalMatches = await db
+		.select({ count: count() })
+		.from(match)
+		.where(eq(match.eventKey, eventKey))
+		.limit(1);
+
+	if (!totalMatches || !totalMatches[0]) return null;
+
+	return totalMatches[0].count;
+});
