@@ -11,6 +11,9 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
+import { db } from "@/lib/database";
+import { match } from "@/lib/database/schema";
+import { count, eq } from "drizzle-orm";
 
 interface CoveragePageProps {
 	searchParams: Promise<{ eventKey: string; minMatches?: number }>;
@@ -28,12 +31,30 @@ export default async function CoveragePage({
 
 	const coverage = await getMatchesMissingCoverage(eventKey, minMatches);
 
+	const event = await db.query.tournament.findFirst({
+		where: (tournament, { eq }) => eq(tournament.id, eventKey),
+	});
+
+	const [totalMatches] = await db
+		.select({
+			count: count(),
+		})
+		.from(match)
+		.where(eq(match.eventKey, eventKey));
+
+	if (!totalMatches) {
+		return <div>No matches found for {eventKey}</div>;
+	}
+	const totalCoverage =
+		(6 * totalMatches?.count - (coverage?.length ?? 0)) /
+		(6 * totalMatches?.count);
+
 	return (
 		<div className="space-y-6">
 			<div className="flex flex-col gap-2">
-				<h1 className="text-3xl font-black">Coverage</h1>
+				<h1 className="text-3xl font-black">Team-Match Coverage</h1>
 				<p className="text-sm text-muted-foreground">
-					Matches missing coverage for {eventKey}
+					Matches missing coverage for {event?.eventName}
 				</p>
 			</div>
 
@@ -41,11 +62,21 @@ export default async function CoveragePage({
 				<Card className="rounded-2xl">
 					<CardHeader className="pb-2">
 						<CardDescription className="text-sm font-medium">
-							Team-matches missing coverage
+							Total missing
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="pt-0 text-3xl font-black">
 						{coverage?.length}
+					</CardContent>
+				</Card>
+				<Card className="rounded-2xl">
+					<CardHeader className="pb-2">
+						<CardDescription className="text-sm font-medium">
+							Total event coverage (%)
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="pt-0 text-3xl font-black">
+						{totalCoverage.toFixed(2)}%
 					</CardContent>
 				</Card>
 			</section>
