@@ -1,1 +1,1 @@
-export { default as db, pool } from "./database";
+export { default as db } from "./database";
