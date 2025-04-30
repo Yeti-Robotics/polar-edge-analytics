@@ -1,14 +1,15 @@
 {
     "$schema": "https://ui.shadcn.com/schema.json",
     "style": "default",
+    "rsc": true,
+    "tsx": true,
     "tailwind": {
+        "config": "",
         "css": "src/styles/globals.css",
-        "config": "tailwind.config.ts",
         "baseColor": "neutral",
         "cssVariables": true
     },
-    "rsc": true,
-    "tsx": true,
+    "iconLibrary": "lucide",
     "aliases": {
         "utils": "@repo/ui/lib/utils",
         "components": "@repo/ui/components",

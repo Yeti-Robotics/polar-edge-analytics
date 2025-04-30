@@ -1,4 +1,4 @@
-import { YETIBlueClient, MemoryCache } from "yeti-blue-sdk";
+import { YETIBlueClient, MemoryCache } from "@yeti-robotics/yeti-blue-sdk";
 
 // Use global object to persist cache between reloads
 const globalForCache = global as unknown as {
