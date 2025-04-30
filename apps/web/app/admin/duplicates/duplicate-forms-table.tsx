@@ -1,7 +1,8 @@
 "use client";
 
-import { type DuplicateFormGroup } from "@/lib/types/forms";
 import { deleteForm } from "@/lib/actions/forms";
+import { type DuplicateFormGroup } from "@/lib/types/forms";
+import { Button } from "@repo/ui/components/button";
 import {
 	Table,
 	TableBody,
@@ -10,7 +11,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
-import { Button } from "@repo/ui/components/button";
 import { useState } from "react";
 
 interface DuplicateFormsTableProps {

@@ -1,7 +1,7 @@
 "use client";
 
-import { TeamData } from "../actions/team-data";
 import { DataTable } from "./DataTable";
+import { TeamData } from "../actions/team-data";
 
 import { Button } from "@repo/ui/components/button";
 import {

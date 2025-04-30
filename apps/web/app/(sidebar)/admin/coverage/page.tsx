@@ -1,9 +1,9 @@
-import { isAdmin } from "@/lib/data/auth";
-import { redirect } from "next/navigation";
 import {
 	getMatchesMissingCoverage,
 	getTotalMatches,
 } from "@/lib/data/admin/coverage";
+import { isAdmin } from "@/lib/data/auth";
+import { db } from "@/lib/database";
 import { Card, CardDescription } from "@repo/ui/components/card";
 import { CardContent, CardHeader } from "@repo/ui/components/card";
 import {
@@ -14,7 +14,7 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import { cn } from "@repo/ui/lib/utils";
-import { db } from "@/lib/database";
+import { redirect } from "next/navigation";
 
 interface CoveragePageProps {
 	searchParams: Promise<{ eventKey: string; minMatches?: number }>;

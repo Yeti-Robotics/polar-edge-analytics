@@ -1,9 +1,10 @@
 import "server-only";
 
 import { auth } from "../auth";
+
+import { UserRole } from "@/lib/database/schema";
 import { redirect } from "next/navigation";
 import { cache } from "react";
-import { UserRole } from "@/lib/database/schema";
 
 export const verifySession = cache(async () => {
 	const session = await auth();

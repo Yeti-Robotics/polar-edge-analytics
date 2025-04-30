@@ -33,8 +33,8 @@ import {
 	Users,
 	Wrench,
 } from "lucide-react";
-import { Session } from "next-auth";
 import Link from "next/link";
+import { Session } from "next-auth";
 import React from "react";
 
 const navbarData = [

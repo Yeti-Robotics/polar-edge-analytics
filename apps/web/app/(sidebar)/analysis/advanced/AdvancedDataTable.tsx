@@ -1,7 +1,8 @@
+import AdvancedDataTableClient from "./AdvancedDataTableClient";
+
 import { db } from "@/lib/database";
 import { match, team, teamMatchStats } from "@/lib/database/schema";
 import { avg, eq, sql } from "drizzle-orm";
-import AdvancedDataTableClient from "./AdvancedDataTableClient";
 
 export type AdvancedTeamData = {
 	team_number: number;

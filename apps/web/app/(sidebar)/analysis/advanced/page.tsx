@@ -1,6 +1,7 @@
-import { Suspense } from "react";
 import { AdvancedDataTable } from "./AdvancedDataTable";
+
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { Suspense } from "react";
 
 export default async function AdvancedAnalysis({
 	searchParams,
