@@ -1,5 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
     "compilerOptions": {
       "declaration": true,
       "declarationMap": true,
@@ -15,9 +16,6 @@
       "skipLibCheck": true,
       "strict": true,
       "target": "ES2022",
-      "paths": {
-        "@/": ["../../packages/ui/src/*"]
-      }
     }
   }
   

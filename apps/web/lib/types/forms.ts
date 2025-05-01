@@ -1,5 +1,5 @@
-import { type InferSelectModel, type InferInsertModel } from "drizzle-orm";
 import { standForm } from "@/lib/database/schema";
+import { type InferSelectModel, type InferInsertModel } from "drizzle-orm";
 
 export type StandForm = InferSelectModel<typeof standForm>;
 export type NewStandForm = InferInsertModel<typeof standForm>;

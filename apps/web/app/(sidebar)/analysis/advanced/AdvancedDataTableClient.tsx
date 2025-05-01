@@ -1,7 +1,7 @@
 "use client";
 
-import { DataTable } from "../components/DataTable";
 import { AdvancedTeamData } from "./AdvancedDataTable";
+import { DataTable } from "../components/DataTable";
 
 import { Button } from "@repo/ui/components/button";
 import {

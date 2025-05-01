@@ -1,8 +1,9 @@
+import { DuplicateFormsTable } from "./duplicate-forms-table";
+
 import { auth } from "@/lib/auth";
 import { forms } from "@/lib/data";
 import { UserRole } from "@/lib/database/schema";
 import { redirect } from "next/navigation";
-import { DuplicateFormsTable } from "./duplicate-forms-table";
 
 export default async function DuplicatesPage() {
 	const session = await auth();

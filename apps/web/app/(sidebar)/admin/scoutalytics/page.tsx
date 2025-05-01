@@ -1,8 +1,7 @@
+import { checkSession } from "@/lib/auth/utils";
 import { db } from "@/lib/database";
 import { match, standForm, tournament, users } from "@/lib/database/schema";
 import { UserRole } from "@/lib/database/schema";
-import { checkSession } from "@/lib/auth/utils";
-import { count, desc, eq } from "drizzle-orm";
 import {
 	Table,
 	TableBody,
@@ -12,6 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
+import { count, desc, eq } from "drizzle-orm";
 
 export default async function ScoutalyticsPage({
 	searchParams: searchParamsPromise,
