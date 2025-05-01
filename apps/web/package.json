@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.0",
-    "@hookform/resolvers": "^5.0.1",
+    "@hookform/resolvers": "^3.10.0",
     "@repo/ui": "workspace:*",
     "@tanstack/react-table": "^8.20.6",
     "drizzle-orm": "^0.41.0",

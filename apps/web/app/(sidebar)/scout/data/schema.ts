@@ -45,12 +45,7 @@ const matchDetailSchema = z.object({
  * Schema for the autonomous period
  */
 const autoSchema = z.object({
-	auto_initiation_line: z.coerce
-		.boolean()
-		.nullish()
-		.default(false)
-		.transform((value) => value ?? false)
-		.describe("Crossed black line?"),
+	auto_initiation_line: z.coerce.boolean().describe("Crossed black line?"),
 	auto_coral_level_1: generateCoralSchema("auto", "trough"),
 	auto_coral_level_2: generateCoralSchema("auto", "low"),
 	auto_coral_level_3: generateCoralSchema("auto", "mid"),
@@ -61,13 +56,13 @@ const autoSchema = z.object({
 		.nonnegative({
 			message: "Auto Algae Processed must be positive",
 		})
-		.default(0)
+
 		.describe("Algae in processor"),
 	auto_algae_netted: z.coerce
 		.number()
 		.int()
 		.nonnegative({ message: "Auto Algae Netted must be positive" })
-		.default(0)
+
 		.describe("Algae netted by a robot"),
 });
 
@@ -85,7 +80,7 @@ const teleopSchema = z.object({
 		.nonnegative({
 			message: "Teleop Algae Processed must be positive",
 		})
-		.default(0)
+
 		.describe("Algae processed"),
 	teleop_algae_netted: z.coerce
 		.number()
@@ -93,7 +88,7 @@ const teleopSchema = z.object({
 		.nonnegative({
 			message: "Teleop Algae Netted must be positive",
 		})
-		.default(0)
+
 		.describe("Algae netted by a robot"),
 });
 
@@ -101,9 +96,7 @@ const teleopSchema = z.object({
  * Schema for the endgame "period"
  */
 const endgameSchema = z.object({
-	cage_climb: cageEnum
-		.describe("What does the robot do in the cage area?")
-		.default(Cage.NONE),
+	cage_climb: cageEnum.describe("What does the robot do in the cage area?"),
 });
 
 /**

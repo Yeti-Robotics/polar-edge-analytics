@@ -9,7 +9,14 @@ import { Cage } from "@/lib/database/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@repo/ui/components/form";
 import { useToast } from "@repo/ui/hooks/use-toast";
-import { createContext, Dispatch, SetStateAction, useContext, useState, useTransition } from "react";
+import {
+	createContext,
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useState,
+	useTransition,
+} from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 
 type ScoutFormContextType = {
@@ -30,17 +37,15 @@ type ScoutFormContextType = {
 		isValid: boolean;
 	};
 	standForm: {
-		teams: TeamInMatch[],
-		setTeams: Dispatch<SetStateAction<TeamInMatch[]>>
-	}
+		teams: TeamInMatch[];
+		setTeams: Dispatch<SetStateAction<TeamInMatch[]>>;
+	};
 };
 
 const ScoutFormContext = createContext<ScoutFormContextType | null>(null);
 
 const defaultValues: StandFormData = {
 	match_detail: {
-		// This is a bit of a hack to get the form to work with the zod schema
-		// The zod schema expects a number, but value needs to be a string to be empty by default
 		team_number: "" as unknown as number,
 		match_number: "" as unknown as number,
 	},
@@ -66,7 +71,7 @@ const defaultValues: StandFormData = {
 	},
 	misc: {
 		comments: "",
-		defense_rating: "1" as unknown as number,
+		defense_rating: "" as unknown as number,
 	},
 };
 
@@ -120,10 +125,7 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 
 		if (currentStepId === "match_detail") {
 			const matchDetails = currentValues.match_detail;
-			if (
-				matchDetails.team_number === ("" as unknown as number) ||
-				matchDetails.match_number === ("" as unknown as number)
-			) {
+			if (!matchDetails.team_number || !matchDetails.match_number) {
 				return false;
 			}
 		}
@@ -166,12 +168,17 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 					form.reset(); // Wipe the form data
 					setCurrentStepIndex(0); // Go back to the starting state
 					toast({
-						title: "Stand form submitted!"
+						title: "Stand form submitted!",
 					});
-				} else if (formSubmission.error === StandFormSubmissionErrors.TEAM_MATCH) {
+				} else if (
+					formSubmission.error ===
+					StandFormSubmissionErrors.TEAM_MATCH
+				) {
 					const teamMatches = formSubmission.errorData!;
-					form.setError("match_detail.team_number", { message: "Invalid team number, please re-enter" });
-					setTeams(teamMatches)
+					form.setError("match_detail.team_number", {
+						message: "Invalid team number, please re-enter",
+					});
+					setTeams(teamMatches);
 					setCurrentStepIndex(0);
 				} else {
 					throw new Error(formSubmission.error);
@@ -180,7 +187,7 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 				console.error("Form submission failed:", error);
 				toast({
 					title: "Stand form submission failed!",
-					variant: "destructive"
+					variant: "destructive",
 				});
 			}
 		});
@@ -205,8 +212,8 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 		},
 		standForm: {
 			teams,
-			setTeams
-		}
+			setTeams,
+		},
 	};
 
 	return (
@@ -218,7 +225,7 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	);
 }
 
-export const useStandForm = () => {
+export function useStandForm() {
 	const context = useContext(ScoutFormContext);
 
 	if (!context) {
@@ -226,4 +233,4 @@ export const useStandForm = () => {
 	}
 
 	return context;
-};
+}

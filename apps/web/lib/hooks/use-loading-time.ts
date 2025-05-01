@@ -1,36 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 
-
 export function useLoadingTime(timeToWaitMs: number) {
-    const [loading, setLoading] = useState(false);
-    const [timedOut, setTimedOut] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [timedOut, setTimedOut] = useState(false);
 
-    const timeoutRef = useRef<NodeJS.Timeout | undefined>();
+	const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-    useEffect(() => {
-        if (loading && !timeoutRef.current) {
-            timeoutRef.current = setTimeout(() => {
-                setTimedOut(true);
-                setLoading(false);
-            }, timeToWaitMs);
-        } else if (!loading) {
-            clearTimeout(timeoutRef.current)
-            timeoutRef.current = undefined;
-        }
+	useEffect(() => {
+		if (loading && !timeoutRef.current) {
+			timeoutRef.current = setTimeout(() => {
+				setTimedOut(true);
+				setLoading(false);
+			}, timeToWaitMs);
+		} else if (!loading) {
+			clearTimeout(timeoutRef.current);
+			timeoutRef.current = undefined;
+		}
 
-        return () => clearTimeout(timeoutRef.current);
-    }, [loading])
+		return () => clearTimeout(timeoutRef.current);
+	}, [loading]);
 
+	const startLoading = () => {
+		setTimedOut(false);
+		setLoading(true);
+	};
 
-    const startLoading = () => {
-        setTimedOut(false);
-        setLoading(true);
-    }
+	const stopLoading = () => {
+		setTimedOut(false);
+		setLoading(false);
+	};
 
-    const stopLoading = () => {
-        setTimedOut(false);
-        setLoading(false);
-    }
-
-    return { timedOut, startLoading, stopLoading };
+	return { timedOut, startLoading, stopLoading };
 }
