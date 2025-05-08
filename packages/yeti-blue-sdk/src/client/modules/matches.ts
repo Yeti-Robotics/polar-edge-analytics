@@ -1,9 +1,8 @@
-import { z } from "zod";
+import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 import { Fetcher } from "@/fetcher";
 import { FetcherOptions } from "@/fetcher/types";
 import { Match, MatchSchema } from "@/schemas/match";
-
-import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
+import { z } from "zod";
 
 /**
  * @description A module for interacting with The Blue Alliance Team API

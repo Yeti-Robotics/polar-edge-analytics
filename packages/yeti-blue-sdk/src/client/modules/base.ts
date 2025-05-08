@@ -1,5 +1,5 @@
-import { Fetcher } from "@/fetcher";
 import { Cache, MemoryCache } from "@/cache";
+import { Fetcher } from "@/fetcher";
 import { FetcherOptions } from "@/fetcher/types";
 
 export interface ModuleBaseConfig<T> {

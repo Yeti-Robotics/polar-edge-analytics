@@ -1,7 +1,9 @@
-import { YETIBlueClient } from "../../yetiBlue";
 import { MemoryCache } from "../../../cache/memoryCache";
-import axios, { AxiosInstance } from "axios";
 import { Team, TeamSimple } from "../../../schemas";
+import { YETIBlueClient } from "../../yetiBlue";
+
+import axios, { AxiosInstance } from "axios";
+
 
 const teamSimple = {
   city: "Charlotte",

@@ -1,6 +1,6 @@
-import axios from "axios";
-import { Fetcher } from "@/fetcher";
 import { Cache } from "@/cache";
+import { Fetcher } from "@/fetcher";
+import axios from "axios";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;

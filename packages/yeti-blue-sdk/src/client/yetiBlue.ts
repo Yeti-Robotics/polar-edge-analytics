@@ -1,9 +1,10 @@
+import { MediaResource } from "./modules/media";
+
 import { Cache, MemoryCache } from "@/cache";
 import { ModuleBaseConfig } from "@/client/modules/base";
 import { MatchesResource } from "@/client/modules/matches";
 import { RankingResource } from "@/client/modules/rankings";
 import { TeamsResource } from "@/client/modules/team";
-import { MediaResource } from "./modules/media";
 
 export interface YETIBlueClientConfig {
   apiKey: string;
