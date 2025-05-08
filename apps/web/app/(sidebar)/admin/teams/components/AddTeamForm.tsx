@@ -7,10 +7,10 @@ import { Input } from "@repo/ui/components/input";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { useState, useTransition } from "react";
 
-
 export function AddTeamForm() {
 	const [teamNumber, setTeamNumber] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, startTransition] = useTransition();
 	const { toast } = useToast();
 
@@ -46,6 +46,7 @@ export function AddTeamForm() {
 					});
 				}
 			} catch (error) {
+				console.error(error);
 				toast({
 					title: "Error adding team",
 					description: "An unexpected error occurred",

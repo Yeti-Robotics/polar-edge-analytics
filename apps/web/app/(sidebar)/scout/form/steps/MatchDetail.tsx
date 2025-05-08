@@ -28,33 +28,46 @@ import { RefreshCcw } from "lucide-react";
 import { useEffect, useTransition } from "react";
 import { useFormContext } from "react-hook-form";
 
-
 const DEFAULT_MATCH_LOAD_WAIT_TIME = 5000;
 
 export function MatchDetail() {
 	const form = useFormContext();
-	const { standForm: { teams, setTeams } } = useStandForm();
+	const {
+		standForm: { teams, setTeams },
+	} = useStandForm();
 	const [isPending, startTransition] = useTransition();
 
 	const isOnline = useIsOnline();
-	const { timedOut, startLoading, stopLoading } = useLoadingTime(DEFAULT_MATCH_LOAD_WAIT_TIME);
+	const { timedOut, startLoading, stopLoading } = useLoadingTime(
+		DEFAULT_MATCH_LOAD_WAIT_TIME
+	);
 
 	const hasGoodInternet = isOnline && !timedOut;
 	const hasTeams = !!teams.length;
 
 	const teamNumber = form.watch("match_detail.team_number");
 	const matchNumber = form.watch("match_detail.match_number");
-	const isValidMatchNumber = !form.getFieldState("match_detail.match_number", form.formState).invalid && parseInt(matchNumber) > 0;
+	const isValidMatchNumber =
+		!form.getFieldState("match_detail.match_number", form.formState)
+			.invalid && parseInt(matchNumber) > 0;
 
 	useEffect(() => {
 		handleMatchNumberChange(matchNumber);
+		// TODO: investigate if we can get around exhaustive deps here. Might require refactoring how we're handling the form state.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [matchNumber, isValidMatchNumber]);
 
 	useEffect(() => {
-		if (hasGoodInternet && hasTeams && !teams.some(t => t.teamNumber == teamNumber)) {
+		if (
+			hasGoodInternet &&
+			hasTeams &&
+			!teams.some((t) => t.teamNumber == teamNumber)
+		) {
 			form.setValue("match_detail.team_number", "");
 		}
-	}, [teamNumber, teams, hasGoodInternet])
+		// TODO: investigate if we can get around exhaustive deps here. Might require refactoring how we're handling the form state.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [teamNumber, teams, hasGoodInternet]);
 
 	const handleMatchNumberChange = (value: string) => {
 		if (isValidMatchNumber) {
@@ -77,7 +90,7 @@ export function MatchDetail() {
 				name="match_detail.match_number"
 				render={({ field }) => {
 					const { onChange, ...fieldParams } = field;
-					
+
 					return (
 						<FormItem>
 							<FormLabel>Match Number</FormLabel>
@@ -87,14 +100,16 @@ export function MatchDetail() {
 									placeholder="Number of match being played"
 									onChange={(e) => {
 										onChange(e);
-										form.trigger("match_detail.match_number");
+										form.trigger(
+											"match_detail.match_number"
+										);
 									}}
 									{...fieldParams}
 								/>
 							</FormControl>
 							<FormMessage className="text-xs" />
 						</FormItem>
-					)
+					);
 				}}
 			/>
 			{isValidMatchNumber && (
@@ -104,7 +119,9 @@ export function MatchDetail() {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Team Number</FormLabel>
-							{isPending && hasGoodInternet && !hasTeams && <Skeleton className="w-full h-10" />}
+							{isPending && hasGoodInternet && !hasTeams && (
+								<Skeleton className="w-full h-10" />
+							)}
 							{hasTeams && (
 								<Select
 									onValueChange={field.onChange}
@@ -128,7 +145,11 @@ export function MatchDetail() {
 									</SelectContent>
 								</Select>
 							)}
-							{!isPending && !hasTeams && <p className="text-muted-foreground text-sm mt-4">No teams found for this match</p>}
+							{!isPending && !hasTeams && (
+								<p className="text-muted-foreground text-sm mt-4">
+									No teams found for this match
+								</p>
+							)}
 							<FormMessage className="text-xs" />
 						</FormItem>
 					)}
@@ -137,7 +158,9 @@ export function MatchDetail() {
 			{!hasGoodInternet && !hasTeams && isValidMatchNumber && (
 				<div className="space-y-4">
 					<div className="text-xs text-red-500 mb-4">
-						{!isOnline ? "No internet." : "Slow connection detected."}{" "}
+						{!isOnline
+							? "No internet."
+							: "Slow connection detected."}{" "}
 						Cannot fetch match details. Please input manually.
 					</div>
 					<FormField
@@ -153,7 +176,11 @@ export function MatchDetail() {
 							</FormItem>
 						)}
 					/>
-					<Button type="button" variant="secondary" onClick={() => handleMatchNumberChange(matchNumber)}>
+					<Button
+						type="button"
+						variant="secondary"
+						onClick={() => handleMatchNumberChange(matchNumber)}
+					>
 						Refetch match details <RefreshCcw />
 					</Button>
 				</div>

@@ -18,7 +18,7 @@ export function useLoadingTime(timeToWaitMs: number) {
 		}
 
 		return () => clearTimeout(timeoutRef.current);
-	}, [loading]);
+	}, [loading, timeToWaitMs]);
 
 	const startLoading = () => {
 		setTimedOut(false);

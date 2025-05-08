@@ -15,7 +15,6 @@ import {
 	SetStateAction,
 	useContext,
 	useState,
-	useTransition,
 } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 
@@ -89,7 +88,6 @@ const defaultValues: StandFormData = {
 export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	const { toast } = useToast();
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
-	const [isSubmitting, startTransition] = useTransition();
 	const form = useForm<StandFormData>({
 		resolver: zodResolver(standFormSchema),
 		mode: "onBlur",
@@ -160,37 +158,34 @@ export function StandFormProvider({ children }: { children: React.ReactNode }) {
 	};
 
 	const onSubmit = async (data: StandFormData) => {
-		startTransition(async () => {
-			try {
-				const formSubmission = await submitStandForm(data);
+		try {
+			const formSubmission = await submitStandForm(data);
 
-				if (formSubmission.success) {
-					form.reset(); // Wipe the form data
-					setCurrentStepIndex(0); // Go back to the starting state
-					toast({
-						title: "Stand form submitted!",
-					});
-				} else if (
-					formSubmission.error ===
-					StandFormSubmissionErrors.TEAM_MATCH
-				) {
-					const teamMatches = formSubmission.errorData!;
-					form.setError("match_detail.team_number", {
-						message: "Invalid team number, please re-enter",
-					});
-					setTeams(teamMatches);
-					setCurrentStepIndex(0);
-				} else {
-					throw new Error(formSubmission.error);
-				}
-			} catch (error) {
-				console.error("Form submission failed:", error);
+			if (formSubmission.success) {
+				form.reset(); // Wipe the form data
+				setCurrentStepIndex(0); // Go back to the starting state
 				toast({
-					title: "Stand form submission failed!",
-					variant: "destructive",
+					title: "Stand form submitted!",
 				});
+			} else if (
+				formSubmission.error === StandFormSubmissionErrors.TEAM_MATCH
+			) {
+				const teamMatches = formSubmission.errorData!;
+				form.setError("match_detail.team_number", {
+					message: "Invalid team number, please re-enter",
+				});
+				setTeams(teamMatches);
+				setCurrentStepIndex(0);
+			} else {
+				throw new Error(formSubmission.error);
 			}
-		});
+		} catch (error) {
+			console.error("Form submission failed:", error);
+			toast({
+				title: "Stand form submission failed!",
+				variant: "destructive",
+			});
+		}
 	};
 
 	const contextValue = {
