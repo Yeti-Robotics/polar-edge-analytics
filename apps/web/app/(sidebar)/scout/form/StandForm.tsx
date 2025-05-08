@@ -22,7 +22,7 @@ const nextStep = (name?: string) => {
 		default:
 			return null;
 	}
-}
+};
 
 export function StandForm() {
 	const { currentStep } = useStandForm();
@@ -30,7 +30,8 @@ export function StandForm() {
 	return (
 		<div>
 			<div className={currentStep?.id !== "match_detail" ? "hidden" : ""}>
-				<MatchDetail /> {/* 
+				<MatchDetail />{" "}
+				{/* 
 				Don't want match detail component to unmount on render, this will remove team number state if
 				the fallback input for no internet is rendered, and thus will force a subsequent fetch and rerender if a user 
 				decides to check this step again.
@@ -38,5 +39,5 @@ export function StandForm() {
 			</div>
 			{nextStep(currentStep?.id)}
 		</div>
-	)
+	);
 }

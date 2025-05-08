@@ -119,7 +119,7 @@ const columns: ColumnDef<TeamData>[] = [
 			columnHelper.accessor("team_number", {
 				cell: (info) => (
 					<Link
-						className="text-blue-400 decoration-dotted underline underline-offset-2"
+						className="text-blue-400 underline decoration-dotted underline-offset-2"
 						href={`/team/${info.getValue()}`}
 					>
 						{info.getValue()}
@@ -232,7 +232,7 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 
 	return (
 		<div className="flex flex-col space-y-4">
-			<div className="flex flex-col md:flex-row md:space-y-0 space-y-4 justify-between items-start md:items-center space-x-4">
+			<div className="flex flex-col items-start justify-between space-y-4 space-x-4 md:flex-row md:items-center md:space-y-0">
 				<div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
 					<Input
 						placeholder="Find team number..."
@@ -282,7 +282,11 @@ export function TeamDataTable({ teamData }: { teamData: TeamData[] }) {
 				</div>
 			</div>
 			<div className="border-2">
-				{teamData?.length ? <DataTable table={table} /> : <Skeleton className="h-16" />}
+				{teamData?.length ? (
+					<DataTable table={table} />
+				) : (
+					<Skeleton className="h-16" />
+				)}
 			</div>
 		</div>
 	);

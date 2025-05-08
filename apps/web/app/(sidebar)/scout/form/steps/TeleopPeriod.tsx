@@ -11,7 +11,7 @@ export function TeleopPeriod() {
 	const form = useFormContext();
 
 	return (
-		<CardContent className="grid min-[375px]:grid-cols-2 gap-4">
+		<CardContent className="grid gap-4 min-[375px]:grid-cols-2">
 			<CoralInput period="teleop" />
 			<div className="flex flex-col gap-2">
 				<FormField

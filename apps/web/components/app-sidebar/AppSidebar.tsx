@@ -110,7 +110,7 @@ export async function AppSidebar() {
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild>
 							<Link
-								className="flex items-center gap-3 h-11"
+								className="flex h-11 items-center gap-3"
 								href="/"
 							>
 								<Logo className="!size-6" />
@@ -149,7 +149,7 @@ export async function AppSidebar() {
 						<form action={authFunction}>
 							<SidebarMenuButton
 								type="submit"
-								className="cursor-pointer h-fit"
+								className="h-fit cursor-pointer"
 							>
 								<Avatar className="size-6 rounded-full">
 									<AvatarImage
@@ -160,7 +160,7 @@ export async function AppSidebar() {
 										{getInitials(nickname)}
 									</AvatarFallback>
 								</Avatar>
-								<div className="flex flex-col ml-4">
+								<div className="ml-4 flex flex-col">
 									<p className="capitalize">{nickname}</p>
 									<p className="text-xs font-normal">
 										{session?.user.name ?? ""}

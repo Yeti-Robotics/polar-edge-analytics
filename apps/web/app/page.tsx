@@ -17,35 +17,34 @@ async function enterScoutingSite() {
 }
 
 export default function Home() {
-
 	return (
-		<div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#7FB3D5] via-[#5499C7] to-primary">
+		<div className="to-primary relative min-h-screen overflow-hidden bg-gradient-to-br from-[#7FB3D5] via-[#5499C7]">
 			{/* Frost overlay */}
-			<div className="absolute inset-0 backdrop-blur-[1px] mix-blend-overlay pointer-events-none" />
+			<div className="pointer-events-none absolute inset-0 mix-blend-overlay backdrop-blur-[1px]" />
 
 			{/* Navigation */}
-			<nav className="absolute top-0 w-full p-6 z-10">
-				<div className="container mx-auto flex justify-end items-center">
+			<nav className="absolute top-0 z-10 w-full p-6">
+				<div className="container mx-auto flex items-center justify-end">
 					<div className="flex items-center space-x-8">
 						<div className="space-x-8 text-white/90">
-							{[{ name: "Data", href: "/analysis" }].map((item) => (
-								<Link
-									key={item.name}
-									href={item.href}
-									className="relative hover:text-white transition-colors group"
-								>
-									{item.name}
-									<span className="absolute inset-x-0 -bottom-1 h-px transform scale-x-0 bg-white transition-transform group-hover:scale-x-100" />
-								</Link>
-							))}
+							{[{ name: "Data", href: "/analysis" }].map(
+								(item) => (
+									<Link
+										key={item.name}
+										href={item.href}
+										className="group relative transition-colors hover:text-white"
+									>
+										{item.name}
+										<span className="absolute inset-x-0 -bottom-1 h-px scale-x-0 transform bg-white transition-transform group-hover:scale-x-100" />
+									</Link>
+								)
+							)}
 						</div>
-						<form
-							action={enterScoutingSite}
-						>
+						<form action={enterScoutingSite}>
 							<Button
 								type="submit"
 								variant="ghost"
-								className="text-white hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border border-white/20"
+								className="border border-white/20 text-white backdrop-blur-sm hover:bg-white/10 hover:text-blue-100"
 							>
 								Login →
 							</Button>
@@ -55,35 +54,35 @@ export default function Home() {
 			</nav>
 
 			{/* Main Content */}
-			<main className="min-h-screen flex flex-col items-center justify-center px-4 relative">
-				<div className="text-center space-y-6 relative">
-					<div className="flex justify-center mb-4">
+			<main className="relative flex min-h-screen flex-col items-center justify-center px-4">
+				<div className="relative space-y-6 text-center">
+					<div className="mb-4 flex justify-center">
 						<Badge
 							variant="secondary"
-							className="bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-glow"
+							className="shadow-glow border border-white/20 bg-white/10 text-white backdrop-blur-md"
 						>
 							In Development
 						</Badge>
 					</div>
 
-					<h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-glow">
+					<h1 className="drop-shadow-glow mb-6 text-5xl font-bold text-white md:text-6xl lg:text-7xl">
 						Polar Edge Analytics
 					</h1>
 
-					<p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8 drop-shadow">
+					<p className="mx-auto mb-8 max-w-2xl text-lg text-white/90 drop-shadow md:text-xl">
 						Publicly accessible, advanced scouting data for teams in
 						North Carolina.
-						<span className="block mt-2 font-semibold">
+						<span className="mt-2 block font-semibold">
 							Brought to you by YETI Robotics.
 						</span>
 					</p>
 
-					<div className="flex flex-col sm:flex-row justify-center gap-4">
+					<div className="flex flex-col justify-center gap-4 sm:flex-row">
 						<form action={enterScoutingSite}>
 							<Button
 								type="submit"
 								variant="ghost"
-								className="text-white text-lg hover:text-blue-100 hover:bg-white/10 backdrop-blur-sm border p-5 border-white/20"
+								className="border border-white/20 p-5 text-lg text-white backdrop-blur-sm hover:bg-white/10 hover:text-blue-100"
 							>
 								Scout →
 							</Button>
@@ -92,6 +91,5 @@ export default function Home() {
 				</div>
 			</main>
 		</div>
-	)
+	);
 }
-

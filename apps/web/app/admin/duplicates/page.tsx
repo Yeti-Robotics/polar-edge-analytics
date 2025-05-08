@@ -16,7 +16,7 @@ export default async function DuplicatesPage() {
 
 	return (
 		<div className="container mx-auto py-10">
-			<h1 className="text-2xl font-bold mb-6">Manage Duplicate Forms</h1>
+			<h1 className="mb-6 text-2xl font-bold">Manage Duplicate Forms</h1>
 			<DuplicateFormsTable duplicates={duplicates} />
 		</div>
 	);

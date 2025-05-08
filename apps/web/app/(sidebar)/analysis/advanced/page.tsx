@@ -16,16 +16,16 @@ export default async function AdvancedAnalysis({
 	}
 
 	return (
-		<div className="flex flex-col gap-4 justify-center">
+		<div className="flex flex-col justify-center gap-4">
 			<h1 className="text-2xl font-black">Advanced Analysis</h1>
-			<p className="text-sm text-muted-foreground max-w-prose">
+			<p className="text-muted-foreground max-w-prose text-sm">
 				Advanced analysis is a work in progress. We currently support
 				calculating average points added across each period of the game
 				for each team.
 			</p>
 			<Suspense
 				key={tournamentId}
-				fallback={<Skeleton className="w-full lg:w-1/2 h-80" />}
+				fallback={<Skeleton className="h-80 w-full lg:w-1/2" />}
 			>
 				<AdvancedDataTable id={tournamentId} />
 			</Suspense>

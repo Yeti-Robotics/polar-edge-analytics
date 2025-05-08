@@ -66,10 +66,10 @@ export function TeamSearch({ events }: TeamSearchProps) {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="flex flex-col sm:flex-row gap-2 max-w-3xl"
+			className="flex max-w-3xl flex-col gap-2 sm:flex-row"
 		>
 			<div className="relative flex w-full">
-				<Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+				<Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
 				<Input
 					placeholder="Search teams..."
 					className="pl-9"
@@ -92,7 +92,7 @@ export function TeamSearch({ events }: TeamSearchProps) {
 							<SelectItem
 								key={event.id}
 								value={event.id}
-								className="flex items-center justify-between group"
+								className="group flex items-center justify-between"
 							>
 								<span>{event.name}</span>
 							</SelectItem>

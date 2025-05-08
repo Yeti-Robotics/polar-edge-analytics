@@ -120,7 +120,7 @@ export function MatchDetail() {
 						<FormItem>
 							<FormLabel>Team Number</FormLabel>
 							{isPending && hasGoodInternet && !hasTeams && (
-								<Skeleton className="w-full h-10" />
+								<Skeleton className="h-10 w-full" />
 							)}
 							{hasTeams && (
 								<Select
@@ -146,7 +146,7 @@ export function MatchDetail() {
 								</Select>
 							)}
 							{!isPending && !hasTeams && (
-								<p className="text-muted-foreground text-sm mt-4">
+								<p className="text-muted-foreground mt-4 text-sm">
 									No teams found for this match
 								</p>
 							)}
@@ -157,7 +157,7 @@ export function MatchDetail() {
 			)}
 			{!hasGoodInternet && !hasTeams && isValidMatchNumber && (
 				<div className="space-y-4">
-					<div className="text-xs text-red-500 mb-4">
+					<div className="mb-4 text-xs text-red-500">
 						{!isOnline
 							? "No internet."
 							: "Slow connection detected."}{" "}

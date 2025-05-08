@@ -17,19 +17,19 @@ export function AutoPeriod() {
 				control={form.control}
 				name="auto.auto_initiation_line"
 				render={({ field }) => (
-					<FormItem className="flex items-center gap-x-2 mb-2">
+					<FormItem className="mb-2 flex items-center gap-x-2">
 						<Checkbox
-							className="size-6 mb-0"
+							className="mb-0 size-6"
 							checked={field.value}
 							onCheckedChange={field.onChange}
 						/>
-						<FormLabel className="text-sm flex items-center gap-2">
+						<FormLabel className="flex items-center gap-2 text-sm">
 							Moved off black line?
 						</FormLabel>
 					</FormItem>
 				)}
 			/>
-			<div className="grid min-[375px]:grid-cols-2 gap-4">
+			<div className="grid gap-4 min-[375px]:grid-cols-2">
 				<CoralInput period="auto" />
 				<div>
 					<FormField

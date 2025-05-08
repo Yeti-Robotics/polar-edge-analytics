@@ -45,7 +45,7 @@ export default async function ScoutalyticsPage({
 
 	return (
 		<div className="container mx-auto py-10">
-			<h1 className="text-2xl font-bold mb-6">
+			<h1 className="mb-6 text-2xl font-bold">
 				Scout Form Submission Analytics
 			</h1>
 			<div className="rounded-md border">
@@ -81,7 +81,7 @@ export default async function ScoutalyticsPage({
 							<TableRow>
 								<TableCell
 									colSpan={2}
-									className="text-center py-6 text-muted-foreground"
+									className="text-muted-foreground py-6 text-center"
 								>
 									No form submissions found
 								</TableCell>

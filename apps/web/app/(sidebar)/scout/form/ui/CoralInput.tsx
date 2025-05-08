@@ -16,7 +16,6 @@ import { FormLabel } from "@repo/ui/components/form";
 import { Cylinder } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-
 /**
  * CoralInput component provides a dialog interface for inputting coral-related data
  * in both autonomous and teleop periods. It uses a dialog to display input fields
@@ -45,7 +44,7 @@ export function CoralInput({ period }: { period: "auto" | "teleop" }) {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button
-					className="flex flex-col [&_svg]:size-8 aspect-square h-auto"
+					className="flex aspect-square h-auto flex-col [&_svg]:size-8"
 					variant="outline"
 				>
 					<Cylinder className="" />
@@ -62,7 +61,7 @@ export function CoralInput({ period }: { period: "auto" | "teleop" }) {
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grid grid-cols-2 gap-4 overflow-scroll">
-					<ReefDiagram className="w-full fill-primary h-[380px] max-h-[50vh]" />
+					<ReefDiagram className="fill-primary h-[380px] max-h-[50vh] w-full" />
 					<div className="flex flex-col justify-between">
 						{([4, 3, 2, 1] as const).map((level) => (
 							<FormField

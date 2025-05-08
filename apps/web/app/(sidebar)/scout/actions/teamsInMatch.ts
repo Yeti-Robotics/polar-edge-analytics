@@ -20,7 +20,9 @@ export type TeamInMatch = {
  * - matchId: The id of the match
  * - teamNumber: The number of the team
  */
-export async function _getTeamsInMatch(matchNumber: number): Promise<TeamInMatch[]> {
+export async function _getTeamsInMatch(
+	matchNumber: number
+): Promise<TeamInMatch[]> {
 	return db
 		.select({
 			matchId: match.id,
@@ -39,7 +41,10 @@ export async function _getTeamsInMatch(matchNumber: number): Promise<TeamInMatch
 		.where(
 			and(
 				eq(tournament.isCurrent, true),
-				eq(match.matchNumber, matchNumber < 0 || isNaN(matchNumber) ? 0 : matchNumber)
+				eq(
+					match.matchNumber,
+					matchNumber < 0 || isNaN(matchNumber) ? 0 : matchNumber
+				)
 			)
 		);
 }

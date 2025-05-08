@@ -13,7 +13,7 @@ export function NavbarLink({
 		<Link
 			onClick={toggleSidebar}
 			href={href}
-			className="flex items-center -space-x-6 w-full"
+			className="flex w-full items-center -space-x-6"
 		>
 			{children}
 		</Link>

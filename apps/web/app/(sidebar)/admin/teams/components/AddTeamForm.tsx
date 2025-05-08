@@ -59,7 +59,7 @@ export function AddTeamForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="flex gap-2 items-end">
+		<form onSubmit={handleSubmit} className="flex items-end gap-2">
 			<div className="flex flex-col gap-2">
 				<label htmlFor="teamNumber">Add Team Number</label>
 				<Input
