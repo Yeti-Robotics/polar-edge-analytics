@@ -84,7 +84,6 @@ export async function seedMatches(eventKey: string) {
 		`https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
 		{
 			headers: {
-				// eslint-disable-next-line turbo/no-undeclared-env-vars
 				"X-TBA-Auth-Key": process.env.TBA_API_KEY!,
 			},
 		}

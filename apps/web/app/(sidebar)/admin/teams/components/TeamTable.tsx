@@ -32,6 +32,7 @@ interface TeamTableProps {
 export function TeamTable({ teams, totalPages, currentPage }: TeamTableProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, startTransition] = useTransition();
 
 	const createQueryString = useCallback(

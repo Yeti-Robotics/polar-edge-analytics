@@ -7,53 +7,12 @@ import { StandFormData, standFormSchema } from "../data/schema";
 import {
 	createServerAction,
 	ServerActionError,
-	ServerActionErrorWithCustomData
+	ServerActionErrorWithCustomData,
 } from "@/lib/actions/actions-utils";
 import { auth } from "@/lib/auth";
 import { AuthErrors, checkSession } from "@/lib/auth/utils";
 import { db } from "@/lib/database";
-import {
-	match,
-	standForm,
-	teamMatch,
-	tournament,
-	UserRole,
-} from "@/lib/database/schema";
-import { and, eq } from "drizzle-orm";
-
-/**
- * Get the current tournament
- * @returns The current tournament
- */
-async function getCurrentTournament() {
-	return db
-		.select()
-		.from(tournament)
-		.where(eq(tournament.isCurrent, true))
-		.limit(1)
-		.then((res) => res[0]);
-}
-
-/**
- * Get the team matches for a given team and match number
- * @param teamNumber The number of the team
- * @param matchNumber The number of the match
- * @returns The team matches
- */
-async function getTeamMatches(teamNumber: number, matchNumber: number) {
-	return db
-		.select()
-		.from(teamMatch)
-		.leftJoin(match, eq(teamMatch.matchId, match.id))
-		.where(
-			and(
-				eq(teamMatch.teamNumber, teamNumber),
-				eq(match.matchNumber, matchNumber),
-				eq(match.compLevel, "qm")
-			)
-		)
-		.limit(1);
-}
+import { standForm, UserRole } from "@/lib/database/schema";
 
 /**
  * Insert a stand form into the database
@@ -115,10 +74,15 @@ async function _submitStandForm(data: StandFormData) {
 
 	const teamMatches = await _getTeamsInMatch(data.match_detail.match_number);
 
-	const teamMatchInfo = teamMatches.find(t => t.teamNumber === data.match_detail.team_number);
+	const teamMatchInfo = teamMatches.find(
+		(t) => t.teamNumber === data.match_detail.team_number
+	);
 
 	if (!teamMatchInfo || !teamMatchInfo.matchId) {
-		throw new ServerActionErrorWithCustomData(StandFormSubmissionErrors.TEAM_MATCH, teamMatches)
+		throw new ServerActionErrorWithCustomData(
+			StandFormSubmissionErrors.TEAM_MATCH,
+			teamMatches
+		);
 	}
 
 	await insertStandForm(
@@ -142,4 +106,8 @@ async function _submitStandForm(data: StandFormData) {
  *
  * @param data The data to submit
  */
-export const submitStandForm = createServerAction<void, TeamInMatch[], Parameters<typeof _submitStandForm>>(_submitStandForm);
+export const submitStandForm = createServerAction<
+	void,
+	TeamInMatch[],
+	Parameters<typeof _submitStandForm>
+>(_submitStandForm);
