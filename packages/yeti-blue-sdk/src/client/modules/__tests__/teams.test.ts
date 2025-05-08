@@ -4,7 +4,6 @@ import { YETIBlueClient } from "../../yetiBlue";
 
 import axios, { AxiosInstance } from "axios";
 
-
 const teamSimple = {
   city: "Charlotte",
   country: "USA",
@@ -21,11 +20,11 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Modules - Teams", () => {
   let client: YETIBlueClient;
-  let cache: MemoryCache<any>;
+  let cache: MemoryCache<unknown>;
   let mockAxiosInstance: jest.Mocked<AxiosInstance>;
 
   beforeEach(() => {
-    cache = new MemoryCache<any>();
+    cache = new MemoryCache<unknown>();
     mockAxiosInstance = {
       get: jest.fn(),
     } as unknown as jest.Mocked<AxiosInstance>;

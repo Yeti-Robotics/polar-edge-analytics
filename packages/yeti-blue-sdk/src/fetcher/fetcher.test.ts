@@ -6,8 +6,8 @@ jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Fetcher", () => {
-  let mockCache: jest.Mocked<Cache<any>>;
-  let fetcher: Fetcher<any>;
+  let mockCache: jest.Mocked<Cache<unknown>>;
+  let fetcher: Fetcher;
 
   beforeEach(() => {
     mockCache = {
@@ -18,7 +18,7 @@ describe("Fetcher", () => {
     };
 
     // Reset axios mock
-    mockedAxios.create.mockReturnValue(mockedAxios as any);
+    mockedAxios.create.mockReturnValue(mockedAxios);
 
     // Create fetcher instance
     fetcher = new Fetcher("https://api.example.com", mockCache);

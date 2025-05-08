@@ -2,13 +2,13 @@ import { Cache } from "@/cache";
 import { FetcherOptions, FetcherResponse } from "@/fetcher/types";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-export class Fetcher<T> {
+export class Fetcher {
   private client: AxiosInstance;
-  private cache: Cache<T>;
+  private cache: Cache<unknown>;
 
   constructor(
     baseURL: string,
-    cache: Cache<T>,
+    cache: Cache<unknown>,
     defaultHeaders: Record<string, string> = {}
   ) {
     this.client = axios.create({
@@ -38,11 +38,11 @@ export class Fetcher<T> {
     }
 
     try {
-      const response = await this.client.get<T>(path, config);
+      const response = await this.client.get<unknown>(path, config);
 
       const maxAge = response.headers["Cache-Control"]?.toString();
 
-      const result: FetcherResponse<T> = {
+      const result: FetcherResponse<unknown> = {
         data: response.data,
         status: response.status,
         etag: response.headers.etag,

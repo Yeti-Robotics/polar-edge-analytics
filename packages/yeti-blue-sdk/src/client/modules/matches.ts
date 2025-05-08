@@ -1,7 +1,7 @@
 import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 import { Fetcher } from "@/fetcher";
 import { FetcherOptions } from "@/fetcher/types";
-import { Match, MatchSchema } from "@/schemas/match";
+import { MatchSchema } from "@/schemas/match";
 import { z } from "zod";
 
 /**
@@ -9,10 +9,10 @@ import { z } from "zod";
  *
  * @see https://www.thebluealliance.com/apidocs/v3
  */
-export class MatchesResource extends ModuleBase<Match[]> {
-  private fetcher: Fetcher<Match[]>;
+export class MatchesResource extends ModuleBase {
+  private fetcher: Fetcher;
 
-  constructor(config: ModuleBaseConfig<Match[]>) {
+  constructor(config: ModuleBaseConfig) {
     super(config);
     this.fetcher = this.createFetcher(config.baseUrl, config.apiKey);
   }
@@ -21,7 +21,13 @@ export class MatchesResource extends ModuleBase<Match[]> {
     return parseInt(eventKey.slice(0, 4));
   }
 
-  private injectYear(data: Record<string, any>) {
+  private injectYear(data: unknown) {
+    if (typeof data !== "object" || data === null) {
+      throw new Error("Invalid response from TBA");
+    }
+    if (!("event_key" in data) || typeof data.event_key !== "string") {
+      throw new Error("Invalid response from TBA");
+    }
     const year = this.getYearFromEventKey(data.event_key);
     return {
       ...data,
@@ -34,9 +40,12 @@ export class MatchesResource extends ModuleBase<Match[]> {
       `/event/${eventKey}/matches`,
       this.getFetcherOptions(options)
     );
-    return z
-      .array(MatchSchema)
-      .parseAsync(res.data.map(this.injectYear.bind(this)));
+    if (Array.isArray(res.data)) {
+      return z
+        .array(MatchSchema)
+        .parseAsync(res.data.map(this.injectYear.bind(this)));
+    }
+    throw new Error("Invalid response from TBA");
   }
 
   async getMatchByKey(matchKey: string, options?: FetcherOptions) {
