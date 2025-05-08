@@ -12,7 +12,7 @@ export default async function AnalysisLayout({
 	}
 	return (
 		<div>
-			<div className="flex justify-center mb-4 w-fit">
+			<div className="mb-4 flex w-fit justify-center">
 				<TournamentPicker tournaments={tournaments.value} />
 			</div>
 			{children}

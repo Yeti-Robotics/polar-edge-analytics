@@ -52,7 +52,7 @@ const columns = [
 	columnHelper.accessor("team_number", {
 		cell: (info) => (
 			<Link
-				className="text-blue-400 decoration-dotted underline underline-offset-2 text-left"
+				className="text-left text-blue-400 underline decoration-dotted underline-offset-2"
 				href={`/team/${info.getValue()}`}
 			>
 				{info.getValue()}
@@ -80,32 +80,38 @@ const columns = [
 		columns: [
 			columnHelper.accessor("auto_total", {
 				cell: (info) => (
-					<div className="text-right w-20">
+					<div className="w-20 text-right">
 						<NumberDisplay value={info.getValue()} />
 					</div>
 				),
-				header: ({ column }) => <SortableHeader label="aEPA" column={column} />,
+				header: ({ column }) => (
+					<SortableHeader label="aEPA" column={column} />
+				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("teleop_total", {
 				cell: (info) => (
-					<div className="text-right w-20">
+					<div className="w-20 text-right">
 						<NumberDisplay value={info.getValue()} />
 					</div>
 				),
-				header: ({ column }) => <SortableHeader label="tEPA" column={column} />,
+				header: ({ column }) => (
+					<SortableHeader label="tEPA" column={column} />
+				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("endgame_total", {
 				cell: (info) => (
-					<div className="text-right w-20">
+					<div className="w-20 text-right">
 						<NumberDisplay value={info.getValue()} />
 					</div>
 				),
-				header: ({ column }) => <SortableHeader label="eEPA" column={column} />,
+				header: ({ column }) => (
+					<SortableHeader label="eEPA" column={column} />
+				),
 				footer: (info) => info.column.id,
 			}),
-		]
+		],
 	}),
 	columnHelper.group({
 		header: "Game Piece",
@@ -113,27 +119,31 @@ const columns = [
 		columns: [
 			columnHelper.accessor("coral_total", {
 				cell: (info) => (
-					<div className="text-right w-20">
+					<div className="w-20 text-right">
 						<NumberDisplay value={info.getValue()} />
 					</div>
 				),
-				header: ({ column }) => <SortableHeader label="coralEPA" column={column} />,
+				header: ({ column }) => (
+					<SortableHeader label="coralEPA" column={column} />
+				),
 				footer: (info) => info.column.id,
 			}),
 			columnHelper.accessor("algae_total", {
 				cell: (info) => (
-					<div className="text-right w-20">
+					<div className="w-20 text-right">
 						<NumberDisplay value={info.getValue()} />
 					</div>
 				),
-				header: ({ column }) => <SortableHeader label="algaeEPA" column={column} />,
+				header: ({ column }) => (
+					<SortableHeader label="algaeEPA" column={column} />
+				),
 				footer: (info) => info.column.id,
-			})
-		]
+			}),
+		],
 	}),
 	columnHelper.accessor("total_score", {
 		cell: (info) => (
-			<div className="text-right w-20">
+			<div className="w-20 text-right">
 				<NumberDisplay value={info.getValue()} />
 			</div>
 		),

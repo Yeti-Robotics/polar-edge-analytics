@@ -23,11 +23,11 @@ export default async function SidebarLayout({
 				<SidebarProvider>
 					<AppSidebar />
 					<SidebarInset className="contain-inline-size">
-						<header className="p-1 sticky top-0 z-10 flex justify-between h-16 shrink-0 items-center gap-2 border-b bg-background">
+						<header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between gap-2 border-b p-1">
 							<AppSidebarTrigger />
 							<ThemeToggle />
 						</header>
-						<div className="flex flex-1 flex-col gap-4 p-4 overflow-auto">
+						<div className="flex flex-1 flex-col gap-4 overflow-auto p-4">
 							{children}
 						</div>
 					</SidebarInset>

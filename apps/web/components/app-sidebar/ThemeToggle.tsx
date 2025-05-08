@@ -29,7 +29,7 @@ export const ThemeToggle = () => {
 				<Button
 					variant="ghost"
 					size="icon"
-					className="rounded-full cursor-pointer"
+					className="cursor-pointer rounded-full"
 					aria-label="Toggle theme"
 				>
 					{mounted ? <Icon /> : ""}

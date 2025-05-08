@@ -28,7 +28,7 @@ export function FormNavigation() {
 	const form = useFormContext<StandFormData>();
 
 	return (
-		<div className="flex justify-between p-4 border-t">
+		<div className="flex justify-between border-t p-4">
 			<Button
 				type="button"
 				variant="outline"
@@ -39,10 +39,16 @@ export function FormNavigation() {
 			</Button>
 			<Button
 				type="button"
-				onClick={isLastStep ? form.handleSubmit(submitForm) : goToNextStep}
+				onClick={
+					isLastStep ? form.handleSubmit(submitForm) : goToNextStep
+				}
 				disabled={isLastStep ? isSubmitting : !canGoNext}
 			>
-				{isLastStep ? isSubmitting ? "Submitting..." : "Submit" : "Next"}
+				{isLastStep
+					? isSubmitting
+						? "Submitting..."
+						: "Submit"
+					: "Next"}
 			</Button>
 		</div>
 	);

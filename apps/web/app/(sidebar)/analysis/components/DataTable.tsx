@@ -16,7 +16,7 @@ type DataTableProps<T> = {
 
 export function DataTable<T>({ table }: DataTableProps<T>) {
 	return (
-		<div className="w-full relative overflow-x-auto">
+		<div className="relative w-full overflow-x-auto">
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (

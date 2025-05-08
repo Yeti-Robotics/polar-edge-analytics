@@ -17,7 +17,7 @@ export const ActiveLink = ({
 	return (
 		<Link
 			className={cn(
-				"flex items-center space-x-2 p-1.5 rounded-md",
+				"flex items-center space-x-2 rounded-md p-1.5",
 				pathname === href ? "bg-accent" : "",
 				className
 			)}

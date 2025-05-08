@@ -12,11 +12,11 @@ type Details = string | string[] | undefined;
 export type ServerActionResult<T, Z> =
 	| { success: true; value: T }
 	| {
-		success: false;
-		error: string;
-		details?: Record<string, Details>;
-		errorData?: Z
-	}
+			success: false;
+			error: string;
+			details?: Record<string, Details>;
+			errorData?: Z;
+	  };
 
 /**
  * Represents an error that can be thrown within a server action.
@@ -49,7 +49,6 @@ export class ServerActionErrorWithDetails extends Error {
 		this.details = details;
 	}
 }
-
 
 export class ServerActionErrorWithCustomData<T> extends Error {
 	errorData: T;
@@ -108,12 +107,13 @@ export function createServerAction<Return, Z, Args extends unknown[] = []>(
 					error: error.message,
 					details: error.details,
 				};
-			} if (error instanceof ServerActionErrorWithCustomData) {
+			}
+			if (error instanceof ServerActionErrorWithCustomData) {
 				return {
 					success: false,
 					error: error.message,
-					errorData: error.errorData
-				}
+					errorData: error.errorData,
+				};
 			}
 			throw error;
 		}

@@ -132,7 +132,7 @@ export function TeamTable({ teams, totalPages, currentPage }: TeamTableProps) {
 					)}
 				</TableBody>
 			</Table>
-			<div className="flex justify-center items-center text-center gap-2">
+			<div className="flex items-center justify-center gap-2 text-center">
 				<Button
 					variant="outline"
 					onClick={() => handlePageChange(currentPage - 1)}

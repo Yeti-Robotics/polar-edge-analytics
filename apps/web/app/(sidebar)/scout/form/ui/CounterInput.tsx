@@ -62,7 +62,7 @@ export function CounterInput({
 				<Minus />
 			</Button>
 			<Input
-				className="text-center h-9 p-0 w-full select-none"
+				className="h-9 w-full p-0 text-center select-none"
 				value={count}
 				onChange={handleChange}
 				readOnly

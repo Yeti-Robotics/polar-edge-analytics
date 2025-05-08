@@ -72,8 +72,10 @@ export enum AuthErrors {
 
 export const errorExplanations: Record<string, string> = {
 	[AuthErrors.BANISHED]: "You have been banned.",
-	[AuthErrors.DISCORD_UNVERIFIED]: "Your Discord account is unverified. Please verify your email and try again.",
-	[AuthErrors.NO_GUILD_NICKNAME]: "You must have a guild nickname. Update your nickname in the Discord server to your full name and try again."
+	[AuthErrors.DISCORD_UNVERIFIED]:
+		"Your Discord account is unverified. Please verify your email and try again.",
+	[AuthErrors.NO_GUILD_NICKNAME]:
+		"You must have a guild nickname. Update your nickname in the Discord server to your full name and try again.",
 };
 
 export function redirectError(error: AuthErrors) {
@@ -85,10 +87,17 @@ function roleIndex(userRole: UserRole) {
 }
 
 export function isSessionAuthorized(requiredRole: UserRole, session: Session) {
-	return session.user.role && session.user.role !== UserRole.BANISHED && roleIndex(session.user.role) <= roleIndex(requiredRole);
+	return (
+		session.user.role &&
+		session.user.role !== UserRole.BANISHED &&
+		roleIndex(session.user.role) <= roleIndex(requiredRole)
+	);
 }
 
-export async function checkSession(requiredRole: UserRole, session?: Session | undefined | null) {
+export async function checkSession(
+	requiredRole: UserRole,
+	session?: Session | undefined | null
+) {
 	if (!session) {
 		session = await auth();
 	}
@@ -98,6 +107,10 @@ export async function checkSession(requiredRole: UserRole, session?: Session | u
 	}
 
 	if (!session?.user.role || !isSessionAuthorized(requiredRole, session)) {
-		redirectError(session?.user.role === UserRole.BANISHED ? AuthErrors.BANISHED : AuthErrors.UNAUTHORIZED)
+		redirectError(
+			session?.user.role === UserRole.BANISHED
+				? AuthErrors.BANISHED
+				: AuthErrors.UNAUTHORIZED
+		);
 	}
 }

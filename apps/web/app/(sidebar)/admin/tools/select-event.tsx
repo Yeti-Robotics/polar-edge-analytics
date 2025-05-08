@@ -37,7 +37,7 @@ export function EventSelector({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					className="max-w-xs w-full justify-between"
+					className="w-full max-w-xs justify-between"
 				>
 					{value
 						? events.find((event) => event.id === value)?.name
@@ -53,7 +53,7 @@ export function EventSelector({
 						<CommandGroup>
 							{events.map((event) => (
 								<CommandItem
-									className="max-w-xs overflow-hidden whitespace-nowrap text-ellipsis cursor-pointer"
+									className="max-w-xs cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap"
 									key={event.id}
 									value={event.id}
 									onSelect={(currentValue) => {

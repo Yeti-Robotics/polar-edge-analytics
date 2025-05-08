@@ -50,7 +50,7 @@ export default async function CoveragePage({
 		<div className="space-y-6">
 			<div className="flex flex-col gap-2">
 				<h1 className="text-3xl font-black">Team-Match Coverage</h1>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-muted-foreground text-sm">
 					Matches missing coverage for {event?.eventName}
 				</p>
 			</div>
@@ -82,20 +82,20 @@ export default async function CoveragePage({
 			<hr />
 			<section className="flex flex-col gap-4">
 				<h2 className="text-2xl font-black">Team-Matches Missing</h2>
-				<div className="h-96 overflow-y-auto border rounded-xl">
-					<table className="w-full relative">
+				<div className="h-96 overflow-y-auto rounded-xl border">
+					<table className="relative w-full">
 						<TableHeader>
 							<TableRow>
-								<TableHead className="sticky top-0 bg-background ">
+								<TableHead className="bg-background sticky top-0">
 									Match
 								</TableHead>
-								<TableHead className="sticky top-0 bg-background ">
+								<TableHead className="bg-background sticky top-0">
 									Alliance
 								</TableHead>
-								<TableHead className="sticky top-0 bg-background ">
+								<TableHead className="bg-background sticky top-0">
 									Position
 								</TableHead>
-								<TableHead className="sticky top-0 bg-background ">
+								<TableHead className="bg-background sticky top-0">
 									Team
 								</TableHead>
 							</TableRow>
@@ -111,7 +111,7 @@ export default async function CoveragePage({
 									</TableCell>
 									<TableCell
 										className={cn(
-											"before:content-[''] before:inline-block before:size-[6px] before:rounded-full before:mr-2 before:align-middle",
+											"before:mr-2 before:inline-block before:size-[6px] before:rounded-full before:align-middle before:content-['']",
 											match.alliance === "red"
 												? "before:bg-red-400"
 												: "before:bg-blue-400"

@@ -9,7 +9,7 @@ export function AppSidebarTrigger() {
 
 	return (
 		<Button
-			className="rounded-full cursor-pointer"
+			className="cursor-pointer rounded-full"
 			variant="ghost"
 			size="icon"
 			onClick={toggleSidebar}

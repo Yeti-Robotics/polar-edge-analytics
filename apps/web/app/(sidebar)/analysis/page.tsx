@@ -10,10 +10,10 @@ export default async function TeamData({
 	const tournamentId = (await searchParams).id;
 	const teamDataResult = await scoutedTeamData(tournamentId);
 	const tournamentData = await getAllTournaments();
-	
+
 	return (
 		<div className="flex flex-col">
-			<h1 className="text-2xl md:text-3xl font-semibold leading-none tracking-tight">
+			<h1 className="text-2xl leading-none font-semibold tracking-tight md:text-3xl">
 				Team Data
 			</h1>
 			<div className="my-4">

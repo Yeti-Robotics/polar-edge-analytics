@@ -8,8 +8,8 @@ import { Card } from "@repo/ui/components/card";
 export function FormLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<StandFormProvider>
-			<div className="max-w-md mx-auto flex flex-col gap-y-4">
-				<Card className="rounded-md overflow-hidden">
+			<div className="mx-auto flex max-w-md flex-col gap-y-4">
+				<Card className="overflow-hidden rounded-md">
 					<FormProgress />
 					<FormHeader />
 					{children}

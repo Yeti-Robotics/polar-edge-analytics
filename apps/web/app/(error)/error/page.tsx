@@ -6,8 +6,14 @@ export default async function ErrorPage(props: {
 	const searchParams = await props.searchParams;
 	const errorMessage = searchParams["error"] ?? "UNKNOWN_ERROR";
 
-	return <div>
-		<div className="text-xl">Error: {errorMessage}</div>
-		{errorExplanations[errorMessage] && <div className="text-wrap mt-4 mx-8">{errorExplanations[errorMessage]}</div>}
-	</div>
+	return (
+		<div>
+			<div className="text-xl">Error: {errorMessage}</div>
+			{errorExplanations[errorMessage] && (
+				<div className="mx-8 mt-4 text-wrap">
+					{errorExplanations[errorMessage]}
+				</div>
+			)}
+		</div>
+	);
 }

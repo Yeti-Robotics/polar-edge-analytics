@@ -14,12 +14,12 @@ import { Suspense } from "react";
 
 export default async function AdminTools() {
 	await checkSession(UserRole.ADMIN);
-	
+
 	return (
 		<div className="flex flex-col gap-6">
 			<section className="flex flex-col">
 				<h1 className="text-2xl font-bold">Admin Tools</h1>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-muted-foreground text-sm">
 					Use these tools to set the current event and seed data from
 					The Blue Alliance.
 				</p>
@@ -29,7 +29,7 @@ export default async function AdminTools() {
 				<h2 className="text-lg font-semibold">Add Event</h2>
 				<form action={seedEvent} className="flex flex-col gap-2">
 					<div className="flex flex-col gap-2">
-						<div className="flex flex-col sm:flex-row sm:items-end gap-2">
+						<div className="flex flex-col gap-2 sm:flex-row sm:items-end">
 							<div className="flex flex-col gap-1">
 								<Label htmlFor="eventKey" className="text-sm">
 									Event Key
@@ -46,7 +46,7 @@ export default async function AdminTools() {
 								Add Event
 							</Button>
 						</div>
-						<p className="text-xs text-muted-foreground max-w-prose my-1">
+						<p className="text-muted-foreground my-1 max-w-prose text-xs">
 							This is the event key for the event you want to add.
 							It can be found on the event page of The Blue
 							Alliance by looking at the URL.
@@ -60,7 +60,7 @@ export default async function AdminTools() {
 				<Suspense fallback={<div>Loading...</div>}>
 					<CurrentEvent />
 				</Suspense>
-				<p className="text-xs text-muted-foreground max-w-prose my-1">
+				<p className="text-muted-foreground my-1 max-w-prose text-xs">
 					Select the event you want to set as the current event.
 				</p>
 			</section>
@@ -88,7 +88,7 @@ export default async function AdminTools() {
 						Seed Matches
 					</Button>
 				</form>
-				<p className="text-xs text-muted-foreground max-w-prose my-1">
+				<p className="text-muted-foreground my-1 max-w-prose text-xs">
 					Seed matches from The Blue Alliance for the current event.
 				</p>
 			</section>

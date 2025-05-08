@@ -42,10 +42,10 @@ export default async function TeamsPage({
 	return (
 		<div className="flex flex-col px-4">
 			<h1 className="text-2xl font-bold">Teams</h1>
-			<p className="text-sm text-muted-foreground">
+			<p className="text-muted-foreground text-sm">
 				Search for a team by team number or name.
 			</p>
-			<div className="flex flex-col gap-4 mt-4">
+			<div className="mt-4 flex flex-col gap-4">
 				<section>
 					<AddTeamForm />
 				</section>

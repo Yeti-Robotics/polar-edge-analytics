@@ -6,7 +6,7 @@ import { UserRole } from "@/lib/database/schema";
 
 export default async function ScoutingPage() {
 	await checkSession(UserRole.USER);
-	
+
 	return (
 		<FormLayout>
 			<StandForm />
