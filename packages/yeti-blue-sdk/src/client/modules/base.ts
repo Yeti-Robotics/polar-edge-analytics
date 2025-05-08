@@ -2,19 +2,19 @@ import { Cache, MemoryCache } from "@/cache";
 import { Fetcher } from "@/fetcher";
 import { FetcherOptions } from "@/fetcher/types";
 
-export interface ModuleBaseConfig<T> {
+export interface ModuleBaseConfig {
   apiKey: string;
   baseUrl: string;
-  cache?: Cache<T>;
+  cache?: Cache<unknown>;
   defaultCache?: boolean;
 }
 
-export class ModuleBase<T> {
-  protected cache: Cache<T>;
+export class ModuleBase {
+  protected cache: Cache<unknown>;
   protected defaultCache: boolean;
 
-  constructor({ cache, defaultCache }: ModuleBaseConfig<T>) {
-    this.cache = cache || new MemoryCache<T>(); // fallback to mem cache if not specified
+  constructor({ cache, defaultCache }: ModuleBaseConfig) {
+    this.cache = cache || new MemoryCache<unknown>(); // fallback to mem cache if not specified
     this.defaultCache = defaultCache ?? true;
   }
 
@@ -29,7 +29,7 @@ export class ModuleBase<T> {
   }
 
   protected createFetcher(baseUrl: string, apiKey: string) {
-    return new Fetcher<T>(baseUrl, this.cache, {
+    return new Fetcher(baseUrl, this.cache, {
       "X-TBA-Auth-Key": apiKey,
       "Content-Type": "application/json",
     });

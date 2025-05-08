@@ -2,10 +2,8 @@ import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 import { Fetcher } from "@/fetcher";
 import { FetcherOptions } from "@/fetcher/types";
 import {
-  DistrictRanking,
   DistrictRankingSchema,
   EventRankingsSchema,
-  RegionalPoolRanking,
   RegionalPoolRankingSchema,
 } from "@/schemas/rankings";
 import { z } from "zod";
@@ -25,12 +23,10 @@ import { z } from "zod";
  * @throws Will throw an error if the response data cannot be parsed
  *         according to the `EventRankingsSchema`.
  */
-export class RankingResource extends ModuleBase<
-  DistrictRanking[] | RegionalPoolRanking[]
-> {
-  private fetcher: Fetcher<DistrictRanking[]>;
+export class RankingResource extends ModuleBase {
+  private fetcher: Fetcher;
 
-  constructor(config: ModuleBaseConfig<DistrictRanking[]>) {
+  constructor(config: ModuleBaseConfig) {
     super(config);
     this.fetcher = this.createFetcher(config.baseUrl, config.apiKey);
   }
@@ -65,12 +61,13 @@ export class RankingResource extends ModuleBase<
    * Gets the event rankings for a given event key
    * @param eventKey - TBA event key
    * @param options - fetcher options
-   * @returns 
+   * @returns
    */
   async getEventRanking(eventKey: number, options?: FetcherOptions) {
-  const res = await this.fetcher.fetch(
-    `/event/${eventKey}/rankings`,
-    this.getFetcherOptions(options)
-  );
-  return z.array(EventRankingsSchema).nullable().parseAsync(res.data);
-}}
+    const res = await this.fetcher.fetch(
+      `/event/${eventKey}/rankings`,
+      this.getFetcherOptions(options)
+    );
+    return z.array(EventRankingsSchema).nullable().parseAsync(res.data);
+  }
+}

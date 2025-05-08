@@ -3,19 +3,19 @@ import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 import { Fetcher } from "@/fetcher";
 
 describe("ModuleBase", () => {
-  let moduleBase: ModuleBase<string>;
-  let config: ModuleBaseConfig<string>;
-  let cache: MemoryCache<string>;
+  let moduleBase: ModuleBase;
+  let config: ModuleBaseConfig;
+  let cache: MemoryCache<unknown>;
 
   beforeEach(() => {
-    cache = new MemoryCache<string>();
+    cache = new MemoryCache<unknown>();
     config = {
       apiKey: "test-key",
       baseUrl: "https://api.example.com",
       cache,
       defaultCache: true,
     };
-    moduleBase = new ModuleBase<string>(config);
+    moduleBase = new ModuleBase(config);
   });
 
   it("initializes with provided cache", () => {
@@ -25,32 +25,32 @@ describe("ModuleBase", () => {
   });
 
   it("initializes with default memory cache when none provided", () => {
-    const configWithoutCache: ModuleBaseConfig<string> = {
+    const configWithoutCache: ModuleBaseConfig = {
       apiKey: "test-key",
       baseUrl: "https://api.example.com",
     };
-    const module = new ModuleBase<string>(configWithoutCache);
+    const module = new ModuleBase(configWithoutCache);
     expect(module["cache"]).toBeInstanceOf(MemoryCache);
   });
 
   it("sets defaultCache to true when not specified", () => {
-    const configWithoutDefaultCache: ModuleBaseConfig<string> = {
+    const configWithoutDefaultCache: ModuleBaseConfig = {
       apiKey: "test-key",
       baseUrl: "https://api.example.com",
       cache,
     };
-    const module = new ModuleBase<string>(configWithoutDefaultCache);
+    const module = new ModuleBase(configWithoutDefaultCache);
     expect(module["defaultCache"]).toBe(true);
   });
 
   it("sets defaultCache to false when specified", () => {
-    const configWithDefaultCacheFalse: ModuleBaseConfig<string> = {
+    const configWithDefaultCacheFalse: ModuleBaseConfig = {
       apiKey: "test-key",
       baseUrl: "https://api.example.com",
       cache,
       defaultCache: false,
     };
-    const module = new ModuleBase<string>(configWithDefaultCacheFalse);
+    const module = new ModuleBase(configWithDefaultCacheFalse);
     expect(module["defaultCache"]).toBe(false);
   });
 

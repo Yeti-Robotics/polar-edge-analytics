@@ -11,7 +11,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Modules - Matches", () => {
   let client: YETIBlueClient;
-  let cache: MemoryCache<any>;
+  let cache: MemoryCache<unknown>;
   let mockAxiosInstance: jest.Mocked<AxiosInstance>;
 
   const mockMatch: Omit<Match, "year"> = {
@@ -289,7 +289,7 @@ describe("Modules - Matches", () => {
   };
 
   beforeEach(() => {
-    cache = new MemoryCache<any>();
+    cache = new MemoryCache<unknown>();
     mockAxiosInstance = {
       get: jest.fn(),
     } as unknown as jest.Mocked<AxiosInstance>;
