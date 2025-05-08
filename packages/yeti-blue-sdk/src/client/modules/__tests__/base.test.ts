@@ -1,5 +1,5 @@
-import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 import { MemoryCache } from "@/cache";
+import { ModuleBase, ModuleBaseConfig } from "@/client/modules/base";
 import { Fetcher } from "@/fetcher";
 
 describe("ModuleBase", () => {
