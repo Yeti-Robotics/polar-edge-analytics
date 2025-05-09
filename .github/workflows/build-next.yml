@@ -1,16 +1,44 @@
-name: Build Next.js
+name: Build
 on: workflow_call
+
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: ci
     steps:
-      - name: Checkout Code
+      - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Install Node/node_modules
-        uses: ./.github/actions/site-setup
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.10.0
 
-      - name: Run Next.js Build
-        run: pnpm run build --filter @app/web
-        shell: bash
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install turbo global
+        run: pnpm add turbo -g
+
+      - name: Run format
+        run: turbo run lint format
+
+      - name: Run tests
+        run: turbo run test
+
+      - name: Build affected apps
+        run: turbo run build --affected

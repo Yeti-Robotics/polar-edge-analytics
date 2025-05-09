@@ -10,6 +10,10 @@
       },
       "lint": {},
       "lint:fix": {},
+      "format": {},
+      "format:fix": {},
+      "test": {
+      },
       "db:start": {
         "cache": false
       },

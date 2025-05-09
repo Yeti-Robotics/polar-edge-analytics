@@ -5,8 +5,11 @@
         "build": "turbo run build",
         "dev": "turbo run dev",
         "dev:yeti-blue": "turbo run dev --filter=@yeti-robotics/yeti-blue-sdk --filter=@app/yeti-blue-sandbox",
+        "format": "turbo run format",
+        "format:fix": "turbo run format:fix",
         "lint": "turbo run lint",
         "lint:fix": "turbo run lint:fix",
+        "test": "turbo run test",
         "release": "pnpm build --filter=./packages/* && changeset publish"
     },
     "devDependencies": {
