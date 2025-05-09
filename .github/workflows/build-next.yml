@@ -31,14 +31,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install turbo global
-        run: pnpm add turbo -g
-
       - name: Run format
-        run: turbo run lint format
+        run: pnpm format
+
+      - name: Run lint
+        run: pnpm lint
 
       - name: Run tests
-        run: turbo run test
+        run: pnpm test
 
       - name: Build affected apps
-        run: turbo run build --affected
+        run: pnpm build --affected
