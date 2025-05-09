@@ -130,6 +130,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.0.0
@@ -143,7 +146,7 @@ importers:
         specifier: ^19
         version: 19.0.4(@types/react@19.0.12)
       eslint:
-        specifier: ^9
+        specifier: ^9.15.0
         version: 9.26.0(jiti@2.4.2)
       tailwindcss:
         specifier: ^4
