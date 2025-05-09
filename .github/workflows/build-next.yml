@@ -3,6 +3,7 @@ on: workflow_call
 
 jobs:
   build:
+    name: Build and test
     runs-on: ubuntu-latest
     environment: ci
     steps:
