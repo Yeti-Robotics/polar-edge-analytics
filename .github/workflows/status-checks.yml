@@ -1,18 +1,53 @@
 name: Status Checks
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
-  next-build:
-    name: Build Next.js
-    uses: ./.github/workflows/build-next.yml
-    secrets: inherit
-  verify-tests:
-    name: All Status Checks Pass
+  build:
+    name: Build and test
     runs-on: ubuntu-latest
-    needs: [next-build]
+    environment: ci
     steps:
-      - name: All tests pass
-        if: success()
-        run: echo "All tests passed successfully!"
-      - name: Test failed
-        if: failure()
-        run: echo "A test failed!"
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.10.0
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run format
+        run: pnpm format
+
+      - name: Run lint
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build affected apps
+        run: pnpm build --affected
