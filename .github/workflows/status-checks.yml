@@ -7,13 +7,18 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build and test
     runs-on: ubuntu-latest
     environment: ci
-    permissions:
-      contents: read
     steps:
       - name: Check out code
         uses: actions/checkout@v4
