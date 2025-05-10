@@ -12,6 +12,8 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     environment: ci
+    permissions:
+      contents: read
     steps:
       - name: Check out code
         uses: actions/checkout@v4
