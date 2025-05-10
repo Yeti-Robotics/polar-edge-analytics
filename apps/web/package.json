@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@auth/drizzle-adapter": "^1.9.0",
-		"@hookform/resolvers": "^3.10.0",
+		"@hookform/resolvers": "^5.0.1",
 		"@repo/ui": "workspace:*",
 		"@tanstack/react-table": "^8.21.3",
 		"drizzle-orm": "^0.43.1",
@@ -25,7 +25,7 @@
 		"prettier": "^3.5.3",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"react-hook-form": "^7.56.1",
+		"react-hook-form": "^7.56.3",
 		"zod": "^3.24.4"
 	},
 	"devDependencies": {

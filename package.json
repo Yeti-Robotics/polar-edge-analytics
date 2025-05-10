@@ -26,6 +26,9 @@
     "@changesets/cli": "^2.28.1"
   },
   "resolutions": {
-    "@babel/core": "7.26.10"
+    "@babel/core": "7.26.10",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-hook-form": "7.56.3"
   }
 }
