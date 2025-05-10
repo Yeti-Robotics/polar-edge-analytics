@@ -58,3 +58,5 @@ jobs:
 
       - name: Build affected apps
         run: pnpm build --affected
+        env:
+          TURBO_SCM_BASE: origin/main
