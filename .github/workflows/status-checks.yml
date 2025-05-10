@@ -19,6 +19,8 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     environment: ci
+    env:
+      TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -48,14 +50,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run format
-        run: pnpm format
-
-      - name: Run lint
-        run: pnpm lint
-
-      - name: Run tests
-        run: pnpm test
-
-      - name: Build affected apps
-        run: pnpm build --affected
+      - name: Lint, format, test, and build
+        run: pnpm turbo run lint format test build --affected
