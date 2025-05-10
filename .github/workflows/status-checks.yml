@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          filter: "blob:none"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -58,5 +59,3 @@ jobs:
 
       - name: Build affected apps
         run: pnpm build --affected
-        env:
-          TURBO_SCM_BASE: origin/main
