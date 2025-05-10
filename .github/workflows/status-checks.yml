@@ -58,3 +58,5 @@ jobs:
 
       - name: Build affected apps
         run: pnpm build --affected
+        env:
+          TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || 'HEAD^' }}
